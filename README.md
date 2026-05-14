@@ -9,7 +9,7 @@
 
 ## 🌐 Live Site
 
-**👉 [Open the Master OS](https://[bridgeapp-os].github.io/bridgeapp-os/)**
+**👉 [https://blankcanvasafricastudio.github.io/bridgeapp-os/]**
 
 
 ---

@@ -9,7 +9,7 @@
 
 ## 🌐 Live Site
 
-**👉 [Open the Master OS](https://[username].github.io/bridgeapp-os/)**
+**👉 [Open the Master OS](https://[bridgeapp-os].github.io/bridgeapp-os/)**
 
 > Replace `[username]` with your GitHub username once Pages is live.
 

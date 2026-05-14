@@ -11,7 +11,6 @@
 
 **👉 [Open the Master OS](https://[bridgeapp-os].github.io/bridgeapp-os/)**
 
-> Replace `[username]` with your GitHub username once Pages is live.
 
 ---
 

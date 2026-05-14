@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Club Launch · Social Poster | BridgeApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2340;--blue:#4a90d9;--orange:#e8601c;--yellow:#f0b429;--white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#e2e8f0;min-height:100vh;padding:32px 16px;display:flex;flex-direction:column;align-items:center;gap:20px}
+
+/* LABEL */
+.label{max-width:540px;width:100%;background:var(--white);border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border:1px solid #cbd5e1}
+.label-info{font-size:11px;color:#475569}
+.label-info strong{color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:-.3px;display:block}
+.label-meta{font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;background:#f1f5f9;border-radius:5px}
+
+/* POSTER — Instagram portrait 1080×1350 (4:5) */
+.poster{width:540px;height:675px;background:var(--navy);border-radius:14px;overflow:hidden;position:relative;box-shadow:0 30px 80px -20px rgba(15,35,64,.35),0 8px 20px -8px rgba(15,35,64,.2)}
+
+/* Stripe accent */
+.poster::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 33%,var(--orange) 33%,var(--orange) 66%,var(--yellow) 66%,var(--yellow) 100%);z-index:5}
+
+/* Top mark */
+.top-mark{position:absolute;top:24px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;z-index:4}
+.brand-mark{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:-.4px;color:var(--white);line-height:1}
+.brand-mark span:nth-child(1){color:var(--blue)}
+.brand-mark span:nth-child(2){color:var(--orange)}
+.club-stamp{background:var(--yellow);color:var(--navy);padding:5px 10px;border-radius:4px;font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.club-stamp::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--navy)}
+
+/* Big yellow card */
+.yellow-card{position:absolute;top:64px;left:24px;right:24px;background:var(--yellow);border-radius:12px;padding:22px 22px 26px;color:var(--navy);overflow:hidden;z-index:3}
+.yellow-card::after{content:'EST. 2026';position:absolute;right:-8px;bottom:-22px;font-family:'Barlow Condensed',sans-serif;font-size:80px;font-weight:900;color:rgba(15,35,64,.05);letter-spacing:-2px;line-height:1;pointer-events:none}
+.kicker{display:inline-block;background:var(--navy);color:var(--yellow);padding:4px 10px;border-radius:4px;font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.headline{font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:900;line-height:.88;letter-spacing:-1.8px;margin-bottom:10px}
+.headline .em{display:block;color:var(--orange);font-style:italic}
+.subline{font-size:13px;font-weight:700;color:var(--navy);max-width:88%;line-height:1.4;opacity:.85;margin-top:8px;position:relative;z-index:1}
+
+/* Mid pillars block */
+.pillars{position:absolute;top:340px;left:24px;right:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;z-index:3}
+.pillar{padding:11px 10px;border-radius:8px;color:var(--white);position:relative;overflow:hidden}
+.pillar.p1{background:var(--blue)}
+.pillar.p2{background:var(--orange)}
+.pillar.p3{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--white)}
+.pillar-num{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;opacity:.35;line-height:1;letter-spacing:-.3px;margin-bottom:2px}
+.pillar-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;letter-spacing:-.2px;line-height:1.1;margin-bottom:3px}
+.pillar-desc{font-size:9px;line-height:1.3;opacity:.85;font-weight:600}
+
+/* Prize callout */
+.prize-line{position:absolute;top:455px;left:24px;right:24px;background:var(--white);border-radius:9px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;z-index:3}
+.prize-line-lbl{font-size:9px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em}
+.prize-line-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:-.6px;color:var(--navy);line-height:1}
+.prize-line-val span{color:var(--orange)}
+.prize-arrow{background:var(--navy);color:var(--yellow);padding:7px 10px;border-radius:6px;font-size:10px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+.prize-arrow::after{content:'›';font-size:14px}
+
+/* CTA block */
+.cta{position:absolute;bottom:24px;left:24px;right:24px;background:var(--orange);border-radius:10px;padding:14px 18px;color:var(--white);display:flex;justify-content:space-between;align-items:center;z-index:3}
+.cta-row{display:flex;flex-direction:column;gap:2px}
+.cta-lbl{font-size:9px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.08em}
+.cta-line{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:-.4px;line-height:1}
+.cta-line .at{color:var(--yellow)}
+.cta-btn{background:var(--white);color:var(--orange);padding:8px 14px;border-radius:6px;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+
+/* Footer mark */
+.foot-mark{position:absolute;bottom:88px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;color:rgba(255,255,255,.4);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;z-index:3}
+
+/* Bottom 3 swatches */
+.bottom-swatch{position:absolute;bottom:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 33%,var(--orange) 33%,var(--orange) 66%,var(--yellow) 66%,var(--yellow) 100%);z-index:5}
+
+/* Brand notes panel */
+.notes{max-width:540px;width:100%;background:var(--white);border-radius:10px;padding:18px 20px;border:1px solid #cbd5e1}
+.notes h3{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--navy);letter-spacing:-.3px;margin-bottom:10px;text-transform:uppercase}
+.notes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:11px;color:#475569;line-height:1.55}
+.notes-grid div{padding:7px 10px;background:#f8fafc;border-radius:6px;border-left:3px solid var(--blue)}
+.notes-grid div:nth-child(2){border-left-color:var(--orange)}
+.notes-grid div:nth-child(3){border-left-color:var(--yellow)}
+.notes-grid div:nth-child(4){border-left-color:var(--navy)}
+.notes-grid strong{color:var(--navy);font-weight:800;display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+
+@media print{
+  body{background:#fff;padding:0}
+  .label,.notes{display:none}
+  .poster{box-shadow:none;border-radius:0}
+}
+</style>
+</head>
+<body>
+
+<!-- LABEL ABOVE POSTER -->
+<div class="label">
+<div class="label-info">
+<strong>Sample Output · Social Media Poster</strong>
+Future Club Launch · Instagram feed format · 1080 × 1350 (4:5)
+</div>
+<div class="label-meta">★ Brand-aligned</div>
+</div>
+
+<!-- THE POSTER -->
+<div class="poster">
+
+<!-- top accent stripe -->
+<div class="top-mark">
+<div class="brand-mark"><span>Bridge</span><span>App</span></div>
+<div class="club-stamp">Future Club</div>
+</div>
+
+<!-- Yellow hero card -->
+<div class="yellow-card">
+<div class="kicker">★ Doors Open · June 2026</div>
+<div class="headline">Worn,<br>Not<br>Just <span class="em">Used.</span></div>
+<div class="subline">A cultural movement of excellence for South Africa's brightest matriculants. Built different. Sign-up is free.</div>
+</div>
+
+<!-- 3 pillars -->
+<div class="pillars">
+<div class="pillar p1">
+<div class="pillar-num">01</div>
+<div class="pillar-name">Compete</div>
+<div class="pillar-desc">10,000+ enter. One Excellence Champion. R100K scholarship.</div>
+</div>
+<div class="pillar p2">
+<div class="pillar-num">02</div>
+<div class="pillar-name">Belong</div>
+<div class="pillar-desc">FC drops, podcast, capsule merch. Made with GalxBoy &amp; Old School SA.</div>
+</div>
+<div class="pillar p3">
+<div class="pillar-num">03</div>
+<div class="pillar-name">Arrive</div>
+<div class="pillar-desc">Matric Drive with BMW. Learner's Pass milestones. Real moments.</div>
+</div>
+</div>
+
+<!-- Prize line -->
+<div class="prize-line">
+<div>
+<div class="prize-line-lbl">Top prize · Excellence Champion</div>
+<div class="prize-line-val">R100K <span>Scholarship</span></div>
+</div>
+<div class="prize-arrow">Enter</div>
+</div>
+
+<!-- footer mark before CTA -->
+<div class="foot-mark">
+<div>Powered by BridgeApp</div>
+<div>The Future Is Watching</div>
+</div>
+
+<!-- CTA bottom -->
+<div class="cta">
+<div class="cta-row">
+<div class="cta-lbl">Sign up · Follow · Tag a matric</div>
+<div class="cta-line">Download <span class="at">BridgeApp</span></div>
+</div>
+<div class="cta-btn">Join FC</div>
+</div>
+
+<div class="bottom-swatch"></div>
+</div>
+
+<!-- BRAND NOTES -->
+<div class="notes">
+<h3>Brand compliance check</h3>
+<div class="notes-grid">
+<div><strong>Colours</strong>Navy #0f2340 · Blue #4a90d9 · Orange #e8601c · Yellow #f0b429. No off-brand colours used.</div>
+<div><strong>Typography</strong>Barlow Condensed Black for display. Barlow Bold for body. Headline at 54px / display 900.</div>
+<div><strong>Lockup logic</strong>Yellow = Future Club hero. Blue = Pathfinder tier. Orange = UniApply tier. Tiers never mixed within a callout.</div>
+<div><strong>Sales CTA</strong>"Download BridgeApp" + "Join FC" button. Two clear actions. No vanity-only messaging.</div>
+</div>
+</div>
+
+</body>
+</html>

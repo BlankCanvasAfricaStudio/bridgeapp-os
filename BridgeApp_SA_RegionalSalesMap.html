@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeApp — SA Regional Sales Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0F2A4A; --navy2:#1a3a62; --blue:#4A90D9;
+  --yellow:#FBBF24; --orange:#F97316; --green:#16a34a;
+  --red:#dc2626; --purple:#7c3aed;
+  --bg:#F4F3EF; --surface:#fff; --border:rgba(15,42,74,0.10);
+  --text:#0F2A4A; --muted:#6b85a0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+/* TOPBAR */
+.topbar{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-title{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:2px;text-transform:uppercase;color:#fff;}
+.tb-title span{color:var(--yellow);}
+.tb-badge{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(249,115,22,.2);color:var(--orange);border:1px solid rgba(249,115,22,.35);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.live-txt{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;}
+
+/* MAIN SPLIT */
+.main{display:grid;grid-template-columns:420px 1fr;height:calc(100vh - 52px);overflow:hidden;}
+
+/* LEFT MAP PANEL */
+.map-panel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.map-header{padding:14px 18px 10px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.map-title{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:15px;text-transform:uppercase;color:var(--navy);}
+.map-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.map-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden;}
+.map-wrap svg{width:100%;height:100%;max-width:380px;max-height:320px;}
+.province{cursor:pointer;transition:all .2s;stroke:#fff;stroke-width:1.5;}
+.province:hover{filter:brightness(1.1);stroke-width:2.5;}
+.province.selected{stroke:#fff;stroke-width:3;filter:brightness(1.15);}
+.prov-label{font-size:9px;font-weight:700;fill:#fff;text-anchor:middle;pointer-events:none;font-family:'Roboto',sans-serif;opacity:.9;}
+
+/* LEGEND */
+.legend{padding:10px 18px 12px;border-top:1px solid var(--border);flex-shrink:0;}
+.leg-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.leg-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--text);}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+
+/* RIGHT DETAIL PANEL */
+.detail-panel{overflow-y:auto;background:var(--bg);display:flex;flex-direction:column;}
+.detail-panel::-webkit-scrollbar{width:4px;}
+.detail-panel::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* WELCOME STATE */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px;}
+.welcome-icon{font-size:52px;margin-bottom:16px;opacity:.4;}
+.welcome-title{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:22px;text-transform:uppercase;color:var(--navy);margin-bottom:8px;}
+.welcome-sub{font-size:13px;color:var(--muted);line-height:1.6;max-width:300px;}
+
+/* REGION HEADER */
+.region-header{padding:18px 20px 14px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;flex-shrink:0;}
+.rh-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.rh-province{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:22px;text-transform:uppercase;color:var(--navy);}
+.rh-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* AGENT CARD */
+.agent-card{margin:14px 16px 0;background:var(--navy);border-radius:12px;padding:14px 16px;color:#fff;display:flex;align-items:center;justify-content:space-between;}
+.ac-left{}
+.ac-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:3px;}
+.ac-name{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:.5px;}
+.ac-role{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+.ac-email{font-size:10px;color:var(--yellow);margin-top:4px;}
+.ac-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+.ac-stat{text-align:right;}
+.ac-stat-val{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:24px;line-height:1;}
+.ac-stat-lbl{font-size:9px;color:rgba(255,255,255,.5);}
+.ac-capture{font-size:10px;padding:3px 8px;border-radius:20px;background:rgba(251,191,36,.15);color:var(--yellow);border:1px solid rgba(251,191,36,.3);}
+
+/* PROCESS FLOW */
+.process-section{margin:12px 16px 0;}
+.section-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px;}
+.process-flow{display:flex;align-items:center;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.pf-step{flex:1;padding:9px 8px;text-align:center;border-right:1px solid var(--border);position:relative;}
+.pf-step:last-child{border-right:none;}
+.pf-num{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:16px;line-height:1;}
+.pf-label{font-size:8px;font-weight:700;letter-spacing:.5px;margin-top:2px;line-height:1.3;color:var(--text2);}
+.pf-icon{font-size:13px;margin-bottom:2px;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 16px 0;}
+.stat-mini{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+.sm-val{font-family:'Roboto Condensed',sans-serif;font-weight:900;font-size:22px;line-height:1;}
+.sm-lbl{font-size:9px;color:var(--muted);margin-top:2px;}
+
+/* SCHOOL CHECKLIST */
+.checklist-section{margin:12px 16px 16px;}
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.school-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:box-shadow .2s;}
+.school-card:hover{box-shadow:0 2px 12px rgba(15,42,74,.1);}
+.sc-header{padding:11px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer;}
+.sc-info{flex:1;min-width:0;}
+.sc-name{font-size:13px;font-weight:700;color:var(--navy);line-height:1.2;}
+.sc-city{font-size:10px;color:var(--muted);margin-top:1px;}
+.sc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.status-badge{font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
+.s-prospect{background:rgba(15,42,74,.08);color:var(--navy);border:1px solid rgba(15,42,74,.2);}
+.s-contacted{background:rgba(74,144,217,.1);color:var(--blue);border:1px solid rgba(74,144,217,.25);}
+.s-awaiting{background:rgba(245,158,11,.1);color:#b45309;border:1px solid rgba(245,158,11,.25);}
+.s-meeting{background:rgba(249,115,22,.12);color:var(--orange);border:1px solid rgba(249,115,22,.3);}
+.s-interested{background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.25);}
+.s-nointerest{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2);}
+.s-future{background:rgba(124,58,237,.08);color:var(--purple);border:1px solid rgba(124,58,237,.2);}
+
+/* EXPAND AREA */
+.sc-body{display:none;border-top:1px solid var(--border);padding:12px 14px;}
+.sc-body.open{display:block;}
+.sc-contact{display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap;}
+.sc-cont-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+.sc-cont-item a{color:var(--blue);text-decoration:none;}
+.sc-cont-item a:hover{text-decoration:underline;}
+
+/* PROCESS CHECKLIST */
+.proc-checks{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.pc-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;background:var(--bg);cursor:pointer;transition:background .15s;}
+.pc-item:hover{background:rgba(74,144,217,.07);}
+.pc-item.done{background:rgba(22,163,74,.07);}
+.pc-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff;}
+.pc-item.done .pc-cb{background:var(--green);border-color:var(--green);}
+.pc-tick{display:none;color:#fff;font-size:10px;font-weight:700;}
+.pc-item.done .pc-tick{display:block;}
+.pc-step-num{font-size:9px;font-weight:700;color:var(--orange);width:14px;flex-shrink:0;}
+.pc-label{font-size:11px;color:var(--text);flex:1;}
+.pc-item.done .pc-label{color:var(--green);}
+.pc-date{font-size:9px;color:var(--muted);}
+
+/* ACTION BUTTONS */
+.sc-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:6px 12px;border-radius:7px;border:none;cursor:pointer;text-decoration:none;transition:all .15s;}
+.btn-cal{background:var(--blue);color:#fff;}
+.btn-cal:hover{background:#3a7bc8;}
+.btn-email{background:var(--bg);color:var(--navy);border:1px solid var(--border);}
+.btn-email:hover{background:var(--border);}
+.btn-call{background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.25);}
+.btn-call:hover{background:rgba(22,163,74,.2);}
+.chevron{font-size:12px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.chevron.open{transform:rotate(180deg);}
+
+/* CONFERENCE BANNER */
+.conf-banner{margin:0 16px 14px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:10px;padding:12px 16px;color:#fff;}
+.cb-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:4px;}
+.cb-title{font-size:13px;font-weight:700;margin-bottom:2px;}
+.cb-meta{font-size:10px;color:rgba(255,255,255,.6);}
+.cb-btn{margin-top:8px;display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;background:var(--yellow);color:var(--navy);cursor:pointer;border:none;text-decoration:none;}
+
+/* RESPONSIVE CHIPS */
+.chip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:20px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-title">BridgeApp <span>× Future Club</span></div>
+    <div style="width:1px;height:18px;background:rgba(255,255,255,.15);margin:0 4px;"></div>
+    <div style="font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);">SA Regional Sales Map</div>
+  </div>
+  <div class="tb-right">
+    <div class="live-dot"></div>
+    <div class="live-txt">Live</div>
+    <div class="tb-badge">Engine 03 · School Sales</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT: MAP PANEL -->
+  <div class="map-panel">
+    <div class="map-header">
+      <div class="map-title">South Africa — Sales Regions</div>
+      <div class="map-sub">Click any province to view agent + school pipeline</div>
+    </div>
+
+    <div class="map-wrap">
+      <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- LIMPOPO -->
+        <polygon id="map-LP" class="province" points="115,20 200,15 290,18 380,22 430,40 420,95 370,110 310,100 250,115 200,110 145,120 100,105 80,70"
+          fill="#4A90D9" onclick="selectRegion('LP')" title="Limpopo"/>
+        <text class="prov-label" x="260" y="68">LIMPOPO</text>
+
+        <!-- NORTH WEST -->
+        <polygon id="map-NW" class="province" points="80,120 100,105 145,120 175,130 200,160 190,210 155,230 110,220 75,195 65,155"
+          fill="#7c3aed" onclick="selectRegion('NW')" title="North West"/>
+        <text class="prov-label" x="128" y="175">NORTH WEST</text>
+
+        <!-- GAUTENG (small) -->
+        <polygon id="map-GP" class="province" points="200,110 250,115 265,130 260,160 235,175 200,165 185,145 190,125"
+          fill="#F97316" onclick="selectRegion('GP')" title="Gauteng"/>
+        <text class="prov-label" x="225" y="148">GP</text>
+
+        <!-- MPUMALANGA -->
+        <polygon id="map-MP" class="province" points="265,130 310,100 370,110 420,95 440,130 430,185 400,205 365,190 330,180 290,175 260,160 265,140"
+          fill="#F97316" onclick="selectRegion('MP')" style="fill:#d97706;" title="Mpumalanga"/>
+        <text class="prov-label" x="355" y="152">MPUMALANGA</text>
+
+        <!-- NORTHERN CAPE (huge) -->
+        <polygon id="map-NC" class="province" points="30,160 65,155 75,195 110,220 155,230 180,265 175,310 155,355 120,385 75,395 35,380 15,330 10,260 18,200"
+          fill="#6b85a0" onclick="selectRegion('NC')" title="Northern Cape"/>
+        <text class="prov-label" x="85" y="300">NORTHERN CAPE</text>
+
+        <!-- FREE STATE -->
+        <polygon id="map-FS" class="province" points="155,230 190,210 200,165 235,175 260,160 290,175 330,180 350,220 340,270 290,295 250,300 205,285 175,265 180,245"
+          fill="#FBBF24" onclick="selectRegion('FS')" title="Free State"/>
+        <text class="prov-label" x="255" y="248" style="fill:#0F2A4A;">FREE STATE</text>
+
+        <!-- KWAZULU-NATAL -->
+        <polygon id="map-KZN" class="province" points="350,220 400,205 430,185 470,180 500,220 510,280 490,340 455,375 420,385 395,365 375,330 360,290 340,270 350,230"
+          fill="#16a34a" onclick="selectRegion('KZN')" title="KwaZulu-Natal"/>
+        <text class="prov-label" x="435" y="280">KZN</text>
+
+        <!-- EASTERN CAPE (large) -->
+        <polygon id="map-EC" class="province" points="155,355 175,310 205,285 250,300 290,295 340,270 360,290 375,330 395,365 375,400 340,420 280,425 220,420 175,405 140,385 135,370"
+          fill="#4A90D9" onclick="selectRegion('EC')" style="fill:#1d6eb5;" title="Eastern Cape"/>
+        <text class="prov-label" x="268" y="370">EASTERN CAPE</text>
+
+        <!-- WESTERN CAPE -->
+        <polygon id="map-WC" class="province" points="30,370 35,380 75,395 120,385 140,385 155,355 135,340 110,340 80,355 50,365"
+          fill="#0F2A4A" onclick="selectRegion('WC')" title="Western Cape"/>
+        <text class="prov-label" x="85" y="375">WC</text>
+
+        <!-- AGENT PINS -->
+        <g id="pin-GP" transform="translate(225,140)" class="agent-pin">
+          <circle r="9" fill="var(--orange)" stroke="white" stroke-width="2"/>
+          <text text-anchor="middle" dy="4" font-size="10" font-weight="900" fill="white">K</text>
+        </g>
+        <g id="pin-EC" transform="translate(220,350)" class="agent-pin">
+          <circle r="9" fill="var(--orange)" stroke="white" stroke-width="2"/>
+          <text text-anchor="middle" dy="4" font-size="10" font-weight="900" fill="white">O</text>
+        </g>
+        <g id="pin-KZN" transform="translate(440,270)" class="agent-pin">
+          <circle r="9" fill="var(--orange)" stroke="white" stroke-width="2"/>
+          <text text-anchor="middle" dy="4" font-size="10" font-weight="900" fill="white">M</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="leg-title">Agent Key · Status Colours</div>
+      <div class="leg-grid">
+        <div class="leg-item"><div class="leg-dot" style="background:rgba(15,42,74,.3)"></div>Prospect</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Contacted</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#b45309"></div>Awaiting</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div>Meeting Set</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Interested</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Not Interested</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="welcome">
+      <div class="welcome-icon">🗺️</div>
+      <div class="welcome-title">Select a Province</div>
+      <div class="welcome-sub">Click any province on the map to view the assigned sales agent, school pipeline, and cold-calling process flow for that region.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===================================================
+// DATA
+// ===================================================
+const PROCESS_STEPS = [
+  { num:1, icon:"📧", label:"Initial Email — Intro + Activation Pack offer to Principal / LO Teacher / Guidance Counsellor" },
+  { num:2, icon:"📞", label:"Follow-up Call (48h) — Confirm receipt, ask for 15-min discovery call, handle objections" },
+  { num:3, icon:"📅", label:"Demo Meeting Booked — Calendar invite sent, Pathfinder demo + UniApply walkthrough" },
+  { num:4, icon:"🎒", label:"Activation Pack Delivered — Assembly talk + parent evening + free Gr 12 Pathfinder onboarding" },
+  { num:5, icon:"✍️", label:"Contract Signed — R60K/yr agreement signed, CRM updated, pod installation scheduled" }
+];
+
+const REGIONS = {
+  GP: {
+    name: "Gauteng",
+    sub: "Pretoria · Johannesburg · Tshwane",
+    agent: { name:"Kefiloe Mametse", role:"School Outreach Coordinator", email:"kefiloe@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "Best conversion corridor",
+    schoolCount: 15,
+    conference: null,
+    schools: [
+      { name:"Acudeo College Kirkney", city:"Pretoria North", email:"admin.kirkney@acudeo.co.za", phone:"+27 12 941 9681", status:"meeting", web:"acudeo.co.za" },
+      { name:"Hoer Overkruin Pretoria", city:"Pretoria East", email:"info@overkruin.com", phone:"+27 12 567 5115", status:"awaiting", web:"overkruin.com" },
+      { name:"Hoerskool Oos-Moot", city:"Pretoria East", email:"admin@oos-moot.co.za", phone:"+27 12 332 0601", status:"awaiting", web:"oos-moot.co.za" },
+      { name:"Gerrit Maritz High School", city:"Pretoria North", email:"hsgerries@yebo.co.za", phone:"+27 12 546 6685", status:"contacted", web:"gerries.co.za" },
+      { name:"Hoerskool Pretoria Noord", city:"Pretoria North", email:"administrasie@pnhs.co.za", phone:"+27 12 546 6590", status:"contacted", web:"pnhs.co.za" },
+      { name:"Hoerskool Menlopark", city:"Menlyn, Pretoria", email:"bemarking@menlopark.co.za", phone:"+27 12 361 7738", status:"contacted", web:"menlopark.co.za" },
+      { name:"St Stithians College", city:"Randpark Ridge, JHB", email:"info@stithian.com", phone:"+27 11 577 6000", status:"prospect", web:"stithian.com" },
+      { name:"Redhill School", city:"Morningside, JHB", email:"info@redhill.co.za", phone:"+27 11 783 4707", status:"prospect", web:"redhill.co.za" },
+      { name:"Reddam House Helderfontein", city:"Midrand", email:"helderfontein@reddamhouse.com", phone:"+27 10 025 6000", status:"prospect", web:"reddamhouse.com" },
+      { name:"Hoerskool Akasia", city:"Akasia, Pretoria", email:"admin@hsakasia.co.za", phone:"+27 12 542 1178", status:"prospect", web:"hsakasia.co.za" },
+      { name:"Hoerskool Elandspoort", city:"Elandspoort, Pretoria", email:"admin@elandspoorths.co.za", phone:"+27 12 386 6565", status:"prospect", web:"elandspoort.co.za" },
+      { name:"Pretoria Technical High School", city:"Pretoria Central", email:"admin@pths.co.za", phone:"+27 12 343 2357", status:"contacted", web:"edarabia.com" },
+      { name:"Hoerskool Pretoria-Wes", city:"Pretoria West", email:"hsptawes@gmail.com", phone:"+27 12 327 5163", status:"contacted", web:"ptaweshs.co.za" },
+      { name:"Hoer Tegniese Skool Pretoria Tuine", city:"Pretoria City", email:"kantoor@htstuine.co.za", phone:"+27 12 379 2181", status:"nointerest", web:"htstuine.co.za" },
+      { name:"Pretoria Central High School", city:"Pretoria Central", email:"N/A", phone:"+27 12 327 5772", status:"nointerest", web:"schoolhive.co.za" }
+    ]
+  },
+  EC: {
+    name: "Eastern Cape",
+    sub: "Port Elizabeth / Gqeberha · East London · Queenstown",
+    agent: { name:"Omphile", role:"EC Field Sales Agent", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "Strong uptake · 17 new prospects Apr",
+    schoolCount: 24,
+    conference: null,
+    schools: [
+      { name:"The Hill College", city:"Port Elizabeth", email:"admin@hillcollege.co.za", phone:"+27 41 373 7043", status:"awaiting", web:"hillcollege.co.za" },
+      { name:"St Dominics Priory", city:"Port Elizabeth", email:"info@priory.co.za", phone:"+27 41 396 2800", status:"awaiting", web:"priory.co.za" },
+      { name:"Elsen Academy", city:"Port Elizabeth", email:"elsen@elsen.co.za", phone:"+27 41 585 3289", status:"awaiting", web:"elsen.co.za" },
+      { name:"Woodridge College", city:"Port Elizabeth", email:"marketing@woodridge.co.za", phone:"+27 41 492 0005", status:"awaiting", web:"woodridge.co.za" },
+      { name:"Stedin College", city:"Port Elizabeth", email:"marketing@stedin.co.za", phone:"+27 41 205 0929", status:"awaiting", web:"stedin.co.za" },
+      { name:"Grey High School", city:"Port Elizabeth", email:"info@greyhighschool.com", phone:"+27 41 374 3300", status:"awaiting", web:"greyhighschool.com" },
+      { name:"Pearson High School", city:"Port Elizabeth", email:"phs@pearsonhighschool.com", phone:"+27 41 583 2111", status:"awaiting", web:"pearsonhighschool.com" },
+      { name:"Victoria Park High School", city:"Port Elizabeth", email:"info@vphigh.co.za", phone:"+27 41 508 6400", status:"awaiting", web:"victoriaparkhigh.com" },
+      { name:"Alexander Road High School", city:"Port Elizabeth", email:"info@arhsco.za", phone:"+27 41 365 1270", status:"awaiting", web:"arhs.co.za" },
+      { name:"Westview School", city:"Port Elizabeth", email:"school@westview.co.za", phone:"+27 41 365 1223", status:"awaiting", web:"westviewpe.co.za" },
+      { name:"Collegiate Girls High School", city:"Port Elizabeth", email:"collegiate@cghs.co.za", phone:"+27 41 373 7705", status:"awaiting", web:"collegiatehigh.co.za" },
+      { name:"Westering High School", city:"Port Elizabeth", email:"whs@westeringhigh.co.za", phone:"+27 41 360 7805", status:"awaiting", web:"westeringhigh.co.za" },
+      { name:"Kabega Christian School", city:"Port Elizabeth", email:"marketing@kcschool.co.za", phone:"+27 41 369 0644", status:"awaiting", web:"kabegachristiansch.wixsite.com" },
+      { name:"Harvest Christian School", city:"Port Elizabeth", email:"reception@harvestcs.co.za", phone:"+27 41 581 2007", status:"awaiting", web:"harvestschool.co.za" },
+      { name:"Theodor Herzl School", city:"Port Elizabeth", email:"marketing@theordorherzl.co.za", phone:"+27 41 581 4244", status:"contacted", web:"theodorherzl.co.za" },
+      { name:"Urban Academy School", city:"Port Elizabeth", email:"admissions@urbanacademy.co.za", phone:"+27 41 585 0886", status:"awaiting", web:"urbanacademyschool.com" },
+      { name:"Happy Home Academy", city:"Port Elizabeth", email:"admin@hhacademy.co.za", phone:"+27 41 451 1243", status:"awaiting", web:"hhacademy.co.za" },
+      { name:"Queens College Boys High", city:"Queenstown", email:"headmaster@queenscollege.co.za", phone:"+27 45 839 4188", status:"awaiting", web:"queenscollege.co.za" },
+      { name:"Queenstown Girls High School", city:"Queenstown", email:"admin@qtghs.co.za", phone:"+27 45 839 4160", status:"awaiting", web:"qtghs.co.za" },
+      { name:"Bellafides Private High School", city:"East London", email:"principal@bellafidesprivateschool.com", phone:"+27 82 826 5209", status:"awaiting", web:"bellafidesprivate.co.za" },
+      { name:"Stirling High School", city:"East London", email:"info@stirlinghigh.co.za", phone:"+27 43 XXX XXXX", status:"interested", web:"stirlinghigh.co.za" },
+      { name:"Bethel High School", city:"East London", email:"info@bethelhigh.co.za", phone:"+27 43 XXX XXXX", status:"meeting", web:"bethelhigh.co.za" }
+    ]
+  },
+  KZN: {
+    name: "KwaZulu-Natal",
+    sub: "Durban · Westville · Pinetown · Hillcrest",
+    agent: { name:"Moses", role:"KZN Field Sales Agent", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "SAHISA Conference Sep 2026",
+    schoolCount: 13,
+    conference: { name:"SAHISA Conference", date:"September 2026", audience:"~250 School Heads", location:"KZN", priority:"HIGH VALUE" },
+    schools: [
+      { name:"Durban High School", city:"Durban", email:"info@durbanhighschool.co.za", phone:"+27 31 277 1500", status:"awaiting", web:"durbanhighschool.co.za" },
+      { name:"Westville Boys High School", city:"Westville, Durban", email:"school@wbhs.co.za", phone:"+27 31 267 1330", status:"awaiting", web:"wbhs.co.za" },
+      { name:"Westville Girls High School", city:"Westville, Durban", email:"school@wghs.co.za", phone:"+27 31 266 1258", status:"awaiting", web:"wghs.co.za" },
+      { name:"Glenwood High School", city:"Glenwood, Durban", email:"glenwood@glenwoodhighschool.co.za", phone:"+27 31 205 5241", status:"awaiting", web:"glenwoodhighschool.co.za" },
+      { name:"Pinetown Girls High", city:"Pinetown", email:"pghsadmin@pghs.co.za", phone:"+27 31 701 1394", status:"awaiting", web:"pghs.co.za" },
+      { name:"Durban Girls College", city:"Durban", email:"marketingadmin@dgc.co.za", phone:"+27 31 268 7200", status:"awaiting", web:"dgc.co.za" },
+      { name:"Northwood School", city:"Durban North", email:"marketing@nwood.co.za", phone:"+27 31 563 6501", status:"awaiting", web:"northwoodschool.co.za" },
+      { name:"Clifton School", city:"Durban", email:"clifton@cliftonschool.co.za", phone:"+27 31 312 2147", status:"awaiting", web:"cliftonschool.co.za" },
+      { name:"St Henrys Marist College", city:"Durban", email:"office@sthenrys.co.za", phone:"+27 31 261 7369", status:"awaiting", web:"sthenrys.co.za" },
+      { name:"Maris Stella", city:"Durban", email:"marketing@marisstella.co.za", phone:"+27 31 209 9426", status:"awaiting", web:"marisstella.co.za" },
+      { name:"Grace Academy", city:"Durban", email:"info@grace-academy.co.za", phone:"+27 31 065 1847", status:"awaiting", web:"grace-academy.co.za" },
+      { name:"Holy Family College", city:"Durban", email:"reception@holyfamilycollege.co.za", phone:"+27 31 205 5083", status:"awaiting", web:"holyfamilycollege.co.za" },
+      { name:"Hillcrest High School", city:"Hillcrest", email:"info@hillcresthigh.co.za", phone:"+27 31 765 XXXX", status:"awaiting", web:"hillcresthigh.co.za" }
+    ]
+  },
+  MP: {
+    name: "Mpumalanga",
+    sub: "Mbombela · Middelburg · Witbank",
+    agent: { name:"TBD — Agent Needed", role:"Mpumalanga Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "ISASA Conference Sep 2026",
+    schoolCount: 0,
+    conference: { name:"ISASA Deputy Heads Conf.", date:"September 2026", audience:"200–250 Deputy Heads", location:"Mpumalanga", priority:"HIGH VALUE" },
+    schools: [
+      { name:"Curro Mbombela", city:"Mbombela", email:"mbombela@curro.co.za", phone:"+27 13 XXX XXXX", status:"prospect", web:"curro.co.za" },
+      { name:"Laerskool Bergvlam", city:"Middelburg", email:"info@bergvlam.co.za", phone:"+27 13 XXX XXXX", status:"prospect", web:"bergvlam.co.za" },
+      { name:"Hoerskool Middelburg", city:"Middelburg", email:"admin@hoerskoolmiddelburg.co.za", phone:"+27 13 XXX XXXX", status:"prospect", web:"hoerskoolmiddelburg.co.za" },
+      { name:"Reddam House Witbank", city:"Witbank/eMalahleni", email:"witbank@reddamhouse.com", phone:"+27 13 XXX XXXX", status:"prospect", web:"reddamhouse.com" }
+    ]
+  },
+  LP: {
+    name: "Limpopo",
+    sub: "Polokwane · Tzaneen · Louis Trichardt",
+    agent: { name:"TBD — Agent Needed", role:"Limpopo Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "22.1% capture rate — 2nd highest",
+    schoolCount: 0,
+    conference: null,
+    schools: [
+      { name:"Merensky High School", city:"Tzaneen", email:"admin@merensky.co.za", phone:"+27 15 XXX XXXX", status:"prospect", web:"merensky.co.za" },
+      { name:"Louis Trichardt High School", city:"Louis Trichardt", email:"admin@lths.co.za", phone:"+27 15 XXX XXXX", status:"prospect", web:"lths.co.za" },
+      { name:"Curro Polokwane", city:"Polokwane", email:"polokwane@curro.co.za", phone:"+27 15 XXX XXXX", status:"prospect", web:"curro.co.za" }
+    ]
+  },
+  FS: {
+    name: "Free State",
+    sub: "Bloemfontein · Welkom · Parys",
+    agent: { name:"TBD — Agent Needed", role:"Free State Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "22% capture rate — strong potential",
+    schoolCount: 0,
+    conference: null,
+    schools: [
+      { name:"Grey College Bloemfontein", city:"Bloemfontein", email:"admin@grey.co.za", phone:"+27 51 XXX XXXX", status:"prospect", web:"grey.co.za" },
+      { name:"Eunice Girls High School", city:"Bloemfontein", email:"admin@eunice.co.za", phone:"+27 51 XXX XXXX", status:"prospect", web:"eunice.co.za" },
+      { name:"Fichardt Park High School", city:"Bloemfontein", email:"admin@fichardtpark.co.za", phone:"+27 51 XXX XXXX", status:"prospect", web:"fichardtpark.co.za" }
+    ]
+  },
+  NC: {
+    name: "Northern Cape",
+    sub: "Kimberley · Upington · Springbok",
+    agent: { name:"TBD — Agent Needed", role:"Northern Cape Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "11.5% — needs focus",
+    schoolCount: 0,
+    conference: null,
+    schools: [
+      { name:"Diamantveld High School", city:"Kimberley", email:"admin@diamantveld.co.za", phone:"+27 53 XXX XXXX", status:"prospect", web:"diamantveld.co.za" },
+      { name:"Langenhoven High School", city:"Upington", email:"admin@langenhoven.co.za", phone:"+27 54 XXX XXXX", status:"prospect", web:"langenhoven.co.za" }
+    ]
+  },
+  NW: {
+    name: "North West",
+    sub: "Rustenburg · Klerksdorp · Potchefstroom",
+    agent: { name:"TBD — Agent Needed", role:"North West Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "Growth opportunity",
+    schoolCount: 0,
+    conference: null,
+    schools: [
+      { name:"Hoerskool Rustenburg", city:"Rustenburg", email:"admin@hsrustenburg.co.za", phone:"+27 14 XXX XXXX", status:"prospect", web:"hsrustenburg.co.za" },
+      { name:"Frikkie Meyer High School", city:"Rustenburg", email:"admin@fmhs.co.za", phone:"+27 14 XXX XXXX", status:"prospect", web:"fmhs.co.za" }
+    ]
+  },
+  WC: {
+    name: "Western Cape",
+    sub: "Cape Town · Stellenbosch · George",
+    agent: { name:"TBD — Agent Needed", role:"Western Cape Field Sales", email:"outreach@gradesmatch.co.za", phone:"+27 XX XXX XXXX" },
+    capture: "Schoolscape CPT — Feb 2026 (declined)",
+    schoolCount: 0,
+    conference: null,
+    schools: [
+      { name:"SACS (South African College Schools)", city:"Cape Town", email:"admin@sacs.co.za", phone:"+27 21 XXX XXXX", status:"prospect", web:"sacs.co.za" },
+      { name:"Bishops Diocesan College", city:"Cape Town", email:"admin@bishops.org.za", phone:"+27 21 XXX XXXX", status:"prospect", web:"bishops.org.za" },
+      { name:"Rondebosch Boys High", city:"Cape Town", email:"admin@rbhs.co.za", phone:"+27 21 XXX XXXX", status:"prospect", web:"rbhs.co.za" }
+    ]
+  }
+};
+
+// State
+const checkState = {};
+let currentRegion = null;
+
+function getStatusLabel(s) {
+  const m = { prospect:"Prospect", contacted:"Contacted", awaiting:"Awaiting Response", meeting:"Meeting Scheduled", interested:"Interested", nointerest:"Not Interested", future:"Future Opportunity" };
+  return m[s] || s;
+}
+
+function buildCalendarLink(school, agent, region) {
+  const title = encodeURIComponent(`BridgeApp School Visit — ${school.name}`);
+  const details = encodeURIComponent(
+    `BRIDGEAPP SCHOOL SALES VISIT\n\n` +
+    `School: ${school.name}\nCity: ${school.city}\nWebsite: ${school.web}\n\n` +
+    `Contact: ${school.email}\nPhone: ${school.phone}\n\n` +
+    `Sales Agent: ${agent.name}\nRegion: ${region.name}\n\n` +
+    `AGENDA:\n` +
+    `• Pathfinder demo (live quiz walkthrough)\n` +
+    `• UniApply overview for Grade 12\n` +
+    `• Future Club Activation Pack pitch\n` +
+    `• R60,000/year contract discussion\n\n` +
+    `Process status: ${getStatusLabel(school.status)}\n\n` +
+    `BridgeApp: bridgeapp.co.za | info@blankcanvasafrica.co.za`
+  );
+  const location = encodeURIComponent(`${school.name}, ${school.city}, South Africa`);
+  const attendees = encodeURIComponent(`${agent.email},${school.email}`);
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&add=${attendees}&sf=true&output=xml`;
+}
+
+function countByStatus(schools) {
+  const counts = { total: schools.length, contacted: 0, meeting: 0, interested: 0, nointerest: 0, prospect: 0 };
+  schools.forEach(s => {
+    if (s.status === 'contacted' || s.status === 'awaiting') counts.contacted++;
+    if (s.status === 'meeting') counts.meeting++;
+    if (s.status === 'interested') counts.interested++;
+    if (s.status === 'nointerest') counts.nointerest++;
+    if (s.status === 'prospect') counts.prospect++;
+  });
+  return counts;
+}
+
+function toggleSchool(id) {
+  const body = document.getElementById(`body-${id}`);
+  const chev = document.getElementById(`chev-${id}`);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function toggleCheck(id) {
+  checkState[id] = !checkState[id];
+  const item = document.getElementById(`check-${id}`);
+  if (item) item.classList.toggle('done', checkState[id]);
+}
+
+function selectRegion(code) {
+  // Deselect all provinces
+  document.querySelectorAll('.province').forEach(p => p.classList.remove('selected'));
+  // Select this one
+  const el = document.getElementById(`map-${code}`);
+  if (el) el.classList.add('selected');
+
+  currentRegion = code;
+  const region = REGIONS[code];
+  if (!region) return;
+
+  const panel = document.getElementById('detailPanel');
+  const counts = countByStatus(region.schools);
+
+  let schoolsHTML = region.schools.map((school, i) => {
+    const sid = `${code}-${i}`;
+    const statusClass = `s-${school.status}`;
+    const steps = PROCESS_STEPS.map((step, si) => {
+      const cid = `${sid}-step${si}`;
+      const done = checkState[cid] ? 'done' : '';
+      return `<div class="pc-item ${done}" id="check-${cid}" onclick="toggleCheck('${cid}')">
+        <div class="pc-cb"><span class="pc-tick">✓</span></div>
+        <span class="pc-step-num">${step.num}</span>
+        <span class="pc-icon" style="font-size:12px;">${step.icon}</span>
+        <span class="pc-label">${step.label}</span>
+      </div>`;
+    }).join('');
+
+    const calLink = buildCalendarLink(school, region.agent, region);
+    const emailLink = `mailto:${school.email}?subject=BridgeApp Partnership Opportunity — ${school.name}&body=Dear Principal / Life Orientation Team,%0A%0AWe are reaching out from BridgeApp regarding a unique opportunity to partner with ${school.name}...`;
+    const callLink = `tel:${school.phone.replace(/\s/g,'')}`;
+
+    return `<div class="school-card">
+      <div class="sc-header" onclick="toggleSchool('${sid}')">
+        <div class="sc-info">
+          <div class="sc-name">${school.name}</div>
+          <div class="sc-city">📍 ${school.city}</div>
+        </div>
+        <div class="sc-right">
+          <span class="status-badge ${statusClass}">${getStatusLabel(school.status)}</span>
+          <span class="chevron" id="chev-${sid}">▼</span>
+        </div>
+      </div>
+      <div class="sc-body" id="body-${sid}">
+        <div class="sc-contact">
+          <div class="sc-cont-item">📧 <a href="${emailLink}">${school.email}</a></div>
+          <div class="sc-cont-item">📞 <a href="${callLink}">${school.phone}</a></div>
+          <div class="sc-cont-item">🌐 <a href="https://${school.web}" target="_blank">${school.web}</a></div>
+        </div>
+        <div class="section-label" style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:8px;">Cold Calling Process Flow — Check Off as You Go</div>
+        <div class="proc-checks">${steps}</div>
+        <div class="sc-actions">
+          <a href="${calLink}" target="_blank" class="btn btn-cal">📅 Schedule in Google Calendar</a>
+          <a href="${emailLink}" class="btn btn-email">📧 Draft Email</a>
+          <a href="${callLink}" class="btn btn-call">📞 Call Now</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const confHTML = region.conference ? `
+    <div class="conf-banner" style="margin:0 16px 14px;">
+      <div class="cb-label">🗓 Conference Opportunity</div>
+      <div class="cb-title">${region.conference.name}</div>
+      <div class="cb-meta">${region.conference.date} · ${region.conference.audience} · ${region.conference.location}</div>
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(region.conference.name + ' — BridgeApp Booth')}&details=${encodeURIComponent('BridgeApp exhibition booth. Target: 15+ school leads.\nAudience: ' + region.conference.audience)}&location=${encodeURIComponent(region.conference.location + ', South Africa')}" target="_blank" class="cb-btn">📅 Block in Calendar</a>
+    </div>` : '';
+
+  const agentTBD = region.agent.name.includes('TBD');
+
+  panel.innerHTML = `
+    <div class="region-header">
+      <div class="rh-top">
+        <div>
+          <div class="rh-province">${region.name}</div>
+          <div class="rh-meta">${region.sub}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Capture Rate Signal</div>
+          <div style="font-size:11px;color:var(--navy);font-weight:700;">${region.capture}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agent-card" style="margin:14px 16px 0;background:${agentTBD ? '#6b85a0' : 'var(--navy)'};">
+      <div class="ac-left">
+        <div class="ac-label">Assigned Sales Agent</div>
+        <div class="ac-name">${region.agent.name}</div>
+        <div class="ac-role">${region.agent.role}</div>
+        <div class="ac-email">${region.agent.email}</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-stat">
+          <div class="ac-stat-val" style="color:var(--yellow);">${counts.total}</div>
+          <div class="ac-stat-lbl">Schools in Pipeline</div>
+        </div>
+        ${agentTBD ? '<div style="font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid rgba(220,38,38,.3);">⚠ Agent Not Assigned</div>' : '<div class="ac-capture">Active</div>'}
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="sm-val" style="color:var(--navy);">${counts.prospect}</div>
+        <div class="sm-lbl">Prospects</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val" style="color:var(--blue);">${counts.contacted}</div>
+        <div class="sm-lbl">Contacted</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val" style="color:var(--orange);">${counts.meeting}</div>
+        <div class="sm-lbl">Meetings</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val" style="color:var(--green);">${counts.interested}</div>
+        <div class="sm-lbl">Interested</div>
+      </div>
+    </div>
+
+    <div class="process-section" style="margin:12px 16px 0;">
+      <div class="section-label">5-Step Cold Calling Process Flow</div>
+      <div class="process-flow">
+        ${PROCESS_STEPS.map((s,i) => `
+          <div class="pf-step" style="${i===0?'background:rgba(249,115,22,.07);':''}">
+            <div class="pf-icon">${s.icon}</div>
+            <div class="pf-num" style="color:var(--orange);">${s.num}</div>
+            <div class="pf-label">${s.icon === '📧' ? 'Email' : s.icon === '📞' ? 'Call' : s.icon === '📅' ? 'Demo' : s.icon === '🎒' ? 'Activate' : 'Sign'}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${confHTML}
+
+    <div class="checklist-section">
+      <div class="cl-header">
+        <div class="section-label" style="margin-bottom:0;">School Pipeline — ${counts.total} Schools</div>
+        <div style="font-size:10px;color:var(--muted);">Click school to expand checklist</div>
+      </div>
+      ${schoolsHTML}
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

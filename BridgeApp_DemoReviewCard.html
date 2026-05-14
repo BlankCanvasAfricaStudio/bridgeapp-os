@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeApp Phase 2 — Demo Review Card | Sign-Off</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2340;--navy-mid:#1a3355;--blue:#4a90d9;--orange:#e8601c;--yellow:#f0b429;
+  --white:#fff;--off-white:#f8fafc;--border:#e2e8f0;--text-primary:#0f2340;
+  --text-secondary:#475569;--text-muted:#94a3b8;--success:#10b981;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#e2e8f0;color:var(--text-primary);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;align-items:flex-start}
+
+/* CARD SHEET — A4-ish review card */
+.card{width:100%;max-width:920px;background:var(--white);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(15,35,64,.25),0 8px 20px -8px rgba(15,35,64,.15);position:relative}
+
+/* TOP BANNER */
+.banner{background:var(--navy);padding:32px 38px 28px;color:var(--white);position:relative;overflow:hidden}
+.banner::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 33%,var(--orange) 33%,var(--orange) 66%,var(--yellow) 66%,var(--yellow) 100%)}
+.banner::after{content:'APPROVAL';position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:'Barlow Condensed',sans-serif;font-size:140px;font-weight:900;color:rgba(255,255,255,.03);letter-spacing:-4px;line-height:1;pointer-events:none}
+.banner-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;position:relative;z-index:1}
+.banner-logo{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:-.5px;line-height:1}
+.banner-logo span:nth-child(1){color:var(--blue)}
+.banner-logo span:nth-child(2){color:var(--orange)}
+.banner-tag{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.08em;font-weight:700;text-transform:uppercase;margin-top:3px}
+.banner-stamp{background:var(--yellow);color:var(--navy);padding:6px 14px;border-radius:6px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.banner-stamp::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--navy);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.banner-title{font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:900;letter-spacing:-1.5px;line-height:.95;margin-bottom:6px;position:relative;z-index:1}
+.banner-title span{color:var(--yellow)}
+.banner-sub{font-size:13px;color:rgba(255,255,255,.65);max-width:520px;position:relative;z-index:1}
+
+/* BODY */
+.body{padding:30px 38px}
+.row{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:22px}
+.row.three{grid-template-columns:repeat(3,1fr);gap:14px}
+.row.four{grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* KPI BLOCKS */
+.kpi{background:var(--off-white);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-bar{position:absolute;top:0;left:0;width:100%;height:3px}
+.kpi.b .kpi-bar{background:var(--blue)}
+.kpi.o .kpi-bar{background:var(--orange)}
+.kpi.y .kpi-bar{background:var(--yellow)}
+.kpi.n .kpi-bar{background:var(--navy)}
+.kpi-label{font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.kpi-value{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--navy);letter-spacing:-.8px;line-height:1}
+.kpi-sub{font-size:11px;color:var(--text-secondary);margin-top:3px}
+
+/* SCOPE BLOCK */
+.scope-h{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--navy);letter-spacing:-.3px;margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px}
+.scope-h::before{content:'';width:14px;height:3px;background:var(--navy);border-radius:2px}
+.scope-list{font-size:13px;color:var(--text-secondary);line-height:1.65}
+.scope-list .item{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border)}
+.scope-list .item:last-child{border-bottom:none}
+.scope-list .item .num{font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--navy);min-width:18px}
+.scope-list .item .txt strong{display:block;color:var(--navy);font-weight:800;margin-bottom:2px;font-size:12px}
+
+/* ENGINES STRIP */
+.engines{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.eng{padding:14px 14px;border-radius:10px;color:var(--white);position:relative;overflow:hidden}
+.eng.e1{background:var(--blue)}
+.eng.e2{background:var(--yellow);color:var(--navy)}
+.eng.e3{background:var(--orange)}
+.eng.e4{background:var(--navy)}
+.eng-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;opacity:.25;line-height:1;letter-spacing:-1px}
+.eng-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:-.2px;margin-top:2px;margin-bottom:3px}
+.eng-desc{font-size:10px;opacity:.85;line-height:1.4;font-weight:600}
+
+/* BUDGET BLOCK */
+.budget-block{background:var(--navy);border-radius:12px;padding:18px 20px;color:var(--white);margin-bottom:22px;position:relative;overflow:hidden}
+.budget-block::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;background:var(--yellow);opacity:.1;border-radius:50%}
+.budget-row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.budget-label{font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;font-weight:800}
+.budget-val{font-family:'Barlow Condensed',sans-serif;font-size:46px;font-weight:900;color:var(--yellow);letter-spacing:-1.2px;line-height:1}
+.budget-note{font-size:11px;color:rgba(255,255,255,.6);max-width:280px;text-align:right;line-height:1.5}
+
+/* APPROVAL BLOCK */
+.approve{background:var(--off-white);border:1px solid var(--border);border-radius:14px;padding:22px 26px}
+.approve-head{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--navy);letter-spacing:-.5px;margin-bottom:4px}
+.approve-sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+.approve-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.sig{padding:14px 0;border-top:2px solid var(--navy)}
+.sig-label{font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.sig-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:14px;letter-spacing:-.2px}
+.sig-line{display:flex;justify-content:space-between;gap:14px;margin-bottom:8px;font-size:11px}
+.sig-line .lbl{color:var(--text-muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
+.sig-line .ln{flex:1;border-bottom:1px solid var(--text-muted);min-height:18px}
+
+/* DEADLINE BANNER */
+.deadline{background:var(--orange);color:var(--white);padding:12px 26px;text-align:center;font-size:13px;font-weight:800;letter-spacing:.02em}
+.deadline strong{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:-.3px}
+
+/* FOOTER */
+.foot{background:var(--navy);color:rgba(255,255,255,.5);padding:14px 26px;font-size:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;letter-spacing:.04em}
+.foot strong{color:rgba(255,255,255,.85)}
+
+@media print{
+  body{background:#fff;padding:0}
+  .card{box-shadow:none;border-radius:0;max-width:none}
+}
+@media(max-width:720px){
+  .row{grid-template-columns:1fr}
+  .row.three,.row.four{grid-template-columns:repeat(2,1fr)}
+  .engines{grid-template-columns:repeat(2,1fr)}
+  .banner{padding:24px 22px}
+  .banner-title{font-size:38px}
+  .body{padding:22px}
+  .approve-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="card">
+
+<!-- TOP BANNER -->
+<div class="banner">
+<div class="banner-row">
+<div>
+<div class="banner-logo"><span>Bridge</span><span>App</span></div>
+<div class="banner-tag">× Future Club · Phase 2 Demo &amp; Approval</div>
+</div>
+<div class="banner-stamp">Awaiting Sign-off</div>
+</div>
+<div class="banner-title">The Growth <span>Era.</span></div>
+<div class="banner-sub">Demo Review Card · v1.0 · For client signature · Becomes the binding Phase 2 brief upon counter-signature by Blank Canvas Agency.</div>
+</div>
+
+<div class="body">
+
+<!-- HEADLINE TARGETS -->
+<div class="row four">
+<div class="kpi n"><div class="kpi-bar"></div><div class="kpi-label">FC Members</div><div class="kpi-value">50,000</div><div class="kpi-sub">By 31 Dec 2026</div></div>
+<div class="kpi b"><div class="kpi-bar"></div><div class="kpi-label">MRR Target</div><div class="kpi-value">R500K</div><div class="kpi-sub">R300K–R500K range</div></div>
+<div class="kpi o"><div class="kpi-bar"></div><div class="kpi-label">School Contracts</div><div class="kpi-value">20–30</div><div class="kpi-sub">IEB Q5 priority · R60K/yr</div></div>
+<div class="kpi y"><div class="kpi-bar"></div><div class="kpi-label">Free-to-Paid</div><div class="kpi-value">3–5%</div><div class="kpi-sub">Conversion target</div></div>
+</div>
+
+<!-- 4 ENGINES -->
+<div class="scope-h">The 4 Growth Engines</div>
+<div class="engines">
+<div class="eng e1"><div class="eng-num">01</div><div class="eng-name">Sales Campaigns</div><div class="eng-desc">Pathfinder · UniApply · Parent Subs · Paid + Influencer</div></div>
+<div class="eng e2"><div class="eng-num">02</div><div class="eng-name">The Future Club</div><div class="eng-desc">Community · Competition · Podcast · Partnerships</div></div>
+<div class="eng e3"><div class="eng-num">03</div><div class="eng-name">School Sales</div><div class="eng-desc">Pods · Matric Lounge · Golf · Merch · Conferences</div></div>
+<div class="eng e4"><div class="eng-num">04</div><div class="eng-name">Systems &amp; Data</div><div class="eng-desc">CRM · AI workflow · Dashboard · Performance</div></div>
+</div>
+
+<!-- WHAT'S APPROVED -->
+<div class="row">
+<div>
+<div class="scope-h">By signing, BridgeApp approves</div>
+<div class="scope-list">
+<div class="item"><span class="num">01</span><span class="txt"><strong>The 4-Engine Phase 2 plan</strong>Sales · Future Club · School Sales · Systems</span></div>
+<div class="item"><span class="num">02</span><span class="txt"><strong>The 4 new BTL pillars</strong>In-school pods · matric lounges · golf clinics · merch capsules</strong></span></div>
+<div class="item"><span class="num">03</span><span class="txt"><strong>R600K working budget</strong>Pending Section 12 final line-item reconciliation</span></div>
+<div class="item"><span class="num">04</span><span class="txt"><strong>May–Dec 2026 roadmap + Dec targets</strong>Eight months of execution. Every milestone sequenced.</span></div>
+<div class="item"><span class="num">05</span><span class="txt"><strong>Brand book + website refresh</strong>At the Figma links provided in the master OS</span></div>
+</div>
+</div>
+<div>
+<div class="scope-h">What Blank Canvas owns</div>
+<div class="scope-list">
+<div class="item"><span class="num">★</span><span class="txt"><strong>Commercial sales engine</strong>Pathfinder · UniApply · Parent subs · School contracts · Future Club</span></div>
+<div class="item"><span class="num">★</span><span class="txt"><strong>All marketing engines</strong>Paid, organic, influencer, BTL, experiential, events</span></div>
+<div class="item"><span class="num">★</span><span class="txt"><strong>Sales support assets</strong>Scripts, decks, merch, travel planning</span></div>
+<div class="item"><span class="num">★</span><span class="txt"><strong>40K commercial sales target</strong>Separate team owns 60K sponsored pipeline</span></div>
+<div class="item"><span class="num">★</span><span class="txt"><strong>CRM workflow + brand assets</strong>Live by Sep 2026 with full automation</span></div>
+</div>
+</div>
+</div>
+
+<!-- BUDGET BLOCK -->
+<div class="budget-block">
+<div class="budget-row">
+<div>
+<div class="budget-label">Total working budget</div>
+<div class="budget-val">R600,000</div>
+</div>
+<div class="budget-note">
+Mid scenario · Final reconciliation in Section 12 appendix · ~4% contingency built in for opportunistic activations
+</div>
+</div>
+</div>
+
+<!-- ROADMAP STRIP -->
+<div class="scope-h">8-month roadmap snapshot</div>
+<div class="row" style="grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:24px">
+<div style="background:var(--blue);color:#fff;padding:8px 6px;border-radius:6px;text-align:center;font-size:9px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">MAY</div><div style="font-size:8px;opacity:.85;font-weight:700">Survey · Pitch</div></div>
+<div style="background:var(--orange);color:#fff;padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">JUN</div><div style="font-size:8px;opacity:.85;font-weight:700">CRM · FC launch</div></div>
+<div style="background:var(--yellow);color:var(--navy);padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">JUL</div><div style="font-size:8px;opacity:.85;font-weight:700">Competition opens</div></div>
+<div style="background:var(--blue);color:#fff;padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">AUG</div><div style="font-size:8px;opacity:.85;font-weight:700">FC 25K target</div></div>
+<div style="background:var(--orange);color:#fff;padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">SEP</div><div style="font-size:8px;opacity:.85;font-weight:700">Conferences</div></div>
+<div style="background:var(--yellow);color:var(--navy);padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">OCT</div><div style="font-size:8px;opacity:.85;font-weight:700">Matric dance</div></div>
+<div style="background:var(--blue);color:#fff;padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">NOV</div><div style="font-size:8px;opacity:.85;font-weight:700">FC 50K · Top 12</div></div>
+<div style="background:var(--orange);color:#fff;padding:8px 6px;border-radius:6px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900">DEC</div><div style="font-size:8px;opacity:.85;font-weight:700">Champion + S1</div></div>
+</div>
+
+<!-- APPROVAL BLOCK -->
+<div class="approve">
+<div class="approve-head">Sign here. Sign now.</div>
+<div class="approve-sub">This card becomes the binding Phase 2 brief upon counter-signature. Approval required by 20 May 2026 to protect the June campaign launch sequence.</div>
+<div class="approve-grid">
+<div class="sig">
+<div class="sig-label">For BridgeApp</div>
+<div class="sig-name">Authorised Signatory</div>
+<div class="sig-line"><span class="lbl">Name</span><span class="ln"></span></div>
+<div class="sig-line"><span class="lbl">Signature</span><span class="ln"></span></div>
+<div class="sig-line"><span class="lbl">Date</span><span class="ln"></span></div>
+</div>
+<div class="sig">
+<div class="sig-label">For Blank Canvas Agency</div>
+<div class="sig-name">Ditshego Ditshego · Project Manager</div>
+<div class="sig-line"><span class="lbl">Name</span><span class="ln"></span></div>
+<div class="sig-line"><span class="lbl">Signature</span><span class="ln"></span></div>
+<div class="sig-line"><span class="lbl">Date</span><span class="ln"></span></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- DEADLINE BANNER -->
+<div class="deadline">
+<strong>★ Approval needed by 20 May 2026 ★</strong> &nbsp;·&nbsp; To protect June campaign launch sequence
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+<div><strong>Blank Canvas Agency</strong> · info@blankcanvasafrica.co.za · Reg. 2025/210463/07</div>
+<div>Demo Review Card v1.0 · Phase 2 · 01 May – 31 Dec 2026</div>
+</div>
+
+</div>
+</body>
+</html>

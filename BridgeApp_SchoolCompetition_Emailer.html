@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your school has been selected · BridgeApp School Excellence Competition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#e2e8f0;color:#0f2340;line-height:1.6;padding:32px 16px}
+.preview{max-width:680px;margin:0 auto 18px;padding:14px 18px;background:#fff;border-radius:10px;border:1px solid #cbd5e1;font-size:11px;color:#475569;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.preview strong{color:#0f2340;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;letter-spacing:-.3px;display:block;margin-bottom:1px}
+.preview-meta{font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;background:#f1f5f9;border-radius:5px}
+
+/* EMAIL CONTAINER */
+.email{max-width:680px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(15,35,64,.2),0 8px 20px -8px rgba(15,35,64,.1)}
+
+/* HEADER */
+.hdr{background:#0f2340;padding:24px 32px 22px;color:#fff;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#4a90d9 0%,#4a90d9 33%,#e8601c 33%,#e8601c 66%,#f0b429 66%,#f0b429 100%)}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;margin-top:5px}
+.hdr-logo{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:-.4px;line-height:1}
+.hdr-logo span:nth-child(1){color:#4a90d9}
+.hdr-logo span:nth-child(2){color:#e8601c}
+.hdr-stamp{background:#f0b429;color:#0f2340;padding:5px 11px;border-radius:5px;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+
+/* HERO */
+.hero{padding:36px 32px 28px;background:#f0b429;color:#0f2340;position:relative;overflow:hidden}
+.hero::after{content:'EST. 2026';position:absolute;right:-10px;bottom:-20px;font-family:'Barlow Condensed',sans-serif;font-size:80px;font-weight:900;color:rgba(15,35,64,.06);letter-spacing:-2px;line-height:1;pointer-events:none}
+.hero-kicker{display:inline-block;background:#0f2340;color:#f0b429;padding:5px 11px;border-radius:5px;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;letter-spacing:-1.3px;line-height:.96;margin-bottom:8px}
+.hero h1 span{color:#e8601c;font-style:italic;display:block}
+.hero p{font-size:14px;font-weight:700;color:#0f2340;max-width:90%;opacity:.85;line-height:1.5;margin-top:6px;position:relative;z-index:1}
+
+/* BODY */
+.body{padding:30px 32px 24px}
+.dear{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0f2340;letter-spacing:-.2px;margin-bottom:14px}
+.body p{font-size:14px;color:#334155;margin-bottom:14px;line-height:1.65}
+.body p strong{color:#0f2340;font-weight:800}
+.callout{background:#f8fafc;border-left:4px solid #4a90d9;padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0;font-size:13px;color:#334155;line-height:1.6}
+.callout strong{display:block;color:#0f2340;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:-.2px;margin-bottom:4px;text-transform:uppercase}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:20px 0}
+.info{padding:14px 14px;border-radius:9px;color:#fff;position:relative}
+.info.i1{background:#4a90d9}
+.info.i2{background:#e8601c}
+.info.i3{background:#0f2340}
+.info-label{font-size:9px;font-weight:900;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.info-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:-.6px;line-height:1;margin-bottom:3px}
+.info-sub{font-size:10px;opacity:.85;font-weight:600;line-height:1.4}
+
+/* CTA BLOCK */
+.cta-block{background:#0f2340;border-radius:12px;padding:24px 26px;color:#fff;text-align:center;margin:24px 0 18px;position:relative;overflow:hidden}
+.cta-block::before{content:'';position:absolute;right:-30px;top:-30px;width:140px;height:140px;background:#f0b429;opacity:.1;border-radius:50%}
+.cta-block::after{content:'';position:absolute;left:-30px;bottom:-30px;width:100px;height:100px;background:#4a90d9;opacity:.1;border-radius:50%}
+.cta-kicker{font-size:10px;font-weight:900;color:#f0b429;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1}
+.cta-headline{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:-.6px;margin-bottom:14px;position:relative;z-index:1}
+.cta-btn{display:inline-block;background:#f0b429;color:#0f2340;padding:13px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;position:relative;z-index:1;transition:transform .15s}
+.cta-btn:hover{transform:translateY(-1px)}
+.cta-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:12px;position:relative;z-index:1}
+
+/* WHAT YOU GET */
+.what-h{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#0f2340;letter-spacing:-.4px;margin:22px 0 12px;display:flex;align-items:center;gap:9px}
+.what-h::before{content:'';width:18px;height:3px;background:#e8601c;border-radius:2px}
+.what-list{list-style:none}
+.what-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed #e2e8f0;font-size:13px;color:#334155;line-height:1.55}
+.what-item:last-child{border-bottom:none}
+.what-num{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#e8601c;line-height:1;flex-shrink:0;width:22px;letter-spacing:-.3px}
+.what-txt strong{color:#0f2340;font-weight:800;display:block;margin-bottom:2px;font-size:13px}
+
+/* FOOTER */
+.foot{background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.foot-brand{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:#0f2340;letter-spacing:-.3px;line-height:1.2}
+.foot-brand span{color:#94a3b8;font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;display:block;margin-top:3px;font-family:'Barlow',sans-serif}
+.foot-meta{font-size:10px;color:#94a3b8;line-height:1.7;text-align:right}
+.foot-meta a{color:#475569;text-decoration:none;font-weight:700}
+.foot-meta a:hover{color:#0f2340}
+
+.sign{font-size:13px;color:#334155;margin-top:18px;padding-top:16px;border-top:1px solid #e2e8f0;line-height:1.6}
+.sign strong{color:#0f2340;font-weight:800;display:block;font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:-.2px}
+.sign em{font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.04em;display:block;margin-top:2px}
+
+/* notes panel below */
+.notes{max-width:680px;margin:18px auto 0;background:#fff;border-radius:10px;padding:18px 22px;border:1px solid #cbd5e1}
+.notes h3{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:#0f2340;letter-spacing:-.3px;margin-bottom:10px;text-transform:uppercase}
+.notes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:11px;color:#475569;line-height:1.55}
+.notes-grid div{padding:8px 11px;background:#f8fafc;border-radius:6px;border-left:3px solid #4a90d9}
+.notes-grid div:nth-child(2){border-left-color:#e8601c}
+.notes-grid div:nth-child(3){border-left-color:#f0b429}
+.notes-grid div:nth-child(4){border-left-color:#0f2340}
+.notes-grid strong{color:#0f2340;font-weight:800;display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+
+@media(max-width:600px){
+  .hdr,.hero,.body,.foot{padding-left:20px;padding-right:20px}
+  .hero h1{font-size:32px}
+  .cta-headline{font-size:20px}
+  .info-grid{grid-template-columns:1fr;gap:8px}
+  .notes-grid{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff;padding:0}
+  .preview,.notes{display:none}
+  .email{box-shadow:none;border-radius:0;max-width:none}
+}
+</style>
+</head>
+<body>
+
+<div class="preview">
+<div>
+<strong>Sample Output · Emailer</strong>
+School Competition · Email 1 of 5 · May 2026 invitation · Sent by Kefiloe to 400+ IEB pilot schools
+</div>
+<div class="preview-meta">★ Brand-aligned</div>
+</div>
+
+<!-- THE EMAIL -->
+<div class="email">
+
+<!-- HEADER -->
+<div class="hdr">
+<div class="hdr-row">
+<div class="hdr-logo"><span>Bridge</span><span>App</span></div>
+<div class="hdr-stamp">School Programme · 2026</div>
+</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<div class="hero-kicker">★ For Heads of School &amp; Principals</div>
+<h1>Your school has been<br>selected to compete<span>for a fully funded study pod.</span></h1>
+<p>The BridgeApp School Excellence Competition is opening to a curated list of IEB Q5 schools. Yours made the cut.</p>
+</div>
+
+<!-- BODY -->
+<div class="body">
+<div class="dear">Dear Head of School,</div>
+
+<p>This is a personal invitation. <strong>Only 400 IEB Q5 schools across South Africa have been invited</strong> to enter the inaugural BridgeApp School Excellence Competition — a 6-month programme that ends with one school being awarded a fully funded study pod installation, valued at over R150,000.</p>
+
+<p>The competition is built on a simple idea: schools that get their matriculants into the right universities deserve recognition. BridgeApp is South Africa's most supportive excellence partner to students, parents, and schools — and we want to make your school the proof.</p>
+
+<!-- INFO GRID -->
+<div class="info-grid">
+<div class="info i1">
+<div class="info-label">Programme period</div>
+<div class="info-val">6 mo.</div>
+<div class="info-sub">June – November 2026</div>
+</div>
+<div class="info i2">
+<div class="info-label">Schools invited</div>
+<div class="info-val">400</div>
+<div class="info-sub">IEB Q5 priority list</div>
+</div>
+<div class="info i3">
+<div class="info-label">Top prize value</div>
+<div class="info-val">R150K+</div>
+<div class="info-sub">Fully funded study pod</div>
+</div>
+</div>
+
+<!-- CALLOUT -->
+<div class="callout">
+<strong>★ Why this matters for your school</strong>
+Schools that register get 60 days of free Pathfinder + UniApply access for their entire matric cohort. No commitment. No installation fee. Your matrics start the year with stronger subject choice clarity and a measurable jump in university acceptance rates.
+</div>
+
+<!-- WHAT YOU GET -->
+<div class="what-h">What registration gives your school</div>
+<ul class="what-list">
+<li class="what-item">
+<span class="what-num">01</span>
+<span class="what-txt"><strong>60 days of free Pathfinder + UniApply access</strong>Full matric cohort onboarded · subject choice and university application guidance · no implementation cost.</span>
+</li>
+<li class="what-item">
+<span class="what-num">02</span>
+<span class="what-txt"><strong>Live school leaderboard position</strong>Your matric class earns points for sign-ups, completed quizzes, and applications. Rank publicly against peer IEB schools.</span>
+</li>
+<li class="what-item">
+<span class="what-num">03</span>
+<span class="what-txt"><strong>Branded school referral link</strong>Share once with parents and students. Every sign-up under your link strengthens your competition position.</span>
+</li>
+<li class="what-item">
+<span class="what-num">04</span>
+<span class="what-txt"><strong>The path to the Top 50</strong>September 2026: Top 50 schools announced. Top 12 announced November. One Excellence School wins the fully funded pod in December.</span>
+</li>
+</ul>
+
+<!-- CTA -->
+<div class="cta-block">
+<div class="cta-kicker">★ Register your school · 60-second form</div>
+<div class="cta-headline">Take Your School to the Top 50.</div>
+<a href="#" class="cta-btn">Register Now &rsaquo;</a>
+<div class="cta-sub">No commitment · Registration closes 31 May 2026 · 60 days of free access begins on Day 1</div>
+</div>
+
+<p>The Top 500 will be ranked by sign-up volume and matric application completion rate. Judging for the Top 50 begins in October. The Top 12 attend a live showcase in November, where the Excellence School is announced.</p>
+
+<p>I'd genuinely like to meet you before the programme opens. I'm available for a 15-minute Zoom or a quick call next week to walk you through how it works. Just reply directly to this email and I'll send through three time slots.</p>
+
+<!-- SIGN-OFF -->
+<div class="sign">
+Warmly,<br>
+<strong>Kefiloe Mametse</strong>
+<em>School Outreach &amp; Sales · Blank Canvas Agency for BridgeApp</em>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+<div>
+<div class="foot-brand">BridgeApp · Pathfinder · UniApply<br><span>The Future Is Watching</span></div>
+</div>
+<div class="foot-meta">
+<a href="mailto:info@blankcanvasafrica.co.za">info@blankcanvasafrica.co.za</a><br>
+Blank Canvas Agency · Reg. 2025/210463/07<br>
+Sandton, Gauteng, South Africa<br>
+<br>
+<a href="#">View in browser</a> · <a href="#">Unsubscribe</a>
+</div>
+</div>
+
+</div>
+
+<!-- BRAND NOTES -->
+<div class="notes">
+<h3>Brand compliance check</h3>
+<div class="notes-grid">
+<div><strong>Colours</strong>Navy header, Yellow Future Club hero, Blue Pathfinder accent, Orange UniApply CTA, Yellow approval button. All on-brand.</div>
+<div><strong>Typography</strong>Barlow Condensed Black for headlines (42px). Barlow Regular for body (14px). Mobile responsive.</div>
+<div><strong>Sales trigger</strong>"Register Now" → registration = 60 days free access = onboarding the full matric cohort. School pipeline directly into the CRM.</div>
+<div><strong>Tone</strong>Direct, confident, South African. Personal sign-off from Kefiloe. No tech jargon. One CTA. Mobile-first.</div>
+</div>
+</div>
+
+</body>
+</html>

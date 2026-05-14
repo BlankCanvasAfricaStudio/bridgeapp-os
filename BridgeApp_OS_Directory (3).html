@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeApp OS — Directory | Blank Canvas Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2340;--navy-mid:#1a3355;--blue:#4a90d9;--blue-light:#dbeafe;
+  --orange:#e8601c;--orange-light:#fff0e8;--yellow:#f0b429;--yellow-light:#fef9c3;
+  --white:#fff;--off-white:#f8fafc;--border:#e2e8f0;--text-primary:#0f2340;
+  --text-secondary:#475569;--text-muted:#94a3b8;--success:#10b981;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Roboto',sans-serif;background:#0a1628;color:var(--text-primary);min-height:100vh;line-height:1.6}
+.container{max-width:1280px;margin:0 auto;padding:32px 28px 60px}
+
+/* HERO */
+.hero{background:var(--navy);border-radius:16px;padding:36px 38px;color:var(--white);position:relative;overflow:hidden;margin-bottom:24px;border:1px solid rgba(255,255,255,.08)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 90% 30%,rgba(240,180,41,.12),transparent 50%)}
+.hero::after{content:'DIRECTORY';position:absolute;right:-15px;bottom:-25px;font-family:'Roboto',sans-serif;font-size:130px;font-weight:900;color:rgba(255,255,255,.025);letter-spacing:0.05em;line-height:1;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.kicker{display:inline-block;background:var(--yellow);color:var(--navy);padding:5px 13px;border-radius:6px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-family:'Roboto',sans-serif;font-size:44px;font-weight:900;letter-spacing:0.02em;line-height:1.15;margin-bottom:10px}
+.hero h1 span.b{color:var(--blue)}
+.hero h1 span.y{color:var(--yellow)}
+.hero h1 span.o{color:var(--orange)}
+.hero p{font-size:14px;color:rgba(255,255,255,.65);max-width:620px;margin-top:4px}
+.hero-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.4);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.hero-meta span strong{color:rgba(255,255,255,.75);display:block;font-family:'Roboto',sans-serif;font-size:20px;font-weight:900;letter-spacing:0.03em;text-transform:none;margin-top:2px}
+
+/* SECTIONS */
+.sect{background:var(--white);border-radius:14px;padding:24px 28px;margin-bottom:18px}
+.sect-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.sect-title{display:flex;align-items:center;gap:12px}
+.sect-num{font-family:'Roboto',sans-serif;font-size:36px;font-weight:900;color:var(--navy);opacity:.18;line-height:1;letter-spacing:-1px}
+.sect-name{font-family:'Roboto',sans-serif;font-size:22px;font-weight:900;color:var(--navy);letter-spacing:0.03em}
+.sect-sub{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
+
+/* FILE GRID */
+.file-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.file{background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;transition:all .15s}
+.file:hover{border-color:var(--navy);transform:translateY(-1px)}
+.file-tag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:900;padding:2px 7px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+.t-master{background:var(--navy);color:var(--yellow)}
+.t-output{background:var(--blue);color:var(--white)}
+.t-asset{background:var(--orange);color:var(--white)}
+.t-doc{background:var(--yellow);color:var(--navy)}
+.t-data{background:var(--success);color:var(--white)}
+.file-name{font-family:'Roboto',sans-serif;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:3px;padding-right:65px;line-height:1.2}
+.file-path{font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;letter-spacing:-.2px;word-break:break-all}
+.file-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px}
+.file-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;color:var(--text-muted);font-weight:700;padding-top:7px;border-top:1px solid var(--border)}
+.file-meta span{display:flex;align-items:center;gap:3px}
+.file-meta .owner{color:var(--orange);font-weight:800}
+.file-meta .freq{color:var(--blue);font-weight:800}
+
+/* OWNERS LEGEND */
+.owners-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.owner-card{background:var(--off-white);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:12px}
+.owner-card strong{display:block;color:var(--navy);font-size:13px;margin-bottom:2px}
+.owner-card .ownr-role{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin-bottom:5px}
+.owner-card .ownr-files{font-size:11px;color:var(--text-secondary);line-height:1.5}
+
+/* TREE */
+.tree{font-family:'JetBrains Mono','Courier New',monospace;font-size:12px;line-height:1.85;color:var(--text-secondary);background:var(--navy);padding:18px 22px;border-radius:10px;color:#cbd5e1}
+.tree .root{color:var(--yellow);font-weight:700}
+.tree .dir{color:var(--blue);font-weight:600}
+.tree .file{background:none;border:none;padding:0;color:#e2e8f0;display:inline;font-weight:600}
+.tree .file:hover{transform:none}
+.tree .file-tag{position:static;background:none;color:var(--text-muted);font-weight:400;font-size:10px;padding:0;margin-left:8px;text-transform:none;letter-spacing:0}
+.tree .ascii{color:#475569;user-select:none}
+.tree .cmt{color:#64748b;font-style:italic}
+
+/* QUICK LINKS BAR */
+.quick-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px;background:var(--off-white);border:1px solid var(--border);border-radius:10px;margin-bottom:18px}
+.quick-bar a{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--navy);background:var(--white);padding:6px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);transition:all .12s;letter-spacing:.02em;text-transform:uppercase}
+.quick-bar a:hover{background:var(--navy);color:var(--white)}
+.quick-bar a.active{background:var(--navy);color:var(--yellow)}
+
+/* SIGN-OFF */
+.signoff{margin-top:32px;padding:20px 28px;background:var(--navy);border-radius:12px;color:rgba(255,255,255,.5);font-size:11px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.signoff strong{color:rgba(255,255,255,.85)}
+.brand-block{display:flex;align-items:center;gap:8px}
+.brand-block .ba{font-family:'Roboto',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.03em;color:var(--white)}
+.brand-block .ba span:nth-child(2){color:var(--blue)}
+.brand-block .ba span:nth-child(3){color:var(--orange)}
+.brand-block .ba span:nth-child(4){color:var(--yellow)}
+
+@media(max-width:768px){
+  .container{padding:18px 14px}
+  .hero{padding:24px 22px}
+  .hero h1{font-size:34px}
+  .sect{padding:18px 20px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+<div class="hero-inner">
+<div class="kicker">★ Operating System Directory · v2.0</div>
+<h1>The <span class="b">Bridge</span><span class="o">App</span> × <span class="y">Future Club</span> OS.</h1>
+<p>One operating system. Six deliverables. Every file in this directory works in concert to deliver Phase 2: from awareness to revenue, May–December 2026.</p>
+<div class="hero-meta">
+<span>FILES IN OS<strong>7 active</strong></span>
+<span>OWNED BY<strong>Blank Canvas</strong></span>
+<span>BUILD VERSION<strong>v2.0 · May 2026</strong></span>
+<span>NEXT REVIEW<strong>20 May 2026</strong></span>
+</div>
+</div>
+</div>
+
+<div class="quick-bar">
+<a href="BridgeApp_Phase2_GrowthOS_v2.html">★ Master OS</a>
+<a href="BridgeApp_OS_Directory.html" class="active">Directory</a>
+<a href="BridgeApp_DemoReviewCard.html">Review Card</a>
+<a href="BridgeApp_FCLaunch_SocialPoster.html">Social Poster</a>
+<a href="BridgeApp_SchoolCompetition_Emailer.html">Emailer</a>
+<a href="BridgeApp_SA_RegionalSalesMap.html">SA Map</a>
+<a href="BridgeApp_Phase2_ClientReport.docx">Client Report</a>
+</div>
+
+<!-- SECTION 01 — FILE INVENTORY -->
+<div class="sect">
+<div class="sect-hdr">
+<div class="sect-title"><span class="sect-num">01</span><div><div class="sect-name">File inventory</div><div class="sect-sub">What's in the OS · Where each file lives · What it does</div></div></div>
+</div>
+
+<div class="file-grid">
+
+<div class="file">
+<div class="file-tag t-master">Master</div>
+<div class="file-name">BridgeApp Phase 2 Growth OS</div>
+<div class="file-path">BridgeApp_Phase2_GrowthOS_v2.html</div>
+<div class="file-desc">The master dashboard. 12 navigable sections covering all 4 engines, content engine, FC tracker, SA regional map, budget, risks, and team access. The single source of truth.</div>
+<div class="file-meta"><span class="owner">Owner: DD</span> · <span class="freq">Update: Weekly</span> · <span>Format: HTML</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-doc">Index</div>
+<div class="file-name">OS Directory</div>
+<div class="file-path">BridgeApp_OS_Directory.html</div>
+<div class="file-desc">This file. The map of the entire operating system. Shows every file, its owner, update frequency, and how the pieces connect. Bookmark this.</div>
+<div class="file-meta"><span class="owner">Owner: DD</span> · <span class="freq">Update: When files added</span> · <span>Format: HTML</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-output">Client</div>
+<div class="file-name">Demo Review Card</div>
+<div class="file-path">BridgeApp_DemoReviewCard.html</div>
+<div class="file-desc">Single-page visual sign-off card for the client. The 20 May 2026 approval moment captured as one shareable visual. Includes scope, budget, deliverables, and signature blocks.</div>
+<div class="file-meta"><span class="owner">Owner: DD</span> · <span class="freq">Update: Per phase</span> · <span>Format: HTML</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-asset">Output</div>
+<div class="file-name">Social Media Poster — FC Launch</div>
+<div class="file-path">BridgeApp_FCLaunch_SocialPoster.html</div>
+<div class="file-desc">Brand-aligned Instagram-ratio (1080×1350) social poster announcing Future Club launch. Demonstrates how all visual outputs must conform to BridgeApp guidelines.</div>
+<div class="file-meta"><span class="owner">Owner: Sememi</span> · <span class="freq">Update: Per campaign</span> · <span>Format: HTML</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-asset">Output</div>
+<div class="file-name">School Competition Emailer</div>
+<div class="file-path">BridgeApp_SchoolCompetition_Emailer.html</div>
+<div class="file-desc">Email 1 of the 5-part school competition series — May 2026 invitation. Sent to 400+ IEB pilot schools. Brand-aligned, mobile-responsive, conversion-ready.</div>
+<div class="file-meta"><span class="owner">Owner: Kefiloe</span> · <span class="freq">Update: Per wave</span> · <span>Format: HTML</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-doc">Report</div>
+<div class="file-name">Phase 2 Client Report</div>
+<div class="file-path">BridgeApp_Phase2_ClientReport.docx</div>
+<div class="file-desc">Formal Word document handover. Phase 2 plan summary, engine-by-engine breakdown, budget allocation, risk register, and approval signature page. For client board review.</div>
+<div class="file-meta"><span class="owner">Owner: DD</span> · <span class="freq">Update: Monthly</span> · <span>Format: DOCX</span></div>
+</div>
+
+<div class="file">
+<div class="file-tag t-data">Data</div>
+<div class="file-name">SA Regional Sales Map</div>
+<div class="file-path">BridgeApp_SA_RegionalSalesMap.html</div>
+<div class="file-desc">Interactive province-by-province sales pipeline map. Shows leads, school contracts, and outreach status per region. Live indicator per province. Used for school sales sprint planning and conference targeting.</div>
+<div class="file-meta"><span class="owner">Owner: Kefiloe</span> · <span class="freq">Update: Weekly</span> · <span>Format: HTML</span></div>
+</div>
+
+</div>
+</div>
+<div class="sect">
+<div class="sect-hdr">
+<div class="sect-title"><span class="sect-num">02</span><div><div class="sect-name">Folder structure</div><div class="sect-sub">Recommended local + cloud organisation</div></div></div>
+</div>
+<div class="tree">
+<span class="root">BridgeApp_Phase2_OS/</span> <span class="cmt"># Master folder — keep in Google Drive, mirrored locally</span><br>
+<span class="ascii">├──</span> <span class="dir">01_Master/</span> <span class="cmt"># Live operating system</span><br>
+<span class="ascii">│   ├──</span> BridgeApp_Phase2_GrowthOS_v2.html <span class="file-tag">★ master dashboard</span><br>
+<span class="ascii">│   ├──</span> BridgeApp_OS_Directory.html <span class="file-tag">this file</span><br>
+<span class="ascii">│   └──</span> BridgeApp_SA_RegionalSalesMap.html <span class="file-tag">sales map</span><br>
+<span class="ascii">├──</span> <span class="dir">02_Client_Deliverables/</span> <span class="cmt"># Sign-off &amp; formal docs</span><br>
+<span class="ascii">│   ├──</span> BridgeApp_DemoReviewCard.html <span class="file-tag">20 May approval</span><br>
+<span class="ascii">│   ├──</span> BridgeApp_Phase2_ClientReport.docx <span class="file-tag">board review</span><br>
+<span class="ascii">│   └──</span> bridgeapp_phase2_handover_2026-05_v1.pdf <span class="file-tag">source PDF</span><br>
+<span class="ascii">├──</span> <span class="dir">03_Brand_Outputs/</span> <span class="cmt"># Every asset goes here</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">social/</span><br>
+<span class="ascii">│   │   └──</span> BridgeApp_FCLaunch_SocialPoster.html <span class="file-tag">sample</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">email/</span><br>
+<span class="ascii">│   │   └──</span> BridgeApp_SchoolCompetition_Emailer.html <span class="file-tag">sample</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">btl_pod/</span> <span class="cmt"># Pod fabrication briefs</span><br>
+<span class="ascii">│   └──</span> <span class="dir">brand_lib/</span> <span class="cmt"># Logos, fonts, colour swatches</span><br>
+<span class="ascii">├──</span> <span class="dir">04_Engines/</span> <span class="cmt"># One folder per engine</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">e01_sales/</span> <span class="cmt"># Pathfinder · UniApply · Parent subs</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">e02_future_club/</span> <span class="cmt"># Competition · podcast · partners</span><br>
+<span class="ascii">│   ├──</span> <span class="dir">e03_school_sales/</span> <span class="cmt"># Pods · lounges · golf · merch</span><br>
+<span class="ascii">│   └──</span> <span class="dir">e04_systems_data/</span> <span class="cmt"># CRM · dashboards · workflows</span><br>
+<span class="ascii">├──</span> <span class="dir">05_Live_Trackers/</span> <span class="cmt"># Data layer</span><br>
+<span class="ascii">│   ├──</span> fc_member_tracker.csv <span class="file-tag">Friday update</span><br>
+<span class="ascii">│   ├──</span> school_pipeline.csv <span class="file-tag">Kefiloe daily</span><br>
+<span class="ascii">│   └──</span> revenue_dashboard.csv <span class="file-tag">DD weekly</span><br>
+<span class="ascii">└──</span> <span class="dir">06_Archive/</span> <span class="cmt"># Old versions, superseded files</span><br>
+<span class="ascii">    └──</span> BridgeApp_FutureClub_Phase2_MasterOS.html <span class="file-tag">v1 archive</span>
+</div>
+</div>
+
+<!-- SECTION 03 — OWNERS & UPDATE CADENCE -->
+<div class="sect">
+<div class="sect-hdr">
+<div class="sect-title"><span class="sect-num">03</span><div><div class="sect-name">Owners &amp; update cadence</div><div class="sect-sub">Who maintains what · How often it gets updated</div></div></div>
+</div>
+<div class="owners-grid">
+<div class="owner-card"><strong>Ditshego Ditshego (DD)</strong><div class="ownr-role">Agency Lead · Director</div><div class="ownr-files">Master OS · Demo Review Card · Phase 2 Client Report · weekly retros · brand QA on all outputs · Friday data review · monthly client check-in</div></div>
+<div class="owner-card"><strong>Nono Ditshego</strong><div class="ownr-role">Social Media Intern · 3 days in office</div><div class="ownr-files">FC Live Tracker (Friday update) · social posts · daily community management · weekly analytics pull · WhatsApp drops · trending audio surfacing</div></div>
+<div class="owner-card"><strong>Kefiloe Mametse</strong><div class="ownr-role">School Outreach &amp; Sales Associate</div><div class="ownr-files">School Pipeline CSV · school emailer waves · pod sign-off MOUs · conference lead capture · golf clinic invites · daily CRM logs</div></div>
+<div class="owner-card"><strong>Sememi Mosupye</strong><div class="ownr-role">Junior Brand &amp; Creative Coordinator</div><div class="ownr-files">Social posters · Reel title cards · email templates · brand library updates · CapCut edits · Canva master template maintenance</div></div>
+</div>
+</div>
+
+<!-- SECTION 04 — ACCESS & SYNC -->
+<div class="sect">
+<div class="sect-hdr">
+<div class="sect-title"><span class="sect-num">04</span><div><div class="sect-name">Access &amp; sync rules</div><div class="sect-sub">How the team works without re-briefing Claude every session</div></div></div>
+</div>
+<div class="file-grid">
+<div class="file">
+<div class="file-name">Step 1 · Set up Claude Project</div>
+<div class="file-desc">Create one Claude Project called <strong>"BridgeApp × Future Club — Phase 2"</strong>. Upload: this Directory, the Master OS HTML, the Phase 2 PDF, and the Client Report DOCX. Every future session inherits this context. No more re-briefing.</div>
+<div class="file-meta"><span class="owner">Setup: DD</span> · <span class="freq">Frequency: Once</span></div>
+</div>
+<div class="file">
+<div class="file-name">Step 2 · Mirror to Google Drive</div>
+<div class="file-desc">Create the folder structure above in shared Drive. Set "BridgeApp_Phase2_OS" → "Anyone with link can view". Team bookmarks the Drive link. Files stay in sync because they live in one place.</div>
+<div class="file-meta"><span class="owner">Setup: DD</span> · <span class="freq">Frequency: Once</span></div>
+</div>
+<div class="file">
+<div class="file-name">Step 3 · Push to GitHub → auto-deploy Netlify</div>
+<div class="file-desc">All HTML files live in a GitHub repo. Netlify is connected to the repo — every commit auto-deploys. To update: download the new file from Claude → replace the file in your GitHub repo → commit with a clear message (e.g. <em>"Update: Roboto typography"</em>) → Netlify deploys automatically. URL never changes.</div>
+<div class="file-meta"><span class="owner">Setup: DD</span> · <span class="freq">Frequency: When OS changes</span></div>
+</div>
+<div class="file">
+<div class="file-name">Step 4 · Notion embed (optional)</div>
+<div class="file-desc">In Notion: /embed → paste Netlify URL → resize full width. OS now lives inside Notion alongside the team's CRM, content calendar, and SOPs. One workspace, one truth.</div>
+<div class="file-meta"><span class="owner">Setup: Nono</span> · <span class="freq">Frequency: Once</span></div>
+</div>
+<div class="file">
+<div class="file-name">Step 5 · Update workflow</div>
+<div class="file-desc">Open the Claude Project → say what changed (e.g. "FC pod added at St Mary's" or "Update budget Engine 03"). Claude returns updated file. Download → replace in GitHub repo → commit → Netlify auto-deploys. URL stable. Team sees update immediately.</div>
+<div class="file-meta"><span class="owner">Owner: DD</span> · <span class="freq">Frequency: As needed</span></div>
+</div>
+<div class="file">
+<div class="file-name">Step 6 · Live FC data automation</div>
+<div class="file-desc">Make.com pulls BridgeApp backend → Google Sheets → Master OS dashboard updates automatically. Until live (Sep 2026 milestone), Nono updates the FC tracker manually every Friday via the dashboard "Update" form.</div>
+<div class="file-meta"><span class="owner">Owner: DD + Nono</span> · <span class="freq">Live: Sep 2026</span></div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 05 — BRAND GUARDRAILS -->
+<div class="sect">
+<div class="sect-hdr">
+<div class="sect-title"><span class="sect-num">05</span><div><div class="sect-name">Brand guardrails — every output</div><div class="sect-sub">No file leaves Blank Canvas without these passing brand QA</div></div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px">
+<div style="background:#0f2340;color:#fff;padding:14px 16px;border-radius:10px"><div style="font-family:'Roboto',sans-serif;font-size:13px;font-weight:900;letter-spacing:0.03em">NAVY</div><div style="font-size:11px;opacity:.7;font-family:monospace;margin-top:2px">#0f2340</div></div>
+<div style="background:#4a90d9;color:#fff;padding:14px 16px;border-radius:10px"><div style="font-family:'Roboto',sans-serif;font-size:13px;font-weight:900;letter-spacing:0.03em">BLUE · PATHFINDER</div><div style="font-size:11px;opacity:.85;font-family:monospace;margin-top:2px">#4a90d9</div></div>
+<div style="background:#e8601c;color:#fff;padding:14px 16px;border-radius:10px"><div style="font-family:'Roboto',sans-serif;font-size:13px;font-weight:900;letter-spacing:0.03em">ORANGE · UNIAPPLY</div><div style="font-size:11px;opacity:.85;font-family:monospace;margin-top:2px">#e8601c</div></div>
+<div style="background:#f0b429;color:#0f2340;padding:14px 16px;border-radius:10px"><div style="font-family:'Roboto',sans-serif;font-size:13px;font-weight:900;letter-spacing:0.03em">YELLOW · FUTURE CLUB</div><div style="font-size:11px;opacity:.65;font-family:monospace;margin-top:2px">#f0b429</div></div>
+</div>
+<div class="file-grid">
+<div class="file">
+<div class="file-name">Typography</div>
+<div class="file-desc"><strong>Display:</strong> Roboto Black (900). Used for headlines, numbers, hero copy — breathable letter-spacing.<br><strong>Body:</strong> Roboto Bold/Regular (700/400). Used for paragraphs, captions, UI.</div>
+</div>
+<div class="file">
+<div class="file-name">Logo lockup rules</div>
+<div class="file-desc">Pathfinder = Blue lockup. UniApply = Orange lockup. Future Club = Yellow lockup. Never mix tier colours within a single product callout.</div>
+</div>
+<div class="file">
+<div class="file-name">Tone of voice</div>
+<div class="file-desc">Direct. Confident. South African. Never patronising. No tech jargon. Speaks WITH students, not AT them. Says "Future Club" — never "the club" or "FC" in customer-facing copy.</div>
+</div>
+<div class="file">
+<div class="file-name">Sales-first rule</div>
+<div class="file-desc">Every output has one CTA: sign up · subscribe · register school · download app · book consult. Brand without sale = back to the brief.</div>
+</div>
+</div>
+</div>
+
+<div class="signoff">
+<div class="brand-block">
+<div class="ba"><span>Bridge</span><span>App</span> × <span>Future</span> <span>Club</span></div>
+<div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.04em;text-transform:uppercase;font-weight:700">Phase 2 OS · Directory v2.0</div>
+</div>
+<div style="text-align:right">
+<strong>Blank Canvas Agency</strong><br>
+info@blankcanvasafrica.co.za · Reg. 2025/210463/07
+</div>
+</div>
+
+</div>
+</body>
+</html>

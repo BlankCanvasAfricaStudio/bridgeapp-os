@@ -1,0 +1,76 @@
+:root{
+  /* ---- Core brand ---- */
+  --brand-navy:#0F2A4A;      /* Deep Navy   · Anchor  · backgrounds, grounding */
+  --brand-blue:#4A90D9;      /* Bridge Blue · Primary · Pathfinder, actions, trust */
+  --brand-yellow:#FBBF24;    /* Future Yellow · Energy · UniApply, achievement, joy */
+  --brand-orange:#F97316;    /* Hype Orange · Action  · Future Club, motion, urgency */
+  --brand-white:#FFFFFF;
+
+  /* ---- Surfaces ---- */
+  --surface-cream:#F8F4EF;       /* editorial page background */
+  --surface-cream-warm:#F5F0E8;  /* alternate warm cream */
+  --surface-stone:#E8E2DA;       /* muted "not this" panels */
+  --surface-card:#FFFFFF;
+  --surface-navy:#0F2A4A;
+  --surface-ink:#060810;         /* near-black product canvas */
+
+  /* ---- Blue scale ---- */
+  --blue-50:#EBF4FF; --blue-100:#BDD7F3; --blue-200:#7FBCE8;
+  --blue-400:#4A90D9; --blue-600:#2F6EB5; --blue-800:#1A3D6B; --blue-950:#0F2A4A;
+
+  /* ---- Yellow scale ---- */
+  --yellow-50:#FFFDE7; --yellow-100:#FDE68A; --yellow-200:#FCD34D;
+  --yellow-400:#FBBF24; --yellow-600:#F59E0B; --yellow-800:#D97706; --yellow-950:#92400E;
+
+  /* ---- Orange scale ---- */
+  --orange-50:#FFF3E0; --orange-100:#FDD0AE; --orange-200:#FBA36F;
+  --orange-400:#F97316; --orange-600:#EA6C10; --orange-800:#C2550D; --orange-950:#7C2D0A;
+
+  /* ---- Navy alphas (the workhorse of the editorial system) ---- */
+  --navy-a08:rgba(15,42,74,0.08);
+  --navy-a10:rgba(15,42,74,0.10);
+  --navy-a12:rgba(15,42,74,0.12);
+  --navy-a18:rgba(15,42,74,0.18);
+  --navy-a22:rgba(15,42,74,0.22);
+  --navy-a40:rgba(15,42,74,0.40);
+  --navy-a45:rgba(15,42,74,0.45);
+  --navy-a50:rgba(15,42,74,0.50);
+  --navy-a60:rgba(15,42,74,0.60);
+  --navy-a70:rgba(15,42,74,0.70);
+
+  /* ---- Semantic status ---- */
+  --status-accepted:#16a34a;
+  --status-accepted-dark:#22c55e;
+  --status-due:#dc2626;
+  --status-due-dark:#ef4444;
+  --status-review:var(--brand-yellow);
+  --status-submitted:var(--brand-blue);
+  --status-draft:var(--navy-a12);
+
+  /* ---- Product accents ---- */
+  --product-pathfinder:var(--brand-blue);
+  --product-uniapply:var(--brand-yellow);
+  --product-futureclub:var(--brand-orange);
+
+  /* ---- Semantic text ---- */
+  --text-strong:var(--brand-navy);
+  --text-body:var(--navy-a70);
+  --text-muted:var(--navy-a60);
+  --text-faint:var(--navy-a45);
+  --text-on-dark:#FFFFFF;
+  --text-on-dark-muted:rgba(255,255,255,0.50);
+  --text-on-dark-faint:rgba(255,255,255,0.32);
+  --text-link:var(--brand-blue);
+  --text-link-hover:var(--blue-600);
+
+  /* ---- Borders & hairlines ---- */
+  --border-hairline:var(--navy-a12);
+  --border-strong:var(--navy-a22);
+  --border-on-dark:rgba(255,255,255,0.11);
+
+  /* ---- Signature gradients (progress bar, product CTAs) ---- */
+  --gradient-tricolour:linear-gradient(90deg,#4A90D9 0%,#F97316 55%,#FBBF24 100%); /* @kind color */
+  --gradient-pathfinder:linear-gradient(135deg,#4A90D9,#2F6EB5); /* @kind color */
+  --gradient-uniapply:linear-gradient(135deg,#FBBF24,#F97316); /* @kind color */
+  --gradient-hero-navy:linear-gradient(135deg,rgba(15,42,74,0.97) 0%,rgba(74,144,217,0.30) 60%,rgba(15,42,74,0.90) 100%); /* @kind color */
+}

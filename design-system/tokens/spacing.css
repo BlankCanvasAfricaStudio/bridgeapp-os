@@ -1,0 +1,16 @@
+:root{
+  --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+  --space-12:48px; --space-14:56px; --space-16:64px; --space-20:80px;
+
+  /* Editorial page frame used by every brand-book section */
+  --page-max:1152px;          /* max-w-6xl */
+  --page-max-wide:1280px;     /* max-w-7xl (marketing site) */
+  --page-gutter:32px;         /* px-8 */
+  --page-gutter-lg:56px;      /* md:px-14 */
+  --section-padding-y:64px;   /* py-16 */
+  --section-padding-y-lg:80px;
+
+  /* The narrow descriptor column that sits left of editorial content */
+  --editorial-rail:100px; /* @kind spacing */
+}

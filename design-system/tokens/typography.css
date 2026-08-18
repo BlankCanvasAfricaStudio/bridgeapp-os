@@ -1,0 +1,35 @@
+:root{
+  /* Roboto only. Four weights, no exceptions. */
+  --weight-regular:400; /* @kind font */  /* body */
+  --weight-medium:500; /* @kind font */   /* UI & labels */
+  --weight-bold:700; /* @kind font */     /* subheadings */
+  --weight-black:900; /* @kind font */    /* headlines */
+
+  /* Type scale — from the 2026 brand book type ladder */
+  --size-display:96px;
+  --size-h1:64px;
+  --size-h2:40px;
+  --size-h3:24px;
+  --size-body:18px;
+  --size-body-sm:15px;
+  --size-label:11px;
+
+  /* Fluid display sizes as used on brand-book pages */
+  --fluid-display:clamp(3.5rem,8vw,7rem); /* @kind font */
+  --fluid-h1:clamp(2.5rem,6vw,5.5rem); /* @kind font */
+  --fluid-h2:clamp(2.2rem,5vw,4.5rem); /* @kind font */
+  --fluid-h3:clamp(1.5rem,3vw,3rem); /* @kind font */
+
+  --tracking-display:-0.04em; /* @kind font */
+  --tracking-h1:-0.03em;
+  --tracking-h2:-0.02em;
+  --tracking-h3:-0.01em;
+  --tracking-body:0; /* @kind font */
+  --tracking-label:0.15em; /* @kind font */
+  --tracking-eyebrow:0.22em; /* @kind font */
+
+  --leading-display:0.92; /* @kind font */
+  --leading-heading:1.05; /* @kind font */
+  --leading-body:1.7; /* @kind font */
+  --leading-tight:1.45; /* @kind font */
+}

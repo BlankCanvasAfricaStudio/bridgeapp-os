@@ -22,7 +22,7 @@ The engine's monthly targets, which are what "good" means here:
 
 That is a 0.6% reach-to-lead rate and a 20% consultation-to-sale rate. When you propose content, sanity-check it against these: a month of 30 posts that cannot plausibly produce 1 200 leads is a month that needs rewriting, not scheduling.
 
-The wider commercial context is 40 000 sales by 30 November 2026. Read `references/targets.md` before you quote any number back to the client, because the measured conversion rate is currently far below plan and that changes what advice is honest.
+The wider commercial context is 40 000 sales by 30 November 2026. Read `references/targets.md` before you quote any number back to the client, because monetisation tracking is not installed yet and that changes what can honestly be claimed.
 
 ## Start here, every time
 

@@ -45,6 +45,6 @@ The briefed media split is **85% Meta, 15% LinkedIn**.
 
 ## The honest caveat
 
-At the time of writing, the Google Analytics property records **zero key events and R0 revenue**. No purchase event fires with a value attached. That means source-level CPA cannot currently be measured, only modelled.
+The GA4 property is set up for engagement. Monetisation has not been switched on, so no purchase event fires and no value is attached. Source-level CPA cannot currently be measured, only modelled.
 
-Say this plainly whenever CPA comes up in a client conversation, rather than quoting a modelled number as though it were measured. The first fix in any paid-media conversation is conversion tracking, not creative.
+Two things follow. Say plainly that any CPA quoted is a model, rather than letting a modelled number pass as measured. And note that paid media has barely run at all: 14 users from paid social and 1 from paid search across eight months. There is no paid performance history to reason from yet, so the first buy is a test, not an optimisation.

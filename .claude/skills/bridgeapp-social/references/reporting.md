@@ -44,4 +44,4 @@ Social analytics are not currently connected to any automated pull. Numbers arri
 
 When numbers arrive as a screenshot, transcribe them into the report table so they are quotable later, and note the date range the screenshot covers. Screenshots without date ranges are not usable and should be sent back.
 
-State plainly which figures are measured and which are modelled. The Google Analytics property currently records zero key events, so anything downstream of a click is a model.
+State plainly which figures are measured and which are modelled. Monetisation is not switched on in GA4, so anything downstream of a click is a model. Reach figures also need a caveat until internal traffic is filtered: roughly 44% of sessions come from `bridge_client` and `Full Automation`, which are machines rather than parents.

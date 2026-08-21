@@ -1,0 +1,388 @@
+<title>Qualifying Sprint Week One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0F2A4A; --blue:#4A90D9; --blue-600:#2F6EB5; --blue-50:#EBF4FF; --blue-200:#7FBCE8;
+  --yellow:#FBBF24; --yellow-600:#F59E0B; --yellow-950:#92400E; --yellow-50:#FFFDE7;
+  --orange:#F97316; --orange-800:#C2550D; --orange-50:#FFF3E0;
+  --green:#16a34a; --green-700:#136B33; --green-50:rgba(22,163,74,.11);
+  --red:#dc2626; --red-700:#b91c1c; --red-50:rgba(220,38,38,.10);
+  --ground:#F8F4EF; --warm:#F5F0E8; --stone:#E8E2DA; --surface:#FFFFFF;
+  --ink:#0F2A4A; --ink-2:rgba(15,42,74,.80); --ink-3:rgba(15,42,74,.72); --ink-4:rgba(15,42,74,.55);
+  --line:rgba(15,42,74,.12); --line-2:rgba(15,42,74,.22);
+  --shadow:0 1px 3px rgba(11,31,58,.08);
+  --f:'Roboto',"Helvetica Neue",Arial,sans-serif;
+  --m:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r-sm:8px; --r-md:12px; --r-lg:24px; --r-pill:999px;
+  /* engine banner grounds stay dark in both themes: white sits on them */
+  --eng-b-bg:#2F6EB5; --eng-o-bg:#A8480B;
+  --tag-b-fg:#2F6EB5; --tag-b-bg:#EBF4FF; --acc-fig:#23568F;
+  --tag-o-fg:#95400A; --tag-o-bg:#FFF3E0;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#060810; --warm:#0B1424; --stone:#16243a; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.82); --ink-3:rgba(255,255,255,.72); --ink-4:rgba(255,255,255,.55);
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.22);
+  --blue-50:#16304f; --yellow-50:#2b2410; --orange-50:#2c1a11; --yellow-950:#FCD34D; --orange-800:#FBA36F;
+  --green:#22c55e; --green-700:#4ade80; --green-50:rgba(34,197,94,.16); --red:#ef4444; --red-700:#fca5a5; --red-50:rgba(239,68,68,.16);
+  --shadow:0 1px 3px rgba(0,0,0,.5);
+  --tag-b-fg:#7FBCE8; --tag-b-bg:#16304f; --acc-fig:#8FC6EC;
+  --tag-o-fg:#FBA36F; --tag-o-bg:#2c1a11;
+}}
+:root[data-theme="dark"]{
+  --ground:#060810; --warm:#0B1424; --stone:#16243a; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.82); --ink-3:rgba(255,255,255,.72); --ink-4:rgba(255,255,255,.55);
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.22);
+  --blue-50:#16304f; --yellow-50:#2b2410; --orange-50:#2c1a11; --yellow-950:#FCD34D; --orange-800:#FBA36F;
+  --green:#22c55e; --green-700:#4ade80; --green-50:rgba(34,197,94,.16); --red:#ef4444; --red-700:#fca5a5; --red-50:rgba(239,68,68,.16);
+  --shadow:0 1px 3px rgba(0,0,0,.5);
+  --tag-b-fg:#7FBCE8; --tag-b-bg:#16304f; --acc-fig:#8FC6EC;
+  --tag-o-fg:#FBA36F; --tag-o-bg:#2c1a11;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:900;letter-spacing:-.025em;line-height:1.09;text-wrap:balance}
+p{margin:0}
+a{color:var(--blue-600)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.wrap{max-width:980px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.eyebrow{font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+
+/* header */
+header{background:var(--navy);color:#fff;padding:clamp(34px,5.4vw,58px) 0 0;border-bottom:4px solid var(--yellow)}
+header .eyebrow{color:rgba(255,255,255,.80)}
+header h1{font-size:clamp(31px,5.4vw,52px);color:#fff;margin:11px 0 12px}
+header .lede{font-size:clamp(15.5px,1.7vw,18.5px);color:rgba(255,255,255,.90);max-width:62ch}
+.statband{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.14);border-radius:var(--r-md);overflow:hidden;margin:clamp(24px,3.4vw,34px) 0 0}
+.sb{background:var(--navy);padding:14px 16px 15px}
+.sb .l{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.74)}
+.sb .v{font-family:var(--m);font-size:22px;font-weight:700;color:#fff;margin-top:6px;font-variant-numeric:tabular-nums;line-height:1}
+.sb .v.y{color:var(--yellow)}
+.sb .s{font-size:11.5px;color:rgba(255,255,255,.76);margin-top:5px;line-height:1.35}
+.hspacer{height:clamp(26px,3.6vw,38px)}
+
+/* sections */
+section{padding:clamp(34px,4.6vw,54px) 0;border-bottom:1px solid var(--line)}
+.sec-h{margin-bottom:clamp(18px,2.4vw,26px)}
+.sec-h h2{font-size:clamp(23px,3.1vw,33px);margin:8px 0 10px}
+.sec-h p{color:var(--ink-2);max-width:66ch;font-size:16px}
+
+/* engine banner */
+.eng{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.eng-h{padding:20px clamp(18px,2.6vw,28px);color:#fff}
+.eng-h.b{background:var(--eng-b-bg)} .eng-h.o{background:var(--eng-o-bg)}
+.eng-h .k{font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.92)}
+.eng-h h3{font-size:clamp(20px,2.5vw,26px);color:#fff;margin:6px 0 0}
+.eng-h .w{font-size:14.5px;color:rgba(255,255,255,.94);margin-top:7px;max-width:64ch}
+.eng-b{padding:clamp(18px,2.6vw,28px)}
+.field{padding:15px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:118px 1fr;gap:18px;align-items:start}
+.field:first-child{border-top:0;padding-top:2px}
+.field>.fl{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);padding-top:4px}
+.field>.fv{font-size:15.4px;color:var(--ink-2)}
+.field>.fv b{color:var(--ink);font-weight:700}
+ul.tight{margin:0;padding-left:19px} ul.tight li{margin:5px 0}
+@media (max-width:620px){.field{grid-template-columns:1fr;gap:7px}}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.6px}
+th{background:var(--warm);text-align:left;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+   color:var(--ink-3);font-family:var(--m);padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:700}
+td.n{text-align:right;font-family:var(--m);font-size:13.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{background:var(--warm);border-top:2px solid var(--line-2);font-weight:700;color:var(--ink)}
+tr.hl td{background:var(--yellow-50)}
+
+.tag{font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  border-radius:var(--r-pill);padding:3px 9px;white-space:nowrap;display:inline-block}
+.tag.new{background:var(--yellow-50);color:var(--yellow-950);border:1px solid var(--yellow-600)}
+.tag.ok{background:var(--green-50);color:var(--green-700)}
+.tag.b{background:var(--tag-b-bg);color:var(--tag-b-fg)}
+.tag.o{background:var(--tag-o-bg);color:var(--tag-o-fg)}
+.tag.blk{background:var(--red-50);color:var(--red-700)}
+
+/* callouts */
+.ask{background:var(--navy);border-radius:var(--r-lg);padding:clamp(22px,3.2vw,34px);color:#fff;border-left:6px solid var(--yellow)}
+.ask .eyebrow{color:var(--yellow)}
+.ask h3{color:#fff;font-size:clamp(20px,2.6vw,27px);margin:9px 0 12px}
+.ask p{color:rgba(255,255,255,.90);max-width:64ch;font-size:15.6px}
+.ask .row{display:flex;flex-wrap:wrap;gap:11px;margin-top:19px}
+.chip{font-family:var(--m);font-size:12px;font-weight:700;letter-spacing:.03em;background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.20);border-radius:var(--r-pill);padding:8px 15px;color:#fff;font-variant-numeric:tabular-nums}
+.chip.y{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+
+.note{background:var(--warm);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 19px;font-size:14.6px;color:var(--ink-2)}
+.note b{color:var(--ink)}
+.note.warn{background:var(--orange-50);border-color:var(--orange)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:clamp(16px,2.2vw,24px)}
+.stack{display:flex;flex-direction:column;gap:clamp(16px,2.2vw,24px)}
+
+/* success list */
+.win{display:grid;grid-template-columns:30px 1fr auto;gap:15px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line)}
+.win:first-of-type{border-top:0}
+.win .i{font-family:var(--m);font-size:11px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.win .t{font-size:15.6px;color:var(--ink-2)}
+.win .t b{color:var(--ink);font-weight:700;display:block;margin-bottom:2px}
+.win .m{font-family:var(--m);font-size:12.5px;font-weight:700;color:var(--acc-fig);white-space:nowrap;font-variant-numeric:tabular-nums}
+.win .m.o{color:var(--tag-o-fg)}
+@media (max-width:620px){.win{grid-template-columns:24px 1fr;gap:11px}.win .m{grid-column:2}}
+
+footer{padding:clamp(30px,4vw,46px) 0 clamp(44px,5vw,62px);color:var(--ink-3);font-size:13.5px}
+footer b{color:var(--ink-2)}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Blank Canvas &middot; BridgeApp by Gradesmatch &middot; Exco motivation</div>
+    <h1>Qualifying Sprint, Week One</h1>
+    <p class="lede">Monday 24 to Sunday 30 August 2026. Paid media buys 2 277 measured clicks. The team walks into 29 schools across Pretoria and Centurion. Both engines answer questions the business has never been able to answer.</p>
+    <div class="statband">
+      <div class="sb"><div class="l">New money requested</div><div class="v y">R8 000</div><div class="s">Paid media and print</div></div>
+      <div class="sb"><div class="l">Already unlocked</div><div class="v">R2 000</div><div class="s">Fuel, 29 school visits</div></div>
+      <div class="sb"><div class="l">Total week one</div><div class="v">R10 000</div><div class="s">Both engines, all in</div></div>
+      <div class="sb"><div class="l">Days to first close</div><div class="v">37</div><div class="s">WITS, UWC and UCT close 30 Sep</div></div>
+    </div>
+    <div class="hspacer"></div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap stack">
+    <div class="ask">
+      <div class="eyebrow">The ask</div>
+      <h3>R8 000 of new spend, approved by Friday 21 August, so week one opens on Monday morning.</h3>
+      <p>R7 500 of it goes into Meta to buy roughly 2 277 measured clicks. R500 prints a tagged leave behind for each of the 29 school visits. The R2 000 already unlocked covers the fuel for those visits. Nothing here is a launch. It is a measurement, and it is the cheapest version of that measurement we can run.</p>
+      <div class="row">
+        <span class="chip y">R7 500 &middot; Meta</span>
+        <span class="chip y">R500 &middot; Print</span>
+        <span class="chip">R2 000 &middot; Fuel, unlocked</span>
+      </div>
+    </div>
+
+    <div class="note"><b>What this document is not asking for.</b> No commitment to the full campaign budget. That decision belongs at the end of the fourteen day sprint, on evidence, and the gate for it is already written into the sprint workbook.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="eyebrow">Why this week</div>
+      <h2>We know what a click costs. We do not know what a sale costs.</h2>
+      <p>The Meta boost that ran from 29 July spent R1 617.57 and returned 491 link clicks. That is <b>R3.29 a click</b>, real and measured. It is the only true cost figure the campaign holds. Everything after the click is dark: the lead endpoint is not live, so nobody knows how many clicks become sign-ups, and GA4 carries no purchase event, so no click has ever been tied to a payment.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>If click to sale turns out to be</th><th>Then a sale costs</th><th>And R7 500 buys</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr><td class="n">0.5%</td><td class="n">R659</td><td class="n">11 sales</td><td>Paid media is not the engine. Shift weight to schools.</td></tr>
+          <tr><td class="n">1.0%</td><td class="n">R329</td><td class="n">23 sales</td><td>Workable only if creative improves sharply.</td></tr>
+          <tr class="hl"><td class="n">2.0%</td><td class="n">R165</td><td class="n">46 sales</td><td>Inside the R55 to R85 benchmark band after optimisation.</td></tr>
+          <tr><td class="n">4.0%</td><td class="n">R82</td><td class="n">91 sales</td><td>Release the full budget into paid.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="height:16px"></div>
+    <div class="note">Those four rows are the entire commercial question. One week of spend tells us which of them we are living in. Guessing costs nothing today and costs a great deal in November.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sec-h">
+      <div class="eyebrow">The two engines</div>
+      <h2>What each engine is doing, and what it is for</h2>
+      <p>They are deliberately measured on the same basis, cost per sale, so that at the end of the sprint they can be compared and the budget can follow whichever one works.</p>
+    </div>
+
+    <div class="eng">
+      <div class="eng-h b">
+        <div class="k">Growth Engine 1</div>
+        <h3>Commercial Sales</h3>
+        <p class="w">Buying attention from parents who can pay, and finding out what that attention converts at.</p>
+      </div>
+      <div class="eng-b">
+        <div class="field"><div class="fl">Audience</div><div class="fv">
+          <b>The paying parent, 35 to 44, mostly women.</b> This is not a guess. The July buy reported 60.7% women against 38.4% men, and 35 to 44 was the largest age band. Geographically it landed Gauteng first, then KwaZulu-Natal at 1 200, Western Cape 863, Limpopo 572, Eastern Cape 556, Mpumalanga 556. We are buying the same audience again because it is the one that holds the card.
+        </div></div>
+        <div class="field"><div class="fl">Channels</div><div class="fv">
+          <ul class="tight">
+            <li><b>Meta, paid.</b> All R7 500. The conversion channel and the only one with real cost data.</li>
+            <li><b>Facebook, organic.</b> Five posts. Parent facing, reassuring, structured.</li>
+            <li><b>Instagram, organic.</b> Five posts. Students, who create the demand a parent then acts on.</li>
+            <li><b>LinkedIn, organic.</b> Three posts. School leadership, which feeds Engine 2 rather than selling directly.</li>
+          </ul>
+          <div style="height:9px"></div>
+          <span class="tag o">Deviation, week one only</span> The briefed media split is 85% Meta and 15% LinkedIn. We are putting 100% behind Meta this week. Splitting a small test budget across a platform with zero performance history halves the signal on both. LinkedIn paid enters in week two, once Meta's click to sale rate is known.
+        </div></div>
+        <div class="field"><div class="fl">Content</div><div class="fv">
+          <b>Four paid creative variants</b>, run against the same audience with distinct tracking, so the test reads cleanly:
+          <ul class="tight">
+            <li>A 20 second recut of the July reel. The original runs 53 seconds against an average watch time of 7 seconds, so we are currently paying to deliver 46 seconds nobody sees. Hook rate is healthy at 38%; hold rate is 7.6%. The fix is length, not concept.</li>
+            <li>A static statement graphic. No video cost, tests whether the hook or the format is doing the work.</li>
+            <li>A product walkthrough screen recording. Answers the objection "what am I actually paying for".</li>
+            <li>A parent proof card. Borrowed trust, one CTA.</li>
+          </ul>
+          <div style="height:9px"></div>
+          <b>Thirteen organic posts</b> across the fixed weekly slots, minimum two carrying a conversion call to action per channel. Monday opens on the 37 day countdown, Wednesday carries the offer, Thursday the proof, Friday the funding checklist, Sunday the question harvest. All produced inside the retainer at no additional cost.
+        </div></div>
+        <div class="field"><div class="fl">Budget</div><div class="fv"><b>R7 500 media, new.</b> Creative production carried in the retainer.</div></div>
+        <div class="field"><div class="fl">Expected output</div><div class="fv">
+          <b>2 277 measured clicks, delivered inside R7 500.</b> That figure we can commit to, because it is budget divided by a known cost per click. The number of sales those clicks produce is the thing being measured and we will not pretend to forecast it. On the range above it falls between 11 and 91.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="eng">
+      <div class="eng-h o">
+        <div class="k">Growth Engine 2</div>
+        <h3>School Outreach</h3>
+        <p class="w">Five days, 29 priority schools, Pretoria and Centurion. Face to face with the people who control access to a Grade 12 cohort.</p>
+      </div>
+      <div class="eng-b">
+        <div class="field"><div class="fl">Audience</div><div class="fv">
+          <b>The Grade 12 or career decision maker at each school.</b> Not the parent, and not yet the learner. This week buys access, and access is what turns into presentations in September. Three of the schools are stalled contacts being re engaged: Iona Convent, Loreto Convent and Pretoria High for Girls.
+        </div></div>
+        <div class="field"><div class="fl">The route</div><div class="fv">
+          <ul class="tight">
+            <li><b>Mon, Pretoria West.</b> Pepps Motheong, Acudeo Kirkney, Elandspoort, Pretoria-Wes, Pretoria Technical, Royal Schools Queens. Six schools, close to the start point to maximise same day reach.</li>
+            <li><b>Tue, Pretoria East.</b> CBC Mount Edmund, Crawford Pretoria, Curro Hazeldean, Woodhill, Maragon Mooikloof, Tyger Valley. Six schools, new private school relationships.</li>
+            <li><b>Wed, Pretoria Central.</b> Iona Convent, Loreto Convent, Pretoria High for Girls, Pretoria Boys High, The Glen High, Abbots College. Six schools, re engaging the stalled ones.</li>
+            <li><b>Thu, Pretoria East and Central.</b> St Alban&rsquo;s, Clapham High, St Mary&rsquo;s DSG, SPARK Silver Lakes, Southdowns. Five independent schools with strong learner populations.</li>
+            <li><b>Fri, Centurion.</b> SPARK Centurion, Lyttleton Manor, Curro Thatchfield, Sutherland, Amberfield, PLG Raslouw. Six schools, closing the week on opportunities raised earlier.</li>
+          </ul>
+        </div></div>
+        <div class="field"><div class="fl">Channels</div><div class="fv">
+          <ul class="tight">
+            <li><b>In person, decision maker direct.</b> 29 visits across five days. Every visit recorded with a clear next action.</li>
+            <li><b>Tagged leave behind at each school.</b> One per school, carrying a QR code unique to that school. This is the bridge from a B2B visit to a parent who buys.</li>
+            <li><b>LinkedIn, three posts</b> naming Pretoria and Centurion the same week the team is in those corridors. A parent seeing their own child&rsquo;s school named is a materially warmer lead.</li>
+          </ul>
+        </div></div>
+        <div class="field"><div class="fl">Content</div><div class="fv">
+          <ul class="tight">
+            <li><b>29 tagged leave behinds</b>, one per school, printed before Monday. This is the R500.</li>
+            <li><b>Decision maker one pager.</b> The access ask, not the product pitch.</li>
+            <li><b>29 QR codes</b>, registered in the UTM register before the first visit. A school visited without one produces sales nobody can trace back to it.</li>
+            <li><b>Same day tracker entry</b> per visit, with feedback and next action.</li>
+          </ul>
+        </div></div>
+        <div class="field"><div class="fl">Budget</div><div class="fv">
+          <b>R2 000 fuel, already unlocked.</b> Roughly 855 km across the week, estimated at R1 749, with R250 for traffic, route changes and follow up visits. Plus R500 print, new. Coordinator time carried in the retainer.
+        </div></div>
+        <div class="field"><div class="fl">Expected output</div><div class="fv">
+          <ul class="tight">
+            <li><b>29 visits attempted</b>, decision maker contacted at each, all recorded in the tracker with feedback.</li>
+            <li><b>10 to 15 qualified follow ups</b>, presentations and meetings secured for September, sales support flagged where needed.</li>
+            <li><b>An end of week read on whether face to face outperforms email outreach.</b> That comparison has never been made and it decides how the school engine is resourced from here.</li>
+          </ul>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="note warn"><b>One thing to be straight about.</b> This week the school engine produces pipeline, not revenue. Its outputs are meetings and follow ups, because you cannot sell to a parent body you have not been given access to. Sales attributable to schools arrive once September presentations run. Judging Engine 2 on sales this week would be measuring it against a job it is not doing yet, which is why its success criteria below are access and pipeline, and its sales baseline is set rather than targeted.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="eyebrow">The week</div>
+      <h2>Day by day</h2>
+      <p>Both engines on one calendar, so capacity clashes are visible before they happen.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Day</th><th>Commercial sales</th><th>School outreach</th><th>Gate</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mon 24</b></td><td>Countdown post 07:30, 37 days. Meta buy goes live. UTM register closed.</td><td>Pretoria West, six schools. ±100 km.</td><td>Drivers locked</td></tr>
+          <tr><td><b>Tue 25</b></td><td>First 24 hour read. Pull any creative under the click through floor. LinkedIn 08:30.</td><td>Pretoria East, six schools. ±200 km.</td><td></td></tr>
+          <tr><td><b>Wed 26</b></td><td>Conversion post, product walkthrough. Creative variant set 2 live.</td><td>Pretoria Central, six schools. Three stalled contacts re engaged. ±155 km.</td><td></td></tr>
+          <tr><td><b>Thu 27</b></td><td>UniApply matric urgency push live. Proof post across all three channels.</td><td>Pretoria East and Central, five independent schools. ±160 km.</td><td>Mid week reconciliation</td></tr>
+          <tr><td><b>Fri 28</b></td><td>Influencer Wave 3, GP creator, content live. Funding Friday carousel.</td><td>Centurion, six schools. ±240 km. Week results logged.</td><td>Working book updated</td></tr>
+          <tr><td><b>Sat 29</b></td><td>Weekend spend read. No new creative. LinkedIn 10:00.</td><td>Follow up list built from the week&rsquo;s feedback.</td><td></td></tr>
+          <tr><td><b>Sun 30</b></td><td>Week close. Cost per sale computed for the first time.</td><td>Face to face against email outreach, read and written up.</td><td>Week one verdict</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="eyebrow">Money</div>
+      <h2>Week one budget</h2>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Line</th><th>Engine</th><th>Owner</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td><b>Paid media, Meta</b><br><span style="font-size:13px">2 277 clicks at R3.29</span></td><td><span class="tag b">GE1</span></td><td>Performance Marketer</td><td><span class="tag new">New</span></td><td class="n">R7 500</td></tr>
+          <tr><td><b>School visit fuel</b><br><span style="font-size:13px">29 schools, five days, ±855 km</span></td><td><span class="tag o">GE2</span></td><td>Schools Coordinator</td><td><span class="tag ok">Unlocked</span></td><td class="n">R2 000</td></tr>
+          <tr><td><b>Tagged leave behinds</b><br><span style="font-size:13px">29 schools, one QR code per school</span></td><td><span class="tag o">GE2</span></td><td>Designer</td><td><span class="tag new">New</span></td><td class="n">R500</td></tr>
+          <tr><td><b>Creative and content production</b><br><span style="font-size:13px">Four paid variants, thirteen organic posts</span></td><td><span class="tag b">GE1</span></td><td>Creative</td><td><span class="tag ok">In retainer</span></td><td class="n">R0</td></tr>
+          <tr class="tot"><td><b>Total, week one</b></td><td></td><td></td><td><b>R8 000 new</b></td><td class="n">R10 000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="height:16px"></div>
+    <div class="note">For context against the approved plan: the Phase 2 budget carries R250 000 of paid media across eight months, which is roughly R7 300 a fortnight. This week spends R7 500 in seven days, deliberately front loaded so that four creative variants get a real read at once rather than one variant getting a slow one.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="eyebrow">The bar</div>
+      <h2>What success looks like on Sunday 30 August</h2>
+      <p>Most of these are measurement outcomes rather than revenue. That is deliberate. A week that banks sales but cannot say where they came from has taught us nothing and cannot be repeated, and a week of school visits is judged on the access it wins, not on revenue it was never going to produce.</p>
+    </div>
+    <div>
+      <div class="win"><div class="i">01</div><div class="t"><b>Cost per sale is known on the paid engine, for the first time</b>The single reason this sprint exists.</div><div class="m">Engine 1</div></div>
+      <div class="win"><div class="i">02</div><div class="t"><b>2 277 clicks delivered inside R7 500</b>Within 10%. Anything wider means the audience or the auction moved and we need to know why.</div><div class="m">2 049 to 2 505</div></div>
+      <div class="win"><div class="i">03</div><div class="t"><b>29 visits attempted, decision maker reached at each, all logged with feedback</b>An unlogged visit is an unmeasured visit.</div><div class="m o">29 of 29</div></div>
+      <div class="win"><div class="i">04</div><div class="t"><b>10 to 15 qualified follow ups, with September meetings secured</b>The actual product of a week of school visits.</div><div class="m o">10 to 15</div></div>
+      <div class="win"><div class="i">05</div><div class="t"><b>Face to face measured against email outreach</b>A comparison the business has never had. It decides how Engine 2 is resourced from September.</div><div class="m o">Written up</div></div>
+      <div class="win"><div class="i">06</div><div class="t"><b>Zero untagged spend and zero untagged schools</b>Every live link and every leave behind appears in the UTM register before it goes out.</div><div class="m">100%</div></div>
+      <div class="win"><div class="i">07</div><div class="t"><b>The daily log is filled every day</b>Seven of seven. A gap in the log is a gap in the evidence.</div><div class="m">7 of 7</div></div>
+      <div class="win"><div class="i">08</div><div class="t"><b>A written week two allocation, defended by the numbers</b>Where the second R7 500 goes, and why. This is the actual deliverable of week one.</div><div class="m">Mon 31 Aug</div></div>
+    </div>
+    <div style="height:20px"></div>
+    <div class="note"><b>And by day fourteen, 6 September.</b> The sprint closes against a seven test gate already built into the workbook: qualifying sales banked, blended cost per sale at or under target, each engine inside twice target, at least one engine at or under target, spend inside the cap, and a complete log. That gate decides whether the full budget is released, released into one engine only, held, or the target is re-cut. Exco makes that call, on that evidence, not before.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="eyebrow">Dependencies</div>
+      <h2>What we need from Gradesmatch, and what it costs us if it does not land</h2>
+      <p>None of these stop the week. All three make the answer weaker.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Item</th><th>Needed by</th><th>Effect on week one if it slips</th></tr></thead>
+        <tbody>
+          <tr><td><b>GA4 purchase event, with value</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>The week runs on manual Peach reconciliation. Cost per sale is still measurable. Channel level attribution gets weaker and slower.</td></tr>
+          <tr><td><b>Parent landing page live on bridgeapp.co.za</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>Paid traffic has no dedicated destination and will convert lower. Every link in the register has to be repointed before spend starts.</td></tr>
+          <tr><td><b>Lead endpoint for the readiness tracker</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>Sign ups are not captured, so click to sign up stays dark and only the end to end click to sale rate can be read.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="height:16px"></div>
+    <div class="note warn"><b>One approval sits outside the week but needs moving now.</b> Exhibitorship at the Jeppe High School for Girls Fun Run and Grade 9 Market Day on 12 September was requested with Sade Marion and is still unconfirmed. It is the largest single parent gathering in the outreach calendar. If it needs an exco signature, week one is when to give it.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>Sources.</b> Cost per click, audience and video performance from Meta Ad insights for the boost of 29 July 2026 and from TikTok Studio, both pulled 20 August 2026. School route, distances, fuel estimate and outreach outputs from the School Visit Proposal for 24 to 28 August 2026. Budget context, the outreach cluster calendar and the school pool from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Closing dates for WITS, UWC and UCT from the campaign application calendar. All targets and gates from the Qualifying Sprint workbook, which carries the working detail behind this document.</p>
+    <p style="margin-top:14px"><b>Prepared by Blank Canvas</b> for BridgeApp by Gradesmatch, 21 August 2026.</p>
+  </div>
+</footer>

@@ -53,11 +53,20 @@ instead. Formula vocabulary was deliberately kept to `SUM`, `ROUND`, `IF`,
 
 Both sit in yellow cells on `03_Sprint_Drivers`:
 
-1. **Sprint media cap** (`C13`), set to R26 000. Agreed 21 August at R13 000 a
-   week for agility across the fourteen days.
-2. **Qualifying sales target** (`C14`), currently 250, split 70/30 across the
-   engines in `C15`.
+1. **Sprint media cap** (`C13`), R10 000. Agreed 21 August at R5 000 a week
+   across both weeks.
+2. **Qualifying sales target** (`C14`), 61, carried entirely by paid media
+   (`C15` is 100%).
 
-Cost per sale is derived from those two, not assumed. At R26 000 against a GE1
-target of 175, that is 7 892 clicks, a required click to sale rate of 2.22%,
-and an implied R148.57 a sale.
+Cost per sale is derived from those two, not assumed. R10 000 buys 3 035 clicks
+at the measured R3.29, so 61 sales needs a **2.01% click to sale rate** and
+implies **R163.93 a sale**.
+
+61 is the 2% case. Hitting it confirms 2%, which tells exco that R2m buys about
+12 100 sales rather than 40 000. For R2m to buy 40 000, click to sale would have
+to reach 6.6% at today's cost per click, or the click would have to fall to
+R1.00 at 2%.
+
+School outreach carries no media spend this sprint, so `C16` is zero by design.
+Its sales are counted and reported, just not targeted, because it is setting its
+first baseline.

@@ -1,0 +1,269 @@
+<title>Derisking R2M</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0F2A4A; --blue:#4A90D9; --blue-600:#2F6EB5; --blue-50:#EBF4FF;
+  --yellow:#FBBF24; --yellow-600:#F59E0B; --yellow-950:#92400E; --yellow-50:#FFFDE7;
+  --orange:#F97316; --orange-50:#FFF3E0;
+  --ground:#F8F4EF; --warm:#F5F0E8; --surface:#FFFFFF;
+  --ink:#0F2A4A; --ink-2:rgba(15,42,74,.80); --ink-3:rgba(15,42,74,.72);
+  --line:rgba(15,42,74,.14); --line-2:rgba(15,42,74,.26);
+  --eng-b:#2F6EB5; --eng-o:#A8480B;
+  --tag-b-fg:#2F6EB5; --tag-b-bg:#EBF4FF; --tag-o-fg:#95400A; --tag-o-bg:#FFF3E0;
+  --f:'Roboto',"Helvetica Neue",Arial,sans-serif;
+  --m:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#060810; --warm:#0B1424; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.82); --ink-3:rgba(255,255,255,.72);
+  --line:rgba(255,255,255,.14); --line-2:rgba(255,255,255,.26);
+  --blue-50:#16304f; --yellow-50:#2b2410; --yellow-950:#FCD34D; --orange-50:#2c1a11;
+  --tag-b-fg:#7FBCE8; --tag-b-bg:#16304f; --tag-o-fg:#FBA36F; --tag-o-bg:#2c1a11;
+}}
+:root[data-theme="dark"]{
+  --ground:#060810; --warm:#0B1424; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.82); --ink-3:rgba(255,255,255,.72);
+  --line:rgba(255,255,255,.14); --line-2:rgba(255,255,255,.26);
+  --blue-50:#16304f; --yellow-50:#2b2410; --yellow-950:#FCD34D; --orange-50:#2c1a11;
+  --tag-b-fg:#7FBCE8; --tag-b-bg:#16304f; --tag-o-fg:#FBA36F; --tag-o-bg:#2c1a11;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:900;letter-spacing:-.022em;line-height:1.1;text-wrap:balance}
+p{margin:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.page{max-width:1000px;margin:0 auto;padding:0 clamp(16px,3vw,26px) 26px}
+.eyebrow{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+
+header{background:var(--navy);color:#fff;border-bottom:3px solid var(--yellow)}
+.hd{max-width:1000px;margin:0 auto;padding:clamp(18px,2.6vw,26px) clamp(16px,3vw,26px) 0}
+.hd .eyebrow{color:rgba(255,255,255,.82)}
+.hd h1{font-size:clamp(26px,3.6vw,38px);color:#fff;margin:7px 0 7px}
+.hd .lede{font-size:clamp(13px,1.4vw,14.8px);color:rgba(255,255,255,.92);max-width:74ch}
+.band{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;overflow:hidden;margin:16px 0 0}
+.band .c{background:var(--navy);padding:9px 12px 11px}
+.band .l{font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.76)}
+.band .v{font-family:var(--m);font-size:19px;font-weight:700;color:#fff;margin-top:4px;font-variant-numeric:tabular-nums;line-height:1}
+.band .v.y{color:var(--yellow)}
+.band .s{font-size:10px;color:rgba(255,255,255,.78);margin-top:3px;line-height:1.3}
+.hb{height:clamp(16px,2.4vw,22px)}
+@media (max-width:660px){.band{grid-template-columns:repeat(2,1fr)}}
+
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(14px,2vw,22px);margin-top:clamp(16px,2.4vw,22px)}
+.two>*,.eng>*,.foot>*{min-width:0}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card h2{font-size:15.5px;margin:0 0 9px}
+.card p{color:var(--ink-2);font-size:13px}
+.card p+p{margin-top:7px}
+.card b{color:var(--ink)}
+.hd2{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+
+table{border-collapse:collapse;width:100%;font-size:12.4px;margin-top:2px}
+th{text-align:left;font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+   color:var(--ink-3);padding:6px 9px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-family:var(--m);font-size:12px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--yellow-50)}
+tr.hl td.n{color:var(--yellow-950)}
+.tw{overflow-x:auto}
+
+.punch{background:var(--navy);border-radius:12px;padding:14px 17px;color:#fff;border-left:5px solid var(--yellow);margin-top:12px}
+.punch .k{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow)}
+.punch p{color:#fff;font-size:14px;font-weight:500;margin-top:5px}
+
+.eng{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,22px);margin-top:clamp(14px,2vw,20px)}
+@media (max-width:760px){.eng{grid-template-columns:1fr}}
+.ec{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ec .t{padding:9px 15px;color:#fff}
+.ec .t.b{background:var(--eng-b)} .ec .t.o{background:var(--eng-o)}
+.ec .t .k{font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.92)}
+.ec .t h3{font-size:15px;color:#fff;margin-top:2px}
+.ec .bd{padding:12px 15px 14px}
+.ec .r{display:grid;grid-template-columns:96px 1fr;gap:11px;padding:5px 0;border-top:1px solid var(--line);font-size:12.4px;color:var(--ink-2)}
+.ec .r:first-child{border-top:0;padding-top:0}
+.ec .r .a{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.ec .r b{color:var(--ink)}
+
+.foot{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(14px,2vw,22px);margin-top:clamp(14px,2vw,20px)}
+@media (max-width:760px){.foot{grid-template-columns:1fr}}
+ul{margin:0;padding-left:17px}
+li{margin:4px 0;color:var(--ink-2);font-size:12.7px}
+li b{color:var(--ink)}
+.dec{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.dec:first-of-type{border-top:0;padding-top:0}
+.dec .p{font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.09em;padding:2px 8px;border-radius:99px;white-space:nowrap;height:fit-content}
+.dec .p.g{background:var(--tag-b-bg);color:var(--tag-b-fg)}
+.dec .p.a{background:var(--tag-o-bg);color:var(--tag-o-fg)}
+.dec .p.r{background:var(--yellow-50);color:var(--yellow-950)}
+.dec b{color:var(--ink)}
+.src{margin-top:16px;padding-top:11px;border-top:1px solid var(--line);font-size:10.5px;color:var(--ink-3);line-height:1.5}
+.src b{color:var(--ink-2)}
+
+@media print{
+  @page{size:A4;margin:6mm}
+  html,body{background:#fff}
+  body{font-size:5.95pt;line-height:1.17}
+  header{border-bottom-width:2px}
+  .hd{padding:7px 0 0}
+  .page{padding:0}
+  .hd,.page{max-width:none}
+  .hd h1{font-size:13.5pt;margin:2px 0 3px}
+  .hd .lede{font-size:6.6pt}
+  .band{margin-top:6px;border-radius:5px}
+  .band .c{padding:3px 7px 4px}
+  .band .l{font-size:5pt}.band .v{font-size:10.5pt;margin-top:2px}.band .s{font-size:5.4pt;margin-top:1px}
+  .hb{height:0}
+  .two,.eng,.foot{gap:5px;margin-top:4px}
+  .card,.ec .bd{padding:5px 8px}
+  .card h2{font-size:7.8pt;margin-bottom:3px}
+  .card p{font-size:5.95pt}.card p+p{margin-top:3px}
+  .hd2{font-size:5.2pt;margin-bottom:3px}
+  .punch{padding:5px 8px;margin-top:5px;border-left-width:3px}
+  .punch p{font-size:6.4pt;margin-top:2px}.punch .k{font-size:5.2pt}
+  table{font-size:5.8pt}
+  th{padding:2px 4px;font-size:5pt}
+  td{padding:2px 4px}
+  td.n{font-size:5.8pt}
+  .ec .t{padding:5px 10px}
+  .ec .t h3{font-size:7.8pt}.ec .t .k{font-size:5pt}
+  .ec .r{padding:2px 0;font-size:6pt;grid-template-columns:56px 1fr;gap:6px}
+  .ec .r .a{font-size:5.2pt}
+  li{font-size:6pt;margin:1.5px 0}
+  ul{padding-left:12px}
+  .dec{padding:2px 0;font-size:6pt;gap:5px}
+  .dec .p{font-size:5.4pt;padding:1px 6px}
+  .src{margin-top:4px;padding-top:3px;font-size:5pt;line-height:1.25}
+  .card,.ec,.punch{break-inside:avoid}
+}
+</style>
+
+<header>
+  <div class="hd">
+    <div class="eyebrow">Blank Canvas &middot; BridgeApp by Gradesmatch &middot; Exco decision &middot; 21 August 2026</div>
+    <h1>Derisking R2M</h1>
+    <p class="lede">R10 000 over two weeks, 24 August to 6 September, to establish what a UniApply sale actually costs before R2 000 000 is committed against an unmeasured number.</p>
+    <div class="band">
+      <div class="c"><div class="l">Sprint spend</div><div class="v y">R10 000</div><div class="s">R5 000 a week, both weeks</div></div>
+      <div class="c"><div class="l">Sales target</div><div class="v">61</div><div class="s">The 2% conversion case</div></div>
+      <div class="c"><div class="l">Cost per click</div><div class="v">R3.29</div><div class="s">Measured, July Meta buy</div></div>
+      <div class="c"><div class="l">Decision date</div><div class="v">6 Sep</div><div class="s">Exco releases, holds or re-cuts</div></div>
+    </div>
+    <div class="hb"></div>
+  </div>
+</header>
+
+<div class="page">
+
+  <div class="two">
+    <div class="card">
+      <div class="hd2">The question</div>
+      <h2>Can R2M buy 40 000 sales?</h2>
+      <p>R2 000 000 divided by 40 000 is <b>R50 a sale</b>. That is the economics the plan assumes, and it has never been tested against a real transaction.</p>
+      <p>What we know is real: the July Meta buy spent R1 617.57 for 491 link clicks, so a click costs <b>R3.29</b>. For that click to become a R50 sale, <b>6.6% of everyone who clicks must buy</b>.</p>
+      <p>At the 2% we are working to, a sale costs R164.72 and <b>R2M buys about 12 100 sales, not 40 000</b>. Reaching 40 000 at that rate costs R6.59m.</p>
+      <div class="punch">
+        <div class="k">The point of the sprint</div>
+        <p>Nobody knows which world we are in: GA4 carries no purchase event, so no click has ever been tied to a payment. R10 000 answers it. R2M spent on the assumption does not.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd2">The two levers</div>
+      <h2>Cost per sale is the click divided by the conversion</h2>
+      <p>Both have to move to reach R50. Conversion alone does not get there from where the click sits today.</p>
+      <div class="tw"><table>
+        <thead><tr><th>If a click costs</th><th>Conversion needed for R50</th></tr></thead>
+        <tbody>
+          <tr><td class="n">R3.29 &nbsp;today</td><td class="n">6.6%</td></tr>
+          <tr><td class="n">R2.50</td><td class="n">5.0%</td></tr>
+          <tr><td class="n">R2.00</td><td class="n">4.0%</td></tr>
+          <tr><td class="n">R1.50</td><td class="n">3.0%</td></tr>
+          <tr class="hl"><td class="n">R1.00</td><td class="n">2.0%</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:8px">At 2% conversion, R50 a sale needs a <b>R1.00 click</b>. We are at R3.29. That came from one unoptimised boost so there is real room to move it, but how much is a measurement, not an opinion.</p>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <div class="hd2">What R10 000 returns</div>
+      <h2>The target is 61, and it is the 2% case</h2>
+      <p>R10 000 buys <b>3 035 clicks</b>. What those clicks return is the whole experiment.</p>
+      <div class="tw"><table>
+        <thead><tr><th>If click to sale is</th><th>A sale costs</th><th>Sales from R10 000</th><th>Then R2M buys</th></tr></thead>
+        <tbody>
+          <tr><td class="n">0.5%</td><td class="n">R659</td><td class="n">15</td><td class="n">3 000</td></tr>
+          <tr><td class="n">1.0%</td><td class="n">R329</td><td class="n">30</td><td class="n">6 100</td></tr>
+          <tr class="hl"><td class="n">2.0%</td><td class="n">R165</td><td class="n">61</td><td class="n">12 100</td></tr>
+          <tr><td class="n">4.0%</td><td class="n">R82</td><td class="n">121</td><td class="n">24 300</td></tr>
+          <tr><td class="n">6.6%</td><td class="n">R50</td><td class="n">200</td><td class="n">40 000</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:8px">Hitting 61 confirms 2%. Missing it says the rate is lower, and says so for R10 000 instead of R2m.</p>
+    </div>
+
+    <div class="card">
+      <div class="hd2">What is being spent</div>
+      <h2>R10 000 new. Everything else is already covered.</h2>
+      <div class="tw"><table>
+        <thead><tr><th>Line</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td><b>Paid media, Meta</b>, R5 000 a week</td><td>New</td><td class="n">R10 000</td></tr>
+          <tr><td><b>School visit fuel</b>, 29 schools</td><td>Unlocked</td><td class="n">R2 000</td></tr>
+          <tr><td>Print in house, creative in retainer</td><td>Covered</td><td class="n">R0</td></tr>
+          <tr class="hl"><td><b>Total, two weeks</b></td><td><b>R10 000 new</b></td><td class="n">R12 000</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:8px">That is <b>0.5% of the budget being derisked</b>, and it sits inside the R250 000 of paid media the Phase 2 plan already carries rather than adding to it.</p>
+    </div>
+  </div>
+
+  <div class="eng">
+    <div class="ec">
+      <div class="t b"><div class="k">Engine 1</div><h3>Commercial Sales</h3></div>
+      <div class="bd">
+        <div class="r"><div class="a">Audience</div><div>The paying parent. Measured at <b>60.7% women, largest band 35 to 44</b>, Gauteng first, then KZN and Western Cape.</div></div>
+        <div class="r"><div class="a">Channel</div><div>All R10 000 into <b>Meta</b>, the only channel with real cost data. Four creative variants, including a <b>20 second recut</b> of the July reel, which runs 53 seconds against a 7 second average watch.</div></div>
+        <div class="r"><div class="a">Proves</div><div><b>Cost per click and click to sale.</b> The two numbers the R2M decision rests on.</div></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="t o"><div class="k">Engine 2</div><h3>School Outreach</h3></div>
+      <div class="bd">
+        <div class="r"><div class="a">Audience</div><div>Grade 11 and 12 learners and the parents behind them, at <b>29 schools</b> across Pretoria and Centurion. Selling direct to the family, not chasing school contracts.</div></div>
+        <div class="r"><div class="a">Channel</div><div>Five days of visits on R2 000 of already unlocked fuel, a <b>QR code unique to each school</b>, and a take home slip for the parent who pays.</div></div>
+        <div class="r"><div class="a">Proves</div><div><b>Sign ups per visit and cost per sale</b>, on the same basis as paid, so the two can be compared on 6 September.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="card">
+      <div class="hd2">What we will know on 6 September</div>
+      <ul>
+        <li><b>What a UniApply sale costs</b>, both engines, measured not modelled.</li>
+        <li><b>Whether R2M can buy 40 000</b>, or what it can actually buy.</li>
+        <li><b>How far the R3.29 click can be pushed down</b>, across four variants.</li>
+        <li><b>Which engine is cheaper</b>, and where the next rand should go.</li>
+        <li><b>Whether the measurement chain holds</b>, from click to Peach to ledger. Nothing has confirmed that end to end.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="hd2">The decision this buys</div>
+      <div class="dec"><span class="p g">Release</span><div><b>At or near 6.6%.</b> The plan works as written. Commit R2M against 40 000.</div></div>
+      <div class="dec"><span class="p a">Re-cut</span><div><b>Around 2%.</b> R2M buys roughly 12 100. Either the target moves or the budget does, decided on evidence.</div></div>
+      <div class="dec"><span class="p r">Hold</span><div><b>Below 1%.</b> Fix the click and the landing page before any further media is committed.</div></div>
+      <div style="margin-top:11px;padding-top:9px;border-top:1px solid var(--line-2);font-size:12.5px;color:var(--ink-2)">
+        <b style="color:var(--ink)">Needed from Gradesmatch dev by 24 August:</b> the GA4 purchase event, the parent landing page live, and the readiness tracker lead endpoint. Without them the sprint still measures cost per sale, on manual Peach reconciliation, but attributes it more slowly.
+      </div>
+    </div>
+  </div>
+
+  <p class="src"><b>Sources.</b> Cost per click, audience and video performance from Meta Ad insights, boost of 29 July 2026, pulled 20 August 2026. School route, distances and fuel from the School Visit Proposal, 24 to 28 August 2026. Budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Working detail and the day 14 gate in the Qualifying Sprint workbook. Every figure here is either reported by a platform or derived from one on this page. None is estimated.</p>
+</div>

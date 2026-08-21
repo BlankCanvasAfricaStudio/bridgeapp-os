@@ -49,12 +49,15 @@ instead. Formula vocabulary was deliberately kept to `SUM`, `ROUND`, `IF`,
 `IFERROR`, `AND`, `OR`, `NOT`, `ISNUMBER`, `COUNT`, `COUNTIF`, `SUBSTITUTE`,
 `LOWER` and `TRIM`, all pre 2007, so nothing depends on a newer function.
 
-## Two decisions still open
+## The drivers
 
-Both sit in yellow cells on `03_Sprint_Drivers` and are marked `SET THIS`:
+Both sit in yellow cells on `03_Sprint_Drivers`:
 
-1. **Sprint media cap** (`C13`), currently R15 000.
+1. **Sprint media cap** (`C13`), set to R26 000. Agreed 21 August at R13 000 a
+   week for agility across the fourteen days.
 2. **Qualifying sales target** (`C14`), currently 250, split 70/30 across the
    engines in `C15`.
 
-Cost per sale is derived from those two, not assumed.
+Cost per sale is derived from those two, not assumed. At R26 000 against a GE1
+target of 175, that is 7 892 clicks, a required click to sale rate of 2.22%,
+and an implied R148.57 a sale.

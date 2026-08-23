@@ -1,0 +1,500 @@
+<title>BridgeApp Growth Office Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  /* brand */
+  --navy:#0F2A4A; --yellow:#FBBF24; --yellow-600:#F59E0B; --yellow-950:#92400E; --yellow-50:#FFFDE7;
+  --ground:#F8F4EF; --warm:#F5F0E8; --surface:#FFFFFF;
+  --ink:#0F2A4A; --ink-2:rgba(15,42,74,.80); --ink-3:rgba(15,42,74,.70); --ink-4:rgba(15,42,74,.52);
+  --line:rgba(15,42,74,.13); --line-2:rgba(15,42,74,.24);
+  /* chart categorical, validated light: #2F6EB5 / #E06617 */
+  --c1:#2F6EB5; --c2:#E06617; --cgray:#9AA6B4;
+  /* chart sequential blue, validated light, pale end 2.29:1 on white */
+  --q0:#7CB0E3; --q1:#5A9AD8; --q2:#3878C0; --q3:#2F6EB5; --q4:#1F508A; --q5:#153A63;
+  --on-q0:#0B2038; --on-q1:#0B2038; --on-q2:#FFFFFF; --on-q3:#FFFFFF; --on-q4:#FFFFFF; --on-q5:#FFFFFF;
+  --on-muted:#415063; --nodata-fill:#E4E7EC;
+  /* status: reserved, always with icon + label */
+  --good:#136B33; --good-bg:rgba(19,107,51,.10);
+  --warn:#95400A; --warn-bg:rgba(149,64,10,.10);
+  --crit:#A81E1E; --crit-bg:rgba(168,30,30,.09);
+  --chart-surface:#FFFFFF;
+  --f:'Roboto',"Helvetica Neue",Arial,sans-serif;
+  --m:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#060810; --warm:#0B1424; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.84); --ink-3:rgba(255,255,255,.74); --ink-4:rgba(255,255,255,.56);
+  --line:rgba(255,255,255,.15); --line-2:rgba(255,255,255,.27);
+  --c1:#4A90D9; --c2:#E06617; --cgray:#6C7C8E;
+  --q0:#2A5E96; --q1:#3579B8; --q2:#4A90D9; --q3:#6BA7E2; --q4:#93C1EC; --q5:#B8D7F3;
+  --on-q0:#FFFFFF; --on-q1:#FFFFFF; --on-q2:#0B2038; --on-q3:#0B2038; --on-q4:#0B2038; --on-q5:#0B2038;
+  --on-muted:#AFBCCB; --nodata-fill:#22314A;
+  --good:#4ADE80; --good-bg:rgba(74,222,128,.14);
+  --warn:#FBA36F; --warn-bg:rgba(251,163,111,.14);
+  --crit:#FCA5A5; --crit-bg:rgba(252,165,165,.13);
+  --yellow-950:#FCD34D; --yellow-50:#2b2410;
+  --chart-surface:#0F2A4A;
+}}
+:root[data-theme="dark"]{
+  --ground:#060810; --warm:#0B1424; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.84); --ink-3:rgba(255,255,255,.74); --ink-4:rgba(255,255,255,.56);
+  --line:rgba(255,255,255,.15); --line-2:rgba(255,255,255,.27);
+  --c1:#4A90D9; --c2:#E06617; --cgray:#6C7C8E;
+  --q0:#2A5E96; --q1:#3579B8; --q2:#4A90D9; --q3:#6BA7E2; --q4:#93C1EC; --q5:#B8D7F3;
+  --on-q0:#FFFFFF; --on-q1:#FFFFFF; --on-q2:#0B2038; --on-q3:#0B2038; --on-q4:#0B2038; --on-q5:#0B2038;
+  --on-muted:#AFBCCB; --nodata-fill:#22314A;
+  --good:#4ADE80; --good-bg:rgba(74,222,128,.14);
+  --warn:#FBA36F; --warn-bg:rgba(251,163,111,.14);
+  --crit:#FCA5A5; --crit-bg:rgba(252,165,165,.13);
+  --yellow-950:#FCD34D; --yellow-50:#2b2410;
+  --chart-surface:#0F2A4A;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:900;letter-spacing:-.024em;line-height:1.1;text-wrap:balance}
+p{margin:0}
+:focus-visible{outline:3px solid var(--c1);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+
+header{background:var(--navy);color:#fff;border-bottom:4px solid var(--yellow);padding:clamp(28px,4vw,46px) 0 0}
+header .eyebrow{color:rgba(255,255,255,.80)}
+header h1{font-size:clamp(30px,4.6vw,46px);color:#fff;margin:9px 0 10px}
+header .lede{font-size:clamp(14.5px,1.6vw,17px);color:rgba(255,255,255,.90);max-width:70ch}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.17);border-radius:11px;overflow:hidden;margin:clamp(20px,3vw,28px) 0 0}
+.kpi .c{background:var(--navy);padding:12px 14px 13px}
+.kpi .l{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.76)}
+.kpi .v{font-size:25px;font-weight:900;color:#fff;margin-top:4px;line-height:1;letter-spacing:-.02em}
+.kpi .v.y{color:var(--yellow)}
+.kpi .s{font-size:11px;color:rgba(255,255,255,.76);margin-top:4px;line-height:1.35}
+.hsp{height:clamp(22px,3vw,32px)}
+
+section{padding:clamp(30px,4vw,48px) 0;border-bottom:1px solid var(--line)}
+.sh{margin-bottom:clamp(16px,2.2vw,24px);max-width:74ch}
+.sh h2{font-size:clamp(22px,2.9vw,31px);margin:7px 0 9px}
+.sh p{color:var(--ink-2);font-size:15.5px}
+.eng-h{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.eng-b{width:13px;height:13px;border-radius:3px;flex:0 0 auto}
+.eng-b.b{background:var(--c1)} .eng-b.o{background:var(--c2)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(15px,2vw,22px)}
+.card h3{font-size:16.5px;margin-bottom:5px}
+.card .sub{color:var(--ink-3);font-size:12.8px;margin-bottom:13px;line-height:1.45}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(14px,2vw,20px)}
+.grid2>*{min-width:0}
+.g-2-1{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(14px,2vw,20px)}
+.g-2-1>*{min-width:0}
+@media (max-width:820px){.g-2-1{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:clamp(14px,2vw,20px)}
+
+/* charts */
+.cv{width:100%;height:auto;display:block;overflow:visible}
+.grid{stroke:var(--line);stroke-width:1}
+.tick{font-family:var(--m);font-size:9px;fill:var(--ink-4);font-variant-numeric:tabular-nums}
+.cat{font-size:11.5px;fill:var(--ink-2)}
+.val{font-family:var(--m);font-size:11px;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+.m-a{fill:var(--c2)} .m-b{fill:var(--c1)} .m-g{fill:var(--cgray)}
+.zero{fill:var(--ink-4)}
+.seq.s0{fill:var(--q0)}.seq.s1{fill:var(--q1)}.seq.s2{fill:var(--q2)}
+.seq.s3{fill:var(--q3)}.seq.s4{fill:var(--q4)}.seq.s5{fill:var(--q5)}
+.voidbar{fill:none;stroke:var(--line-2);stroke-width:1}
+.voidtxt{font-size:10.5px;fill:var(--ink-4);font-style:italic}
+.track{fill:var(--line)}
+.segcap{font-size:12px;color:var(--ink-2);margin-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.segcap b{color:var(--ink);font-family:var(--m);font-size:11.5px;font-variant-numeric:tabular-nums}
+.nodata{fill:var(--nodata-fill)}
+.tkey{font-family:var(--m);font-size:13px;font-weight:700}
+.tval{font-family:var(--m);font-size:9.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.on-s0{fill:var(--on-q0)}.on-s1{fill:var(--on-q1)}.on-s2{fill:var(--on-q2)}
+.on-s3{fill:var(--on-q3)}.on-s4{fill:var(--on-q4)}.on-s5{fill:var(--on-q5)}
+.in-muted{fill:var(--on-muted)}
+.pin{fill:var(--c2)}
+.pintxt{font-family:var(--m);font-size:9.5px;font-weight:700;fill:#0B2038}
+.cnote{font-size:11.5px;color:var(--ink-3);margin-top:9px;line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0 2px}
+.lg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2)}
+.lg i{width:11px;height:11px;border-radius:3px;flex:0 0 auto;display:block}
+.lg i.c1{background:var(--c1)}.lg i.c2{background:var(--c2)}.lg i.cg{background:var(--cgray)}
+.lg i.q1{background:var(--q1)}.lg i.q5{background:var(--q5)}.lg i.nd{background:var(--nodata-fill)}
+
+.tv{margin-top:11px;border-top:1px solid var(--line);padding-top:9px}
+.tv summary{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);cursor:pointer}
+.tv summary:hover{color:var(--ink)}
+.tw{overflow-x:auto;margin-top:9px}
+table{border-collapse:collapse;width:100%;font-size:12.8px}
+th{text-align:left;font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+   color:var(--ink-3);padding:6px 9px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+td.n{text-align:right;font-family:var(--m);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* findings */
+.find{display:grid;grid-template-columns:auto 1fr;gap:11px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.find:first-of-type{border-top:0;padding-top:2px}
+.find .ic{width:19px;height:19px;border-radius:5px;display:grid;place-items:center;font-size:11px;font-weight:900;margin-top:2px;flex:0 0 auto}
+.find.w .ic{background:var(--good-bg);color:var(--good)}
+.find.n .ic{background:var(--crit-bg);color:var(--crit)}
+.find.c .ic{background:var(--warn-bg);color:var(--warn)}
+.find .t{font-size:14px;color:var(--ink-2)}
+.find .t b{color:var(--ink);display:block;margin-bottom:1px}
+.need{display:grid;grid-template-columns:26px 1fr auto;gap:12px;padding:11px 0;border-top:1px solid var(--line);align-items:start}
+.need:first-of-type{border-top:0}
+.need .i{font-family:var(--m);font-size:11px;font-weight:700;color:var(--ink-3);margin-top:3px}
+.need .t{font-size:14.2px;color:var(--ink-2)}
+.need .t b{color:var(--ink);display:block}
+.pill{font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:99px;white-space:nowrap;height:fit-content;margin-top:2px}
+.pill.blk{background:var(--crit-bg);color:var(--crit)}
+.pill.deg{background:var(--warn-bg);color:var(--warn)}
+.hero{font-size:clamp(34px,5vw,50px);font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--ink)}
+.hero.o{color:var(--c2)}
+.herolab{font-size:12.5px;color:var(--ink-3);margin-top:7px;line-height:1.45}
+footer{padding:clamp(26px,3.4vw,40px) 0 clamp(40px,5vw,58px);color:var(--ink-3);font-size:12.5px;line-height:1.55}
+footer b{color:var(--ink-2)}
+</style>
+<header><div class="wrap">
+<div class="eyebrow">Blank Canvas &middot; BridgeApp by Gradesmatch &middot; Commercial Growth Office</div>
+<h1>Where the growth actually is</h1>
+<p class="lede">Everything the numbers say as at 20 August 2026, split by growth engine, with what is working, what is not, and what Gradesmatch has to switch on before any of it can be measured properly.</p>
+<div class="kpi">
+  <div class="c"><div class="l">Sessions</div><div class="v">1 057 408</div><div class="s">1 January to 20 August 2026</div></div>
+  <div class="c"><div class="l">Users</div><div class="v">169 100</div><div class="s">129 592 of them new</div></div>
+  <div class="c"><div class="l">Paid sales banked</div><div class="v y">137</div><div class="s">Peach, reconciled to the ledger</div></div>
+  <div class="c"><div class="l">Revenue in GA4</div><div class="v">R0</div><div class="s">Monetisation is not installed</div></div>
+  <div class="c"><div class="l">Target</div><div class="v">40 000</div><div class="s">by 30 November 2026</div></div>
+  <div class="c"><div class="l">Weekly pace needed</div><div class="v">2 667</div><div class="s">15 weeks remain</div></div>
+</div><div class="hsp"></div></div></header>
+<section><div class="wrap">
+<div class="sh"><div class="eyebrow">Overview</div>
+<h2>Traffic is not the problem. Measurement is.</h2>
+<p>Over almost eight months the property recorded 1 057 408 sessions and 15 851 057 events. It recorded <b>zero key events and zero revenue</b>, because the purchase event has never been installed. Every sale the business has made was counted by hand out of Peach.</p></div>
+<div class="g-2-1">
+<div class="card"><h3>Progress to 40 000</h3><p class="sub">Banked against target. The bar is not a rendering error.</p><svg viewBox="0 0 560 12" role="img" class="cv" preserveAspectRatio="none">
+<rect x="0" y="0" width="560" height="12" rx="6.0" class="track"/>
+<rect x="0" y="0" width="12.0" height="12" rx="6.0" class="m-a"><title>Sales banked: 137 of 40 000 (0.34%)</title></rect>
+</svg><div style="margin-top:14px"><div class="hero">0.34%</div><p class="herolab">137 sales banked of 40 000. Holding the deadline needs 2 667 a week for 15 weeks.</p></div></div>
+<div class="card"><h3>What one sale has to cost</h3><p class="sub">The plan's own economics, never yet tested.</p><div class="hero o">R50</div><p class="herolab">R2 000 000 divided by 40 000 sales. At the measured R3.29 a click that needs <b>6.6% of everyone who clicks to buy</b>.</p></div>
+</div></div></section>
+<section><div class="wrap">
+<div class="sh"><div class="eyebrow">Where the traffic comes from</div>
+<h2>Paid media has never actually run</h2>
+<p>Across eight months every paid channel combined returned <b>52 people</b>. The audience the business has was earned, not bought, which means none of it can be scaled by spending more of the same.</p></div>
+<div class="g-2-1">
+<div class="card"><h3>Traffic by channel</h3><p class="sub">Log scale, because the range runs from 509 000 down to 1. Orange marks the paid channels.</p><div class="legend"><span class="lg"><i class="c1"></i>Earned</span><span class="lg"><i class="c2"></i>Paid</span></div><svg viewBox="0 0 580 356" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="144.3" y1="6" x2="144.3" y2="328" class="grid"/>
+<text x="144.3" y="346" class="tick" text-anchor="middle">1</text>
+<line x1="194.1" y1="6" x2="194.1" y2="328" class="grid"/>
+<text x="194.1" y="346" class="tick" text-anchor="middle">10</text>
+<line x1="258.9" y1="6" x2="258.9" y2="328" class="grid"/>
+<text x="258.9" y="346" class="tick" text-anchor="middle">100</text>
+<line x1="325.9" y1="6" x2="325.9" y2="328" class="grid"/>
+<text x="325.9" y="346" class="tick" text-anchor="middle">1 000</text>
+<line x1="393.2" y1="6" x2="393.2" y2="328" class="grid"/>
+<text x="393.2" y="346" class="tick" text-anchor="middle">10 000</text>
+<line x1="460.4" y1="6" x2="460.4" y2="328" class="grid"/>
+<text x="460.4" y="346" class="tick" text-anchor="middle">100 000</text>
+<text x="113" y="25.0" class="cat" text-anchor="end">Unassigned</text>
+<path d="M124,10 H504.0 A4,4 0 0 1 508.0,14 V28 A4,4 0 0 1 504.0,32 H124 Z" class="m-b"><title>Unassigned: 509 000 sessions. GA4 could not attribute these</title></path>
+<text x="516" y="25.0" class="val">509 000</text>
+<text x="113" y="57.0" class="cat" text-anchor="end">Direct</text>
+<path d="M124,42 H499.9415295875748 A4,4 0 0 1 503.9415295875748,46 V60 A4,4 0 0 1 499.9415295875748,64 H124 Z" class="m-b"><title>Direct: 443 000 sessions. Typed, saved, or opened in app</title></path>
+<text x="516" y="57.0" class="val">443 000</text>
+<text x="113" y="89.0" class="cat" text-anchor="end">Organic search</text>
+<path d="M124,74 H454.32509420740405 A4,4 0 0 1 458.32509420740405,78 V92 A4,4 0 0 1 454.32509420740405,96 H124 Z" class="m-b"><title>Organic search: 93 000 sessions. Google and Bing, no spend</title></path>
+<text x="516" y="89.0" class="val">93 000</text>
+<text x="113" y="121.0" class="cat" text-anchor="end">Referral</text>
+<path d="M124,106 H391.9443607338638 A4,4 0 0 1 395.9443607338638,110 V124 A4,4 0 0 1 391.9443607338638,128 H124 Z" class="m-b"><title>Referral: 11 000 sessions. Links from other sites</title></path>
+<text x="516" y="121.0" class="val">11 000</text>
+<text x="113" y="153.0" class="cat" text-anchor="end">Organic social</text>
+<path d="M124,138 H329.55693775165196 A4,4 0 0 1 333.55693775165196,142 V156 A4,4 0 0 1 329.55693775165196,160 H124 Z" class="m-b"><title>Organic social: 1 300 sessions. Facebook and Instagram pages</title></path>
+<text x="516" y="153.0" class="val">1 300</text>
+<text x="113" y="185.0" class="cat" text-anchor="end">AI assistant</text>
+<path d="M124,170 H238.15125076887148 A4,4 0 0 1 242.15125076887148,174 V188 A4,4 0 0 1 238.15125076887148,192 H124 Z" class="m-b"><title>AI assistant: 56 sessions. Referrals from chat assistants</title></path>
+<text x="516" y="185.0" class="val">56</text>
+<text x="113" y="217.0" class="cat" text-anchor="end">Cross-network</text>
+<path d="M124,202 H226.30222722389578 A4,4 0 0 1 230.30222722389578,206 V220 A4,4 0 0 1 226.30222722389578,224 H124 Z" class="m-a"><title>Cross-network: 37 sessions. Google cross-network placements</title></path>
+<text x="516" y="217.0" class="val">37</text>
+<text x="113" y="249.0" class="cat" text-anchor="end">Paid social</text>
+<path d="M124,234 H199.13813038944957 A4,4 0 0 1 203.13813038944957,238 V252 A4,4 0 0 1 199.13813038944957,256 H124 Z" class="m-a"><title>Paid social: 14 users. Meta ads, reported as users</title></path>
+<text x="516" y="249.0" class="val">14</text>
+<text x="113" y="281.0" class="cat" text-anchor="end">Paid search</text>
+<path d="M124,266 H140.25603954162514 A4,4 0 0 1 144.25603954162514,270 V284 A4,4 0 0 1 140.25603954162514,288 H124 Z" class="m-a"><title>Paid search: 1 users. Google Ads, reported as users</title></path>
+<text x="516" y="281.0" class="val">1</text>
+<text x="113" y="313.0" class="cat" text-anchor="end">LinkedIn paid</text>
+<rect x="124" y="308.0" width="3" height="2" class="m-a zero"><title>LinkedIn paid: 0 sessions. 15% of the briefed buy, never ran</title></rect>
+<text x="516" y="313.0" class="val">0</text>
+</svg>
+<p class="cnote">Paid social and paid search are reported by GA4 as users, not sessions. Both figures are shown as reported.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Channel</th><th>Value</th><th>Group</th></tr></thead><tbody><tr><td>Unassigned</td><td class="n">509 000</td><td class="n">Earned</td></tr><tr><td>Direct</td><td class="n">443 000</td><td class="n">Earned</td></tr><tr><td>Organic search</td><td class="n">93 000</td><td class="n">Earned</td></tr><tr><td>Referral</td><td class="n">11 000</td><td class="n">Earned</td></tr><tr><td>Organic social</td><td class="n">1 300</td><td class="n">Earned</td></tr><tr><td>AI assistant</td><td class="n">56</td><td class="n">Earned</td></tr><tr><td>Cross-network</td><td class="n">37</td><td class="n">Paid</td></tr><tr><td>Paid social</td><td class="n">14</td><td class="n">Paid</td></tr><tr><td>Paid search</td><td class="n">1</td><td class="n">Paid</td></tr><tr><td>LinkedIn paid</td><td class="n">0</td><td class="n">Paid</td></tr></tbody></table></div></details></div>
+<div class="card"><h3>Who the traffic actually is</h3><p class="sub">Machine traffic against human traffic, all sessions.</p><svg viewBox="0 0 520 46" role="img" class="cv" preserveAspectRatio="none">
+<rect x="0.0" y="0" width="288.6" height="46" class="m-b" rx="2"><title>Human sessions: 591 408 (55.9%)</title></rect>
+<rect x="290.6" y="0" width="120.5" height="46" class="m-g" rx="2"><title>bridge_client: 247 000 (23.4%)</title></rect>
+<rect x="413.1" y="0" width="106.9" height="46" class="m-a" rx="2"><title>Full Automation: 219 000 (20.7%)</title></rect>
+</svg>
+<div class="segcap"><span>Human sessions <b>56%</b></span><span>bridge_client <b>23%</b></span><span>Full Automation <b>21%</b></span></div>
+<p class="cnote">466 000 of 1 057 408 sessions, 44%, are automation. Until they are filtered out every rate the property reports is diluted.</p><div class="legend"><span class="lg"><i class="c1"></i>Human</span><span class="lg"><i class="cg"></i>bridge_client</span><span class="lg"><i class="c2"></i>Full Automation</span></div><h3 style="margin-top:22px">And what they are holding</h3><p class="sub">Users by device, as reported.</p><svg viewBox="0 0 520 132" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="76.0" y1="6" x2="76.0" y2="104" class="grid"/>
+<text x="76.0" y="122" class="tick" text-anchor="middle">0</text>
+<line x1="139.9" y1="6" x2="139.9" y2="104" class="grid"/>
+<text x="139.9" y="122" class="tick" text-anchor="middle">10 000</text>
+<line x1="203.8" y1="6" x2="203.8" y2="104" class="grid"/>
+<text x="203.8" y="122" class="tick" text-anchor="middle">20 000</text>
+<line x1="267.6" y1="6" x2="267.6" y2="104" class="grid"/>
+<text x="267.6" y="122" class="tick" text-anchor="middle">30 000</text>
+<line x1="331.5" y1="6" x2="331.5" y2="104" class="grid"/>
+<text x="331.5" y="122" class="tick" text-anchor="middle">40 000</text>
+<line x1="395.4" y1="6" x2="395.4" y2="104" class="grid"/>
+<text x="395.4" y="122" class="tick" text-anchor="middle">50 000</text>
+<text x="65" y="25.0" class="cat" text-anchor="end">Mobile</text>
+<path d="M76,10 H448.0 A4,4 0 0 1 452.0,14 V28 A4,4 0 0 1 448.0,32 H76 Z" class="m-b"><title>Mobile: 58 864 users, 85.4% of the reported device split</title></path>
+<text x="460" y="25.0" class="val">58 864</text>
+<text x="65" y="57.0" class="cat" text-anchor="end">Desktop</text>
+<path d="M76,42 H131.26420222886654 A4,4 0 0 1 135.26420222886654,46 V60 A4,4 0 0 1 131.26420222886654,64 H76 Z" class="m-b"><title>Desktop: 9 278 users, 13.5% of the reported device split</title></path>
+<text x="460" y="57.0" class="val">9 278</text>
+<text x="65" y="89.0" class="cat" text-anchor="end">Tablet</text>
+<path d="M76,74 H76.89290568089154 A4,4 0 0 1 80.89290568089154,78 V92 A4,4 0 0 1 76.89290568089154,96 H76 Z" class="m-b"><title>Tablet: 766 users, 1.1% of the reported device split</title></path>
+<text x="460" y="89.0" class="val">766</text>
+</svg>
+<p class="cnote">85% of these users are on a phone. Creative, the landing page and the readiness tracker are all judged on a small screen first.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Segment</th><th>Sessions</th></tr></thead><tbody><tr><td>Human</td><td class="n">591 408</td></tr><tr><td>bridge_client</td><td class="n">247 000</td></tr><tr><td>Full Automation</td><td class="n">219 000</td></tr><tr><td>Total sessions</td><td class="n">1 057 408</td></tr><tr><td>Mobile users</td><td class="n">58 864</td></tr><tr><td>Desktop users</td><td class="n">9 278</td></tr><tr><td>Tablet users</td><td class="n">766</td></tr></tbody></table></div></details></div>
+</div></div></section>
+<section><div class="wrap">
+<div class="sh"><div class="eyebrow">The measurement gap</div>
+<h2>The funnel is not broken. It was never wired up.</h2>
+<p>People move through the pages exactly as you would hope. The commerce events underneath them do not exist, so GA4 reports a purchase journey of zero from 69 114 session starts. Those zeros are missing instrumentation, not missing customers.</p></div>
+<div class="grid2">
+<div class="card"><h3>Page progression, which is measured</h3><p class="sub">Sessions reaching each page. GA4, 1 January to 20 August 2026.</p><svg viewBox="0 0 520 146" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<text x="117" y="25.0" class="cat" text-anchor="end">Learn</text>
+<path d="M128,10 H432.0 A4,4 0 0 1 436.0,14 V28 A4,4 0 0 1 432.0,32 H128 Z" class="seq s0"><title>Learn: 33 927 (100.0% of the first stage)</title></path>
+<text x="444" y="25.0" class="val">33 927</text>
+<text x="117" y="57.0" class="cat" text-anchor="end">Pricing</text>
+<path d="M128,42 H261.8542164058125 A4,4 0 0 1 265.8542164058125,46 V60 A4,4 0 0 1 261.8542164058125,64 H128 Z" class="seq s2"><title>Pricing: 15 185 (44.8% of the first stage)</title></path>
+<text x="444" y="57.0" class="val">15 185</text>
+<text x="117" y="89.0" class="cat" text-anchor="end">Packages</text>
+<path d="M128,74 H231.478173725941 A4,4 0 0 1 235.478173725941,78 V92 A4,4 0 0 1 231.478173725941,96 H128 Z" class="seq s3"><title>Packages: 11 839 (34.9% of the first stage)</title></path>
+<text x="444" y="89.0" class="val">11 839</text>
+<text x="117" y="121.0" class="cat" text-anchor="end">Payment</text>
+<path d="M128,106 H196.25431072597047 A4,4 0 0 1 200.25431072597047,110 V124 A4,4 0 0 1 196.25431072597047,128 H128 Z" class="seq s5"><title>Payment: 7 959 (23.5% of the first stage)</title></path>
+<text x="444" y="121.0" class="val">7 959</text>
+</svg>
+<p class="cnote">23% of everyone who reaches Learn reaches Payment. That is a working funnel.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Stage</th><th>Sessions</th></tr></thead><tbody><tr><td>Learn</td><td class="n">33 927</td></tr><tr><td>Pricing</td><td class="n">15 185</td></tr><tr><td>Packages</td><td class="n">11 839</td></tr><tr><td>Payment</td><td class="n">7 959</td></tr></tbody></table></div></details></div>
+<div class="card"><h3>Purchase journey, which is not</h3><p class="sub">The same property, same period, commerce events.</p><svg viewBox="0 0 520 178" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<text x="117" y="25.0" class="cat" text-anchor="end">Session start</text>
+<path d="M128,10 H432.0 A4,4 0 0 1 436.0,14 V28 A4,4 0 0 1 432.0,32 H128 Z" class="seq s0"><title>Session start: 69 114 (100.0% of the first stage)</title></path>
+<text x="444" y="25.0" class="val">69 114</text>
+<text x="117" y="57.0" class="cat" text-anchor="end">View product</text>
+<rect x="128" y="42" width="308" height="22" class="voidbar"><title>View product: not instrumented, so GA4 records zero</title></rect>
+<text x="138" y="57.0" class="voidtxt">not instrumented</text>
+<text x="444" y="57.0" class="val">0</text>
+<text x="117" y="89.0" class="cat" text-anchor="end">Add to cart</text>
+<rect x="128" y="74" width="308" height="22" class="voidbar"><title>Add to cart: not instrumented, so GA4 records zero</title></rect>
+<text x="138" y="89.0" class="voidtxt">not instrumented</text>
+<text x="444" y="89.0" class="val">0</text>
+<text x="117" y="121.0" class="cat" text-anchor="end">Begin checkout</text>
+<rect x="128" y="106" width="308" height="22" class="voidbar"><title>Begin checkout: not instrumented, so GA4 records zero</title></rect>
+<text x="138" y="121.0" class="voidtxt">not instrumented</text>
+<text x="444" y="121.0" class="val">0</text>
+<text x="117" y="153.0" class="cat" text-anchor="end">Purchase</text>
+<rect x="128" y="138" width="308" height="22" class="voidbar"><title>Purchase: not instrumented, so GA4 records zero</title></rect>
+<text x="138" y="153.0" class="voidtxt">not instrumented</text>
+<text x="444" y="153.0" class="val">0</text>
+</svg>
+<p class="cnote">Four stages report zero because no ecommerce event fires. This is the single highest value fix on the list.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Stage</th><th>Events</th></tr></thead><tbody><tr><td>Session start</td><td class="n">69 114</td></tr><tr><td>View product</td><td class="n">0</td></tr><tr><td>Add to cart</td><td class="n">0</td></tr><tr><td>Begin checkout</td><td class="n">0</td></tr><tr><td>Purchase</td><td class="n">0</td></tr></tbody></table></div></details></div>
+</div></div></section>
+<section><div class="wrap">
+<div class="eng-h"><span class="eng-b b"></span><div class="eyebrow">Growth Engine 1</div></div>
+<div class="sh"><h2>Commercial Sales</h2>
+<p>Buying attention from people who can pay. One real buy has ever run: a boosted post from 29 July that spent R1 617.57 and returned 491 link clicks. Everything known about paid performance comes from those eight days.</p></div>
+
+<div class="grid2">
+<div class="card"><h3>Current state</h3><p class="sub">What the one real buy established.</p><div class="hero">R3.29</div><p class="herolab">Cost per link click, measured. Click through rate 3.1% on 15 979 views. This is the only true cost figure the campaign holds.</p><div style="margin-top:16px"><div class="find w"><span class="ic">+</span><div class="t"><b>Meta reaches the buyer</b>60.7% women, and 35 to 44 was the largest age band. That is the parent who holds the card.</div></div><div class="find w"><span class="ic">+</span><div class="t"><b>Organic works without spend</b>One reel reached 12 677 views, 87% of them non followers. Organic search brings 93 000 sessions a year for nothing.</div></div></div></div>
+<div class="card"><h3>What is not working</h3><p class="sub">Each of these is measured, not inferred.</p><div class="find n"><span class="ic">!</span><div class="t"><b>Paid has never run at scale</b>52 people across eight months, from every paid channel combined. There is no performance history to optimise against.</div></div><div class="find n"><span class="ic">!</span><div class="t"><b>The video is too long for its audience</b>53 seconds of video against 7 seconds of average watch. Hook rate is healthy at 38%, hold rate is 7.6%. We are paying to deliver 46 seconds nobody sees.</div></div><div class="find n"><span class="ic">!</span><div class="t"><b>Nearly half of all traffic is unattributed</b>Unassigned is the single largest channel at 509 000 sessions. GA4 cannot say where it came from, so it cannot be repeated or defended.</div></div><div class="find c"><span class="ic">~</span><div class="t"><b>TikTok reaches the student, not the buyer</b>38 922 views and 5 194 likes, but 54% aged 18 to 24 and 97% returning viewers. Treat it as demand creation, never as a sales channel.</div></div></div>
+</div>
+
+<div class="grid2" style="margin-top:20px">
+<div class="card"><h3>Where the paid audience actually is</h3><p class="sub">Meta reach by province, boosted post, 29 July to 5 August.</p><svg viewBox="0 0 328 328" role="img" class="cv tmap" preserveAspectRatio="xMidYMid meet">
+<rect x="82" y="0" width="76" height="76" rx="7" class="nodata"><title>North West: Not in the reported top six</title></rect>
+<text x="120.0" y="34.0" class="tkey in-muted" text-anchor="middle">NW</text>
+<text x="120.0" y="52.0" class="tval in-muted" text-anchor="middle">not in top 6</text>
+<rect x="164" y="0" width="76" height="76" rx="7" class="seq s2"><title>Limpopo: 572 reached</title></rect>
+<text x="202.0" y="34.0" class="tkey on-s2" text-anchor="middle">LP</text>
+<text x="202.0" y="52.0" class="tval on-s2" text-anchor="middle">572</text>
+<rect x="0" y="82" width="76" height="76" rx="7" class="nodata"><title>Northern Cape: Not in the reported top six</title></rect>
+<text x="38.0" y="116.0" class="tkey in-muted" text-anchor="middle">NC</text>
+<text x="38.0" y="134.0" class="tval in-muted" text-anchor="middle">not in top 6</text>
+<rect x="82" y="82" width="76" height="76" rx="7" class="seq s5"><title>Gauteng: Largest, figure not reported</title></rect>
+<text x="120.0" y="116.0" class="tkey on-s5" text-anchor="middle">GP</text>
+<text x="120.0" y="134.0" class="tval on-s5" text-anchor="middle">largest</text>
+<circle cx="145" cy="95" r="10" class="pin"/>
+<text x="145" y="99" class="pintxt" text-anchor="middle">29</text>
+<rect x="164" y="82" width="76" height="76" rx="7" class="seq s2"><title>Mpumalanga: 556 reached</title></rect>
+<text x="202.0" y="116.0" class="tkey on-s2" text-anchor="middle">MP</text>
+<text x="202.0" y="134.0" class="tval on-s2" text-anchor="middle">556</text>
+<rect x="82" y="164" width="76" height="76" rx="7" class="nodata"><title>Free State: Not in the reported top six</title></rect>
+<text x="120.0" y="198.0" class="tkey in-muted" text-anchor="middle">FS</text>
+<text x="120.0" y="216.0" class="tval in-muted" text-anchor="middle">not in top 6</text>
+<rect x="164" y="164" width="76" height="76" rx="7" class="seq s5"><title>KwaZulu-Natal: 1 200 reached</title></rect>
+<text x="202.0" y="198.0" class="tkey on-s5" text-anchor="middle">KZN</text>
+<text x="202.0" y="216.0" class="tval on-s5" text-anchor="middle">1 200</text>
+<rect x="0" y="246" width="76" height="76" rx="7" class="seq s4"><title>Western Cape: 863 reached</title></rect>
+<text x="38.0" y="280.0" class="tkey on-s4" text-anchor="middle">WC</text>
+<text x="38.0" y="298.0" class="tval on-s4" text-anchor="middle">863</text>
+<rect x="82" y="246" width="76" height="76" rx="7" class="seq s2"><title>Eastern Cape: 556 reached</title></rect>
+<text x="120.0" y="280.0" class="tkey on-s2" text-anchor="middle">EC</text>
+<text x="120.0" y="298.0" class="tval on-s2" text-anchor="middle">556</text>
+</svg>
+<p class="cnote">Schematic map, provinces in approximate position. Meta reports its top six only, so North West, Northern Cape and Free State are not shown as zero, they are unreported.</p><div class="legend"><span class="lg"><i class="q1"></i>Fewer reached</span><span class="lg"><i class="q5"></i>More reached</span><span class="lg"><i class="nd"></i>Not in top six</span><span class="lg"><i class="c2"></i>School visits this sprint</span></div><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Province</th><th>Reached</th><th>Note</th></tr></thead><tbody><tr><td>Gauteng</td><td class="n">not reported</td><td class="n">Largest, figure not reported</td></tr><tr><td>KwaZulu-Natal</td><td class="n">1 200</td><td class="n"></td></tr><tr><td>Western Cape</td><td class="n">863</td><td class="n"></td></tr><tr><td>Limpopo</td><td class="n">572</td><td class="n"></td></tr><tr><td>Eastern Cape</td><td class="n">556</td><td class="n"></td></tr><tr><td>Mpumalanga</td><td class="n">556</td><td class="n"></td></tr><tr><td>North West</td><td class="n">not reported</td><td class="n">Not in the reported top six</td></tr><tr><td>Northern Cape</td><td class="n">not reported</td><td class="n">Not in the reported top six</td></tr><tr><td>Free State</td><td class="n">not reported</td><td class="n">Not in the reported top six</td></tr></tbody></table></div></details></div>
+<div class="card"><h3>Two audiences, two platforms</h3><p class="sub">TikTok viewers by age band. Ordered scale, so one hue, darker is more.</p><svg viewBox="0 0 520 196" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="76.0" y1="6" x2="76.0" y2="168" class="grid"/>
+<text x="76.0" y="186" class="tick" text-anchor="middle">0</text>
+<line x1="147.1" y1="6" x2="147.1" y2="168" class="grid"/>
+<text x="147.1" y="186" class="tick" text-anchor="middle">10</text>
+<line x1="218.2" y1="6" x2="218.2" y2="168" class="grid"/>
+<text x="218.2" y="186" class="tick" text-anchor="middle">20</text>
+<line x1="289.3" y1="6" x2="289.3" y2="168" class="grid"/>
+<text x="289.3" y="186" class="tick" text-anchor="middle">30</text>
+<line x1="360.4" y1="6" x2="360.4" y2="168" class="grid"/>
+<text x="360.4" y="186" class="tick" text-anchor="middle">40</text>
+<line x1="431.6" y1="6" x2="431.6" y2="168" class="grid"/>
+<text x="431.6" y="186" class="tick" text-anchor="middle">50</text>
+<text x="65" y="25.0" class="cat" text-anchor="end">18-24</text>
+<path d="M76,10 H456.0 A4,4 0 0 1 460.0,14 V28 A4,4 0 0 1 456.0,32 H76 Z" class="seq s5"><title>TikTok viewers aged 18-24: 54%</title></path>
+<text x="468" y="25.0" class="val">54%</text>
+<text x="65" y="57.0" class="cat" text-anchor="end">25-34</text>
+<path d="M76,42 H306.66666666666663 A4,4 0 0 1 310.66666666666663,46 V60 A4,4 0 0 1 306.66666666666663,64 H76 Z" class="seq s4"><title>TikTok viewers aged 25-34: 33%</title></path>
+<text x="468" y="57.0" class="val">33%</text>
+<text x="65" y="89.0" class="cat" text-anchor="end">35-44</text>
+<path d="M76,74 H128.88888888888889 A4,4 0 0 1 132.88888888888889,78 V92 A4,4 0 0 1 128.88888888888889,96 H76 Z" class="seq s3"><title>TikTok viewers aged 35-44: 8%</title></path>
+<text x="468" y="89.0" class="val">8%</text>
+<text x="65" y="121.0" class="cat" text-anchor="end">45-54</text>
+<path d="M76,106 H93.33333333333333 A4,4 0 0 1 97.33333333333333,110 V124 A4,4 0 0 1 93.33333333333333,128 H76 Z" class="seq s2"><title>TikTok viewers aged 45-54: 3%</title></path>
+<text x="468" y="121.0" class="val">3%</text>
+<text x="65" y="153.0" class="cat" text-anchor="end">55+</text>
+<path d="M76,138 H86.22222222222223 A4,4 0 0 1 90.22222222222223,142 V156 A4,4 0 0 1 86.22222222222223,160 H76 Z" class="seq s1"><title>TikTok viewers aged 55+: 2%</title></path>
+<text x="468" y="153.0" class="val">2%</text>
+</svg>
+<p class="cnote">Meta's largest band was 35 to 44. TikTok's is 18 to 24. Both skew female, so gender is not what separates them. Age is, and only one of those ages holds a card.</p><h3 style="margin-top:20px">Gender, both platforms</h3><p class="sub">Reported shares of the audience each platform delivered.</p><p class="cat" style="font-size:12px;color:var(--ink-3);margin-bottom:5px">Meta, boosted post</p><svg viewBox="0 0 420 30" role="img" class="cv" preserveAspectRatio="none">
+<rect x="0.0" y="0" width="252.5" height="30" class="m-b" rx="2"><title>Women: 60.7 (60.7%)</title></rect>
+<rect x="254.5" y="0" width="159.7" height="30" class="m-a" rx="2"><title>Men: 38.4 (38.4%)</title></rect>
+<rect x="416.3" y="0" width="3.7" height="30" class="m-g" rx="2"><title>Non binary: 0.9 (0.9%)</title></rect>
+</svg>
+<div class="segcap"><span>Women <b>61%</b></span><span>Men <b>38%</b></span><span>Non binary <b>1%</b></span></div><p class="cat" style="font-size:12px;color:var(--ink-3);margin:12px 0 5px">TikTok, single video</p><svg viewBox="0 0 420 30" role="img" class="cv" preserveAspectRatio="none">
+<rect x="0.0" y="0" width="271.7" height="30" class="m-b" rx="2"><title>Female: 65 (65.0%)</title></rect>
+<rect x="273.7" y="0" width="146.3" height="30" class="m-a" rx="2"><title>Male: 35 (35.0%)</title></rect>
+</svg>
+<div class="segcap"><span>Female <b>65%</b></span><span>Male <b>35%</b></span></div><div class="legend"><span class="lg"><i class="c1"></i>Women</span><span class="lg"><i class="c2"></i>Men</span><span class="lg"><i class="cg"></i>Non binary</span></div><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Measure</th><th>Meta</th><th>TikTok</th></tr></thead><tbody><tr><td>Largest age band</td><td class="n">35 to 44</td><td class="n">18 to 24</td></tr><tr><td>Women</td><td class="n">60.7%</td><td class="n">65%</td></tr><tr><td>Men</td><td class="n">38.4%</td><td class="n">35%</td></tr><tr><td>Age 18-24</td><td class="n">not reported</td><td class="n">54%</td></tr><tr><td>Age 25-34</td><td class="n">not reported</td><td class="n">33%</td></tr><tr><td>Age 35-44</td><td class="n">not reported</td><td class="n">8%</td></tr><tr><td>Age 45-54</td><td class="n">not reported</td><td class="n">3%</td></tr><tr><td>Age 55+</td><td class="n">not reported</td><td class="n">2%</td></tr></tbody></table></div></details></div>
+</div>
+
+<div class="card" style="margin-top:20px">
+<h3>What the sprint has to establish</h3>
+<p class="sub">Sales that R10 000 returns at each possible click to sale rate. The 2% row is the working hypothesis; the 6.6% row is what the R2m plan silently assumes.</p>
+<div class="legend"><span class="lg"><i class="c1"></i>Sales from R10 000</span><span class="lg"><i class="c2"></i>The rate R2m needs</span></div>
+<svg viewBox="0 0 760 196" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="92.0" y1="6" x2="92.0" y2="168" class="grid"/>
+<text x="92.0" y="186" class="tick" text-anchor="middle">0</text>
+<line x1="394.0" y1="6" x2="394.0" y2="168" class="grid"/>
+<text x="394.0" y="186" class="tick" text-anchor="middle">100</text>
+<line x1="696.0" y1="6" x2="696.0" y2="168" class="grid"/>
+<text x="696.0" y="186" class="tick" text-anchor="middle">200</text>
+<text x="81" y="25.0" class="cat" text-anchor="end">0.5%</text>
+<path d="M92,10 H133.3 A4,4 0 0 1 137.3,14 V28 A4,4 0 0 1 133.3,32 H92 Z" class="m-b"><title>At 0.5% click to sale: R659 a sale, 15 sales from R10 000, and R2m buys 3 035</title></path>
+<text x="704" y="25.0" class="val">15</text>
+<text x="81" y="57.0" class="cat" text-anchor="end">1.0%</text>
+<path d="M92,42 H178.6 A4,4 0 0 1 182.6,46 V60 A4,4 0 0 1 178.6,64 H92 Z" class="m-b"><title>At 1.0% click to sale: R329 a sale, 30 sales from R10 000, and R2m buys 6 071</title></path>
+<text x="704" y="57.0" class="val">30</text>
+<text x="81" y="89.0" class="cat" text-anchor="end">2.0%</text>
+<path d="M92,74 H272.22 A4,4 0 0 1 276.22,78 V92 A4,4 0 0 1 272.22,96 H92 Z" class="m-b"><title>At 2.0% click to sale: R165 a sale, 61 sales from R10 000, and R2m buys 12 142</title></path>
+<text x="704" y="89.0" class="val">61</text>
+<text x="81" y="121.0" class="cat" text-anchor="end">4.0%</text>
+<path d="M92,106 H453.42 A4,4 0 0 1 457.42,110 V124 A4,4 0 0 1 453.42,128 H92 Z" class="m-b"><title>At 4.0% click to sale: R82 a sale, 121 sales from R10 000, and R2m buys 24 283</title></path>
+<text x="704" y="121.0" class="val">121</text>
+<text x="81" y="153.0" class="cat" text-anchor="end">6.6%</text>
+<path d="M92,138 H692.0 A4,4 0 0 1 696.0,142 V156 A4,4 0 0 1 692.0,160 H92 Z" class="m-a"><title>At 6.6% click to sale: R50 a sale, 200 sales from R10 000, and R2m buys 40 068</title></path>
+<text x="704" y="153.0" class="val">200</text>
+</svg>
+<p class="cnote">Cost per sale is the click divided by the conversion. At 2% a sale costs R165 and R2m buys about 12 142 sales rather than 40 000.</p>
+<details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Click to sale</th><th>Cost per sale</th><th>Sales from R10 000</th><th>R2m would buy</th></tr></thead><tbody><tr><td>0.5%</td><td class="n">R659</td><td class="n">15</td><td class="n">3 035</td></tr><tr><td>1.0%</td><td class="n">R329</td><td class="n">30</td><td class="n">6 071</td></tr><tr><td>2.0%</td><td class="n">R165</td><td class="n">61</td><td class="n">12 142</td></tr><tr><td>4.0%</td><td class="n">R82</td><td class="n">121</td><td class="n">24 283</td></tr><tr><td>6.6%</td><td class="n">R50</td><td class="n">200</td><td class="n">40 068</td></tr></tbody></table></div></details>
+</div>
+</div></section>
+<section><div class="wrap">
+<div class="eng-h"><span class="eng-b o"></span><div class="eyebrow">Growth Engine 2</div></div>
+<div class="sh"><h2>School Outreach</h2>
+<p>Reaching learners and the parents behind them in person. 29 schools across five days, 855 km, R1 749 of fuel against R2 000 approved. This engine has never been measured, so this sprint sets its first baseline rather than hitting a target.</p></div>
+
+<div class="grid2">
+<div class="card"><h3>The week, school by school</h3><p class="sub">Visits per day, 24 to 28 August.</p><svg viewBox="0 0 520 196" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="168.0" y1="6" x2="168.0" y2="168" class="grid"/>
+<text x="168.0" y="186" class="tick" text-anchor="middle">0</text>
+<line x1="219.3" y1="6" x2="219.3" y2="168" class="grid"/>
+<text x="219.3" y="186" class="tick" text-anchor="middle">1</text>
+<line x1="270.7" y1="6" x2="270.7" y2="168" class="grid"/>
+<text x="270.7" y="186" class="tick" text-anchor="middle">2</text>
+<line x1="322.0" y1="6" x2="322.0" y2="168" class="grid"/>
+<text x="322.0" y="186" class="tick" text-anchor="middle">3</text>
+<line x1="373.3" y1="6" x2="373.3" y2="168" class="grid"/>
+<text x="373.3" y="186" class="tick" text-anchor="middle">4</text>
+<line x1="424.7" y1="6" x2="424.7" y2="168" class="grid"/>
+<text x="424.7" y="186" class="tick" text-anchor="middle">5</text>
+<text x="157" y="25.0" class="cat" text-anchor="end">Mon Pretoria West</text>
+<path d="M168,10 H472.0 A4,4 0 0 1 476.0,14 V28 A4,4 0 0 1 472.0,32 H168 Z" class="m-b"><title>Mon: Pretoria West, 6 schools, 100 km, R205 fuel</title></path>
+<text x="484" y="25.0" class="val">6</text>
+<text x="157" y="57.0" class="cat" text-anchor="end">Tue Pretoria East</text>
+<path d="M168,42 H472.0 A4,4 0 0 1 476.0,46 V60 A4,4 0 0 1 472.0,64 H168 Z" class="m-b"><title>Tue: Pretoria East, 6 schools, 200 km, R409 fuel</title></path>
+<text x="484" y="57.0" class="val">6</text>
+<text x="157" y="89.0" class="cat" text-anchor="end">Wed Pretoria Central</text>
+<path d="M168,74 H472.0 A4,4 0 0 1 476.0,78 V92 A4,4 0 0 1 472.0,96 H168 Z" class="m-b"><title>Wed: Pretoria Central, 6 schools, 155 km, R317 fuel</title></path>
+<text x="484" y="89.0" class="val">6</text>
+<text x="157" y="121.0" class="cat" text-anchor="end">Thu Pretoria East/Central</text>
+<path d="M168,106 H420.6666666666667 A4,4 0 0 1 424.6666666666667,110 V124 A4,4 0 0 1 420.6666666666667,128 H168 Z" class="m-b"><title>Thu: Pretoria East/Central, 5 schools, 160 km, R327 fuel</title></path>
+<text x="484" y="121.0" class="val">5</text>
+<text x="157" y="153.0" class="cat" text-anchor="end">Fri Centurion</text>
+<path d="M168,138 H472.0 A4,4 0 0 1 476.0,142 V156 A4,4 0 0 1 472.0,160 H168 Z" class="m-b"><title>Fri: Centurion, 6 schools, 240 km, R491 fuel</title></path>
+<text x="484" y="153.0" class="val">6</text>
+</svg>
+<p class="cnote">29 schools in five days. Three stalled relationships are being re opened: Iona Convent, Loreto Convent and Pretoria High for Girls.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Day</th><th>Area</th><th>Schools</th><th>Km</th><th>Fuel</th></tr></thead><tbody><tr><td>Mon</td><td class="n">Pretoria West</td><td class="n">6</td><td class="n">100</td><td class="n">R205</td></tr><tr><td>Tue</td><td class="n">Pretoria East</td><td class="n">6</td><td class="n">200</td><td class="n">R409</td></tr><tr><td>Wed</td><td class="n">Pretoria Central</td><td class="n">6</td><td class="n">155</td><td class="n">R317</td></tr><tr><td>Thu</td><td class="n">Pretoria East/Central</td><td class="n">5</td><td class="n">160</td><td class="n">R327</td></tr><tr><td>Fri</td><td class="n">Centurion</td><td class="n">6</td><td class="n">240</td><td class="n">R491</td></tr></tbody></table></div></details></div>
+<div class="card"><h3>What access costs</h3><p class="sub">Fuel per day against distance.</p><svg viewBox="0 0 520 196" role="img" class="cv" preserveAspectRatio="xMidYMid meet">
+<line x1="52.0" y1="6" x2="52.0" y2="168" class="grid"/>
+<text x="52.0" y="186" class="tick" text-anchor="middle">0</text>
+<line x1="222.0" y1="6" x2="222.0" y2="168" class="grid"/>
+<text x="222.0" y="186" class="tick" text-anchor="middle">100</text>
+<line x1="392.0" y1="6" x2="392.0" y2="168" class="grid"/>
+<text x="392.0" y="186" class="tick" text-anchor="middle">200</text>
+<text x="41" y="25.0" class="cat" text-anchor="end">Mon</text>
+<path d="M52,10 H218.0 A4,4 0 0 1 222.0,14 V28 A4,4 0 0 1 218.0,32 H52 Z" class="m-a"><title>Mon: 100 km, R205 fuel</title></path>
+<text x="468" y="25.0" class="val">100 km</text>
+<text x="41" y="57.0" class="cat" text-anchor="end">Tue</text>
+<path d="M52,42 H388.0 A4,4 0 0 1 392.0,46 V60 A4,4 0 0 1 388.0,64 H52 Z" class="m-a"><title>Tue: 200 km, R409 fuel</title></path>
+<text x="468" y="57.0" class="val">200 km</text>
+<text x="41" y="89.0" class="cat" text-anchor="end">Wed</text>
+<path d="M52,74 H311.5 A4,4 0 0 1 315.5,78 V92 A4,4 0 0 1 311.5,96 H52 Z" class="m-a"><title>Wed: 155 km, R317 fuel</title></path>
+<text x="468" y="89.0" class="val">155 km</text>
+<text x="41" y="121.0" class="cat" text-anchor="end">Thu</text>
+<path d="M52,106 H320.0 A4,4 0 0 1 324.0,110 V124 A4,4 0 0 1 320.0,128 H52 Z" class="m-a"><title>Thu: 160 km, R327 fuel</title></path>
+<text x="468" y="121.0" class="val">160 km</text>
+<text x="41" y="153.0" class="cat" text-anchor="end">Fri</text>
+<path d="M52,138 H456.0 A4,4 0 0 1 460.0,142 V156 A4,4 0 0 1 456.0,160 H52 Z" class="m-a"><title>Fri: 240 km, R491 fuel</title></path>
+<text x="468" y="153.0" class="val">240 km</text>
+</svg>
+<p class="cnote">R1 749 of fuel for 29 schools is about R60 a school. Against paid media at R3.29 a click, that buys roughly 18 clicks worth of access per school. Whether it converts better is exactly what has never been tested.</p><details class="tv"><summary>Table view</summary><div class="tw"><table><thead><tr><th>Day</th><th>Km</th><th>Fuel</th></tr></thead><tbody><tr><td>Mon</td><td class="n">100</td><td class="n">R205</td></tr><tr><td>Tue</td><td class="n">200</td><td class="n">R409</td></tr><tr><td>Wed</td><td class="n">155</td><td class="n">R317</td></tr><tr><td>Thu</td><td class="n">160</td><td class="n">R327</td></tr><tr><td>Fri</td><td class="n">240</td><td class="n">R491</td></tr></tbody></table></div></details></div>
+</div>
+
+<div class="grid2" style="margin-top:20px">
+<div class="card"><h3>What is working</h3><p class="sub">Grounded in the visit plan and the Phase 2 workbook.</p><div class="find w"><span class="ic">+</span><div class="t"><b>Access is cheap</b>R60 a school in fuel to stand in front of a Grade 12 cohort. Nothing in paid media reaches a room full of qualified buyers for that.</div></div><div class="find w"><span class="ic">+</span><div class="t"><b>The route is real and costed</b>855 km planned day by day, R1 749 estimated against R2 000 approved. The money is already unlocked.</div></div><div class="find w"><span class="ic">+</span><div class="t"><b>Re-engagement is built in</b>Three schools already spoken to are being re opened rather than starting cold.</div></div></div>
+<div class="card"><h3>What is not working</h3><p class="sub">These are gaps, not failures. None has been measured before.</p><div class="find n"><span class="ic">!</span><div class="t"><b>No sign up rate per visit exists</b>Nobody can say what a school visit is worth, because it has never been counted. Until it is, the engine cannot be compared against paid media or funded against it.</div></div><div class="find n"><span class="ic">!</span><div class="t"><b>No tagging in place yet</b>Without a QR code unique to each school, a sale that starts in a school hall arrives as Unassigned, which is already the largest channel at 509 000 sessions.</div></div><div class="find c"><span class="ic">~</span><div class="t"><b>The effort and the audience are in different places</b>All 29 visits are in Gauteng. The paid audience is national, with KwaZulu-Natal at 1 200 and Western Cape at 863. Four of the six Phase 2 pilot schools are in the Eastern Cape and none is on this route.</div></div></div>
+</div>
+</div></section>
+<section><div class="wrap">
+<div class="sh"><div class="eyebrow">Enablement</div>
+<h2>What Gradesmatch has to switch on</h2>
+<p>The Growth Office can buy attention, book schools and write content today. What it cannot do today is prove any of it paid off. These six items are what turn this report from a description into a control panel, in priority order.</p></div>
+<div class="card"><div class="need"><span class="i">01</span><div class="t"><b>Fire a <b>purchase</b> event in GA4, with the transaction value and id</b>Nothing else on this list matters until this exists. Today the property holds 15 851 057 events, 0 key events and R0 of revenue, so no click has ever been tied to a payment. Send it from the Peach callback, dedupe on transaction_id.</div><span class="pill blk">Blocks everything</span></div><div class="need"><span class="i">02</span><div class="t"><b>Deploy the parent landing page on bridgeapp.co.za</b>Paid traffic currently has no dedicated destination. Every tagged link in the register has to be repointed before spend starts, and the conversion rate we measure is the rate of whatever page they land on instead.</div><span class="pill blk">Blocks the sprint</span></div><div class="need"><span class="i">03</span><div class="t"><b>Expose a lead endpoint for the readiness tracker</b>Without it, sign ups are not captured, so click to sign up stays dark and only the end to end click to sale rate can be read. That halves what the sprint can learn.</div><span class="pill blk">Blocks the sprint</span></div><div class="need"><span class="i">04</span><div class="t"><b>Filter automation traffic out of the property</b>466 000 of 1 057 408 sessions, 44%, are bridge_client and Full Automation. Every rate in the property is diluted by them. Filters are not retroactive, so the sooner this is set the sooner the baseline is clean.</div><span class="pill deg">Degrades every number</span></div><div class="need"><span class="i">05</span><div class="t"><b>Tag every outbound link, and keep tagging them</b>Unassigned is the largest single channel at 509 000 sessions. Each untagged link adds to it, and traffic in that bucket cannot be repeated, defended or funded.</div><span class="pill deg">Degrades attribution</span></div><div class="need"><span class="i">06</span><div class="t"><b>Give the Growth Office a read only feed of cleared transactions</b>Sales are reconciled by hand out of Peach each morning. That works for 137 sales. It does not work for 40 000, and it is the step that will silently break first as volume rises.</div><span class="pill deg">Limits scale</span></div></div>
+<p class="cnote" style="margin-top:14px">The first three block the sprint that starts on 24 August. The sprint still runs without them, on manual Peach reconciliation, but it measures cost per sale more slowly and cannot break it down by channel.</p>
+</div></section>
+
+<footer><div class="wrap">
+<p><b>Sources.</b> Sessions, users, events, channels, page progression, purchase journey and automation segments from Google Analytics 4, property gradesmatch_bridge, 1 January to 20 August 2026, pulled 20 August 2026. Cost per click, click through rate, audience and video performance from Meta Ad insights for the boosted post of 29 July 2026. Organic reach from Reel insights and TikTok Studio, both pulled 20 August 2026. School route, distances and fuel from the School Visit Proposal for 24 to 28 August 2026. Pilot schools, budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Sales banked from the Peach transaction export reconciled to the sales ledger.</p>
+<p style="margin-top:11px"><b>On the numbers.</b> Every figure here is either reported by a platform or derived arithmetically from one on this page. Nothing is estimated or modelled. Where a platform did not publish a figure, the gap is shown as unreported rather than filled in. Chart colours were validated for colour vision deficiency and for contrast against both the light and dark surfaces.</p>
+<p style="margin-top:11px"><b>Prepared by Blank Canvas</b> for BridgeApp by Gradesmatch, 21 August 2026.</p>
+</div></footer>

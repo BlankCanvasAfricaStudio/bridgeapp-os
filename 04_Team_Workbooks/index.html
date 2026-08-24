@@ -289,6 +289,8 @@ td.nowrap{white-space:nowrap}
 .p-converted{background:var(--success-light);color:var(--success-deep)}
 .p-nurture{background:var(--yellow-light);color:#a16207}
 
+.note{display:inline-block;max-width:210px;font-size:11.5px;line-height:1.4;color:var(--text-secondary);background:var(--yellow-light);border-left:2px solid var(--yellow);border-radius:0 5px 5px 0;padding:4px 8px}
+
 /* ── APPROVALS QUEUE ──────────────────────────────────── */
 .queue{background:var(--white);border-radius:13px;padding:16px 18px;margin-bottom:12px}
 .queue h3{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.02em;padding-bottom:9px;margin-bottom:12px;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -426,7 +428,7 @@ td.nowrap{white-space:nowrap}
 <div class="tablewrap">
 <div class="tscroll"><table id="schools-table">
 <thead><tr>
-<th>School</th><th>Province / town</th><th>Last contact</th><th>Status</th><th>Contact</th><th>Follow-up needed</th><th>Due</th><th class="num">Learners</th>
+<th>School</th><th>Province / town</th><th>Last contact</th><th>Status</th><th>Contact</th><th>Follow-up needed</th><th>Due</th><th>Notes</th><th class="num">Learners</th>
 </tr></thead>
 <tbody id="schools-body" data-dyn></tbody>
 </table></div>
@@ -447,7 +449,7 @@ td.nowrap{white-space:nowrap}
 <div class="tablewrap">
 <div class="tscroll"><table id="events-table">
 <thead><tr>
-<th>Event</th><th>Dates</th><th>Where</th><th>Status</th><th>Who went</th><th class="num">Turnout</th><th class="num">Talked to</th><th class="num">Leads</th><th class="num">Cost / lead</th><th>Outcome</th>
+<th>Event</th><th>Dates</th><th>Where</th><th>Status</th><th>Who went</th><th class="num">Turnout</th><th class="num">Talked to</th><th class="num">Leads</th><th class="num">Cost / lead</th><th>Outcome</th><th>Notes</th>
 </tr></thead>
 <tbody id="events-body" data-dyn></tbody>
 </table></div>
@@ -589,6 +591,7 @@ var DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
 var LOCKED_FIELDS=['channel','format','title','caption','hashtags','cta','asset','date','time'];
 var CAPTION_LIMITS={'Instagram Feed':2200,'Instagram Reel':2200,'Instagram Story':2200,'TikTok':2200,'Facebook':63206,'LinkedIn':3000,'YouTube Shorts':1000,'X / Twitter':280,'WhatsApp Broadcast':4096,'WhatsApp Status':700,'Email':100000};
 var SCHOOL_TARGET=20;
+var NOTE_PH='Awaiting the invoice from the organisers · Contract still to be signed';
 
 /* ── STATE ──────────────────────────────────────────────────── */
 var state=blank();
@@ -1114,6 +1117,13 @@ function approveById(id){
 }
 
 /* ═══ WORKBOOK 2 — SCHOOLS ══════════════════════════════════ */
+/* Working notes — "awaiting the invoice", "contract still to be signed".
+   Marked so they read as a note rather than another data column. */
+function noteCell(v){
+  var t=String(v||'').trim();
+  if(!t)return '<span class="sub">—</span>';
+  return '<span class="note" title="'+esc(t)+'">'+esc(t)+'</span>';
+}
 function stageHint(id){
   var m=STAGES.filter(function(x){return x.id===id;})[0];
   return m&&m.hint?m.hint:'';
@@ -1128,7 +1138,7 @@ function sPasses(s){
   if(sFilters.due==='open'&&(s.followDone||!(s.followUp||'').trim()))return false;
   if(sFilters.due==='done'&&!s.followDone)return false;
   if(sFilters.q){
-    var hay=((s.name||'')+' '+(s.city||'')+' '+(s.province||'')+' '+(s.contact||'')+' '+(s.email||'')+' '+(s.followUp||'')+' '+(s.website||'')).toLowerCase();
+    var hay=((s.name||'')+' '+(s.city||'')+' '+(s.province||'')+' '+(s.contact||'')+' '+(s.email||'')+' '+(s.followUp||'')+' '+(s.website||'')+' '+(s.notes||'')).toLowerCase();
     if(hay.indexOf(sFilters.q)<0)return false;
   }
   return true;
@@ -1142,7 +1152,7 @@ function renderSchools(){
   var shown=all.filter(sPasses);
   var body=$('schools-body');
   if(!shown.length){
-    body.innerHTML='<tr><td colspan="8"><div class="qempty">'+(all.length?'Nothing matching the current filter.':'<b>No schools logged yet</b>After every visit, call or email, log the school here — where it stands, and what needs to happen next.')+'</div></td></tr>';
+    body.innerHTML='<tr><td colspan="9"><div class="qempty">'+(all.length?'Nothing matching the current filter.':'<b>No schools logged yet</b>After every visit, call or email, log the school here — where it stands, and what needs to happen next.')+'</div></td></tr>';
   }else{
     body.innerHTML=shown.map(function(s){
       return '<tr data-id="'+esc(s.id)+'" tabindex="0" class="'+(schoolLate(s)?'overdue':(s.stage==='signed'?'won':''))+'">'
@@ -1155,6 +1165,7 @@ function renderSchools(){
             :'<span class="sub">no contact yet</span>')+'</td>'
         +'<td>'+(s.followUp?esc(s.followUp):'<span class="sub">nothing outstanding</span>')+(s.followOwner?'<div class="sub">'+esc(s.followOwner)+'</div>':'')+'</td>'
         +'<td class="nowrap"><span class="'+dueClass(s.followDue,s.followDone)+'">'+dueText(s.followDue,s.followDone)+'</span></td>'
+        +'<td>'+noteCell(s.notes)+'</td>'
         +'<td class="num">'+(s.learners?Number(s.learners).toLocaleString('en-ZA'):'—')+'</td>'
         +'</tr>';
     }).join('');
@@ -1216,7 +1227,8 @@ KINDS.school={
       +fText('sc-fdue','Due by',s.followDue,'','date')
       +'<div class="f wide"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font-size:13px;font-weight:700;color:var(--text-primary);cursor:pointer">'
       +'<input type="checkbox" id="sc-fdone" style="width:18px;height:18px"'+(s.followDone?' checked':'')+'> This follow-up is done</label></div>');
-    h+=fs('Notes',fArea('sc-notes','Anything else worth knowing',s.notes,'They want the competition to land in Term 3, not Term 2.',3));
+    h+=fs('Notes',fArea('sc-notes','Anything outstanding on this one',s.notes,NOTE_PH,3,
+      'Whatever is in flight — invoices, contracts, who still owes us an answer.'));
     return h+historyHTML(s);
   },
   wire:function(){
@@ -1245,7 +1257,7 @@ function renderEvents(){
   var all=state.events.slice().sort(function(a,b){return String(b.startDate||'').localeCompare(String(a.startDate||''));});
   var body=$('events-body');
   if(!all.length){
-    body.innerHTML='<tr><td colspan="10"><div class="qempty"><b>No events logged yet</b>Add every exhibition, conference and expo the team goes to — then log the leads it brought in.</div></td></tr>';
+    body.innerHTML='<tr><td colspan="11"><div class="qempty"><b>No events logged yet</b>Add every exhibition, conference and expo the team goes to — then log the leads it brought in.</div></td></tr>';
   }else{
     body.innerHTML=all.map(function(e){
       var n=leadsFor(e.id).length;
@@ -1262,6 +1274,7 @@ function renderEvents(){
         +'<td class="num">'+n+'</td>'
         +'<td class="num">'+(cpl?rands(cpl):'—')+'</td>'
         +'<td>'+(e.outcome?esc(e.outcome):(e.motivation?'<span class="sub">'+esc(e.motivation)+'</span>':'<span class="sub">not written up yet</span>'))+'</td>'
+        +'<td>'+noteCell(e.notes)+'</td>'
         +'</tr>';
     }).join('');
     clickable(body,'tr','event');
@@ -1362,12 +1375,13 @@ KINDS.event={
   fields:{'ef-name':'name','ef-type':'type','ef-start':'startDate','ef-end':'endDate','ef-city':'city',
     'ef-province':'province','ef-venue':'venue','ef-team':'team','ef-cost':'cost',
     'ef-audience':'audience','ef-contact':'contact','ef-motivation':'motivation','ef-next':'nextAction',
+    'ef-notes':'notes',
     'ef-expected':'expected','ef-actual':'actual','ef-conversations':'conversations',
     'ef-outcome':'outcome','ef-worked':'worked','ef-didnt':'didnt'},
   blank:function(){
     return{id:uid('e'),name:'',type:EVENT_TYPES[0],startDate:todayISO(),endDate:'',city:'',province:'',
       venue:'',audience:'',contact:'',team:'',cost:'',status:'pending',expected:'',actual:'',conversations:'',
-      motivation:'',nextAction:'',outcome:'',worked:'',didnt:'',decidedBy:'',decidedAt:'',
+      motivation:'',nextAction:'',notes:'',outcome:'',worked:'',didnt:'',decidedBy:'',decidedAt:'',
       createdBy:who(),createdAt:new Date().toISOString(),log:[]};
   },
   validate:function(d){
@@ -1392,6 +1406,8 @@ KINDS.event={
     h+=fs('Why we would go',
       fArea('ef-motivation','What it is worth to us',e.motivation,'250 schools attending. Right decision makers in the room.',3)
       +fArea('ef-next','Next action',e.nextAction,'Confirm stand size and send the invoice to finance.',2));
+    h+=fs('Notes',fArea('ef-notes','Anything outstanding on this one',e.notes,NOTE_PH,3,
+      'Whatever is in flight — invoices, contracts, who still owes us an answer.'));
     h+=fs('Turnout',
       fText('ef-expected','Turnout expected',e.expected,'2500','number')
       +fText('ef-actual','Turnout on the day',e.actual,'2100','number')
@@ -1650,8 +1666,8 @@ function exportSchools(){
 function exportEvents(){
   if(!state.events.length&&!state.leads.length){toast('No events or leads logged yet.','bad');return;}
   if(state.events.length)download('BridgeApp_Events_'+todayISO()+'.csv',csv(
-    ['Event','Type','Who it is for','Starts','Ends','Venue','City','Province','Contact','Status','Decided by','Decided at','Who goes','Cost estimate','Why we would go','Next action','Turnout expected','Turnout actual','Spoke to','Leads captured','Outcome','What worked','What did not'],
-    state.events.map(function(e){return [e.name,e.type,e.audience,e.startDate,e.endDate,e.venue,e.city,e.province,e.contact,label(EVENT_STATUS,e.status),e.decidedBy,e.decidedAt,e.team,e.cost,e.motivation,e.nextAction,e.expected,e.actual,e.conversations,leadsFor(e.id).length,e.outcome,e.worked,e.didnt];})
+    ['Event','Type','Who it is for','Starts','Ends','Venue','City','Province','Contact','Status','Decided by','Decided at','Who goes','Cost estimate','Why we would go','Next action','Turnout expected','Turnout actual','Spoke to','Leads captured','Outcome','Notes','What worked','What did not'],
+    state.events.map(function(e){return [e.name,e.type,e.audience,e.startDate,e.endDate,e.venue,e.city,e.province,e.contact,label(EVENT_STATUS,e.status),e.decidedBy,e.decidedAt,e.team,e.cost,e.motivation,e.nextAction,e.expected,e.actual,e.conversations,leadsFor(e.id).length,e.outcome,e.notes,e.worked,e.didnt];})
   ),'text/csv;charset=utf-8');
   if(state.leads.length)download('BridgeApp_Leads_'+todayISO()+'.csv',csv(
     ['Lead','Organisation','Role','Type','Email','Phone','From event','Interest','What they want','Follow-up owner','Due','Follow-up','Outcome','Value','Notes'],

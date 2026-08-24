@@ -572,7 +572,7 @@ var SCHOOL_TARGET=20;
 
 /* ── STATE ──────────────────────────────────────────────────── */
 var state=blank();
-var shared=null, mode='local', canWrite=true;
+var shared=null, saver=null, mode='local', canWrite=true;
 var pubTimer=null, pubBusy=false, pubQueued=false;
 var selWeek=weekOf(todayISO());
 var tab='approvals';
@@ -673,6 +673,9 @@ function normalise(d){
 function boot(){
   try{
     if(window.claude&&typeof window.claude.use==='function'){
+      /* Downloads are mediated when the page runs inside the Claude viewer;
+         on GitHub Pages a plain blob link does the job. */
+      window.claude.use('downloads').then(function(d){saver=d||null;},function(){saver=null;});
       window.claude.use('artifact').then(onCap,function(){onCap(null);});
       return;
     }
@@ -1458,11 +1461,29 @@ function render(){
 /* ═══ EXPORT ════════════════════════════════════════════════ */
 function csvCell(v){var s=String(v==null?'':v);return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 function csv(head,rows){return '﻿'+head.join(',')+'\n'+rows.map(function(r){return r.map(csvCell).join(',');}).join('\n');}
-function download(name,text,type){
+function download(name,text,type,done){
+  if(saver){
+    saver.save({filename:name,data:text}).then(function(){if(done)done();},function(err){
+      var code=(err&&err.code)||'unavailable';
+      if(code==='declined')return;
+      if(code==='extension_not_enabled'||code==='rejected_extension'){
+        /* CSV is not always allowed here — same file, .txt name, opens in Sheets. */
+        saver.save({filename:name.replace(/\.[^.]+$/,'')+'.txt',data:text}).then(function(){
+          toast('Saved as a .txt file — it is still the same spreadsheet, so open it with File → Import in Sheets or Excel.','good');
+        },function(e2){
+          if((e2&&e2.code)!=='declined')toast('This view could not save the file. Open the workbook on the OS site to export it.','bad');
+        });
+        return;
+      }
+      toast('This view could not save the file. Open the workbook on the OS site to export it.','bad');
+    });
+    return;
+  }
   var blob=new Blob([text],{type:type||'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(url);a.remove();},600);
+  if(done)done();
 }
 function exportContent(){
   var rows=weekItems().slice().sort(function(a,b){return String(a.date||'zz').localeCompare(String(b.date||'zz'))||byTime(a,b);});
@@ -1470,16 +1491,14 @@ function exportContent(){
   download('BridgeApp_Content_Week_'+selWeek+'.csv',csv(
     ['Week','Date','Time','Channel','Format','Title','Caption','Hashtags','CTA','Asset link','Engine','Owner','Status','Cleared by','Cleared at','DD note','Live link','Posted at','Results'],
     rows.map(function(i){return [selWeek,i.date,i.time,i.channel,i.format,i.title,i.caption,i.hashtags,i.cta,i.asset,i.engine,i.owner,label(STATUSES,i.status),i.approvedBy,i.approvedAt,i.notes,i.postedUrl,i.postedAt,i.results];})
-  ),'text/csv;charset=utf-8');
-  toast('CSV exported — drop it in the Drive folder.','good');
+  ),'text/csv;charset=utf-8',function(){toast('CSV exported — drop it in the Drive folder.','good');});
 }
 function exportSchools(){
   if(!state.schools.length){toast('No schools logged yet.','bad');return;}
   download('BridgeApp_Schools_'+todayISO()+'.csv',csv(
     ['School','Type','Province','Town','Learners','Contact','Role','Email','Phone','Last contact','How','Who went','Response','Stage','Contract value','Follow-up needed','Follow-up owner','Due','Done','Notes'],
     state.schools.map(function(s){return [s.name,s.type,s.province,s.city,s.learners,s.contact,s.role,s.email,s.phone,s.lastVisit,s.visitType,s.visitedBy,label(RESPONSES,s.response),label(STAGES,s.stage),s.fee,s.followUp,s.followOwner,s.followDue,s.followDone?'Yes':'No',s.notes];})
-  ),'text/csv;charset=utf-8');
-  toast('Schools exported.','good');
+  ),'text/csv;charset=utf-8',function(){toast('Schools exported.','good');});
 }
 function exportEvents(){
   if(!state.events.length&&!state.leads.length){toast('No events or leads logged yet.','bad');return;}
@@ -1490,8 +1509,9 @@ function exportEvents(){
   if(state.leads.length)download('BridgeApp_Leads_'+todayISO()+'.csv',csv(
     ['Lead','Organisation','Role','Type','Email','Phone','From event','Interest','What they want','Follow-up owner','Due','Follow-up','Outcome','Value','Notes'],
     state.leads.map(function(l){return [l.name,l.org,l.role,l.type,l.email,l.phone,eventName(l.eventId),label(INTEREST,l.interest),l.want,l.owner,l.followDue,label(FOLLOW,l.follow),label(OUTCOMES,l.outcome),l.value,l.notes];})
-  ),'text/csv;charset=utf-8');
-  toast('Exported '+(state.events.length&&state.leads.length?'two files — events and leads':'the file')+'.','good');
+  ),'text/csv;charset=utf-8',function(){
+    toast('Exported '+(state.events.length&&state.leads.length?'two files — events and leads':'the file')+'.','good');
+  });
 }
 function copyApproved(){
   var rows=weekItems().filter(function(i){return i.status==='approved';})
@@ -1522,12 +1542,14 @@ function fallbackCopy(text,done){
   ta.remove();
 }
 function snapshot(){
-  download(SNAPSHOT,JSON.stringify(state,null,1),'application/json');
-  toast('os_snapshot.json downloaded. Upload it to 04_Team_Workbooks/ in the repo and the whole team sees these numbers on the OS.','good');
+  download(SNAPSHOT,JSON.stringify(state,null,1),'application/json',function(){
+    toast('os_snapshot.json saved. Upload it to 04_Team_Workbooks/ in the repo and the whole team sees these numbers on the OS.','good');
+  });
 }
 function backup(){
-  download('BridgeApp_TeamWorkbooks_'+todayISO()+'.json',JSON.stringify(state,null,1),'application/json');
-  toast('Backup downloaded.','good');
+  download('BridgeApp_TeamWorkbooks_'+todayISO()+'.json',JSON.stringify(state,null,1),'application/json',function(){
+    toast('Backup saved.','good');
+  });
 }
 function restore(e){
   var file=e.target.files&&e.target.files[0];if(!file)return;

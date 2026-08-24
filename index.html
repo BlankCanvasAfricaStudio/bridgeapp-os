@@ -234,6 +234,26 @@ body{font-family:var(--font-body);background:#f0f4f8;color:var(--text-primary);m
 /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
 @media(max-width:900px){#sidebar{display:none}#main{margin-left:0;padding:16px}}
 @media print{#sidebar{display:none}#main{margin-left:0;padding:0}.page{display:block!important}.sub-nav{display:none}.sub-p{display:block!important}}
+
+/* LIVE TEAM WORKBOOK FEED */
+.wb-hd{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.wb-hd strong{display:block;font-size:15px;font-weight:800;color:var(--navy)}
+.wb-hd span{font-size:11px;color:var(--text-muted);font-weight:600}
+.wb-open{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--white);background:var(--navy);padding:8px 13px;border-radius:8px;text-decoration:none;white-space:nowrap}
+.wb-open:hover{background:var(--blue)}
+.wb-stat{border-radius:10px;padding:13px 15px;background:var(--off-white);border:1px solid var(--border);border-left:3px solid var(--blue)}
+.wb-stat.wb-ok{border-left-color:var(--success)}
+.wb-stat.wb-warn{border-left-color:var(--yellow)}
+.wb-stat.wb-bad{border-left-color:#dc2626}
+.wb-stat .v{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.wb-stat.wb-bad .v{color:#dc2626}
+.wb-stat .l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-top:4px;line-height:1.35}
+.wb-need{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--border);font-size:12.5px;color:var(--text-secondary)}
+.wb-need:last-child{border-bottom:0}
+.wb-need b{color:var(--navy)}
+.wb-need .w{font-size:10.5px;color:var(--text-muted);font-weight:800;min-width:74px;flex:none;text-transform:uppercase;letter-spacing:.04em}
+.wb-need .w.late{color:#dc2626}
+.wb-none{font-size:12.5px;color:var(--text-muted);padding:10px 0}
 </style>
 </head>
 <body>
@@ -267,6 +287,7 @@ body{font-family:var(--font-body);background:#f0f4f8;color:var(--text-primary);m
     <button class="sb-item gen" onclick="go('regional')"><i class="ti ti-map-2"></i>SA regional map</button>
     <button class="sb-item gen" onclick="go('content')"><i class="ti ti-calendar-week"></i>Content engine</button>
     <button class="sb-item gen" onclick="go('fc-tracker')"><i class="ti ti-chart-line"></i>FC dashboard</button>
+    <a class="sb-item gen" href="04_Team_Workbooks/index.html" style="text-decoration:none"><i class="ti ti-checkbox"></i>Team workbooks</a>
 
     <div class="sb-group" style="margin-top:8px">Resources</div>
     <button class="sb-item gen" onclick="go('budget')"><i class="ti ti-receipt"></i>Budget · R600K</button>
@@ -294,6 +315,19 @@ body{font-family:var(--font-body);background:#f0f4f8;color:var(--text-primary);m
       <div class="hero-stat"><div class="hs-val">20–30</div><div class="hs-lbl">School Contracts</div></div>
       <div class="hero-stat"><div class="hs-val">3–5%</div><div class="hs-lbl">Free-to-Paid</div></div>
     </div>
+  </div>
+
+  <div class="sh">Live from the team workbooks</div>
+  <div class="card">
+    <div class="wb-hd">
+      <div>
+        <strong>What the team has logged</strong>
+        <span id="wb-when">Nothing logged on this device yet</span>
+      </div>
+      <a class="wb-open" href="04_Team_Workbooks/index.html">Open the workbooks →</a>
+    </div>
+    <div class="g4" id="wb-stats"></div>
+    <div id="wb-needs"></div>
   </div>
 
   <div class="g4">
@@ -1395,6 +1429,81 @@ function renderFCCharts(){
 }
 
 window.addEventListener('load',function(){loadFC();});
+
+// ── LIVE TEAM WORKBOOK FEED ─────────────────────────────────────────
+// Reads whatever the team workbooks (04_Team_Workbooks/) have saved:
+// this browser's own copy first, otherwise the committed os_snapshot.json.
+// Content DD clears, schools Kefiloe logs and event leads all land here.
+(function(){
+  var LS='ba_os_v1', SNAP='04_Team_Workbooks/os_snapshot.json';
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function parseISO(s){var p=String(s||'').split('-');return new Date(+p[0],(+p[1]||1)-1,+p[2]||1);}
+  function weekOf(s){var d=parseISO(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return iso(d);}
+  function daysUntil(s){return s?Math.round((parseISO(s)-parseISO(iso(new Date())))/86400000):null;}
+  function late(due,done){return !!due&&!done&&daysUntil(due)<0;}
+  function stamp(t){if(!t)return'';var d=new Date(t);
+    return d.toLocaleDateString('en-ZA',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});}
+
+  function render(d){
+    var box=document.getElementById('wb-stats'), needs=document.getElementById('wb-needs'), when=document.getElementById('wb-when');
+    if(!box)return;
+    if(!d){
+      box.innerHTML='';
+      needs.innerHTML='<div class="wb-none">No workbook data on this device yet. Open the workbooks and log the week — these numbers fill in as the team works.</div>';
+      return;
+    }
+    var content=d.content||[], schools=d.schools||[], events=d.events||[], leads=d.leads||[];
+    var wk=weekOf(iso(new Date()));
+    var week=content.filter(function(i){return (i.date?weekOf(i.date):i.week)===wk;});
+    var cleared=week.filter(function(i){return i.status==='approved';}).length;
+    var waiting=content.filter(function(i){return i.status==='review';});
+    var lateS=schools.filter(function(s){return late(s.followDue,s.followDone);});
+    var lateL=leads.filter(function(l){return late(l.followDue,l.follow==='done');});
+    var signed=schools.filter(function(s){return s.stage==='signed';}).length;
+    var tiles=[
+      {v:cleared,l:'Cleared to post this week',c:'wb-ok'},
+      {v:waiting.length,l:'Waiting on DD’s sign-off',c:waiting.length?'wb-warn':''},
+      {v:lateS.length+lateL.length,l:'Follow-ups past due',c:(lateS.length+lateL.length)?'wb-bad':'wb-ok'},
+      {v:signed,l:'Schools signed of 20–30',c:'wb-ok'},
+      {v:schools.filter(function(s){return !!s.lastVisit;}).length,l:'Schools visited'},
+      {v:leads.length,l:'Leads from events'},
+      {v:events.filter(function(e){return e.status==='attended';}).length,l:'Events attended'}
+    ];
+    box.innerHTML=tiles.map(function(t){
+      return '<div class="wb-stat '+(t.c||'')+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div></div>';
+    }).join('');
+    var rows=[];
+    waiting.slice(0,4).forEach(function(i){
+      rows.push('<div class="wb-need"><span class="w">Sign-off</span><span><b>'+esc(i.title||'Untitled post')+'</b> — '
+        +esc(i.channel||'')+(i.owner?' · '+esc(i.owner):'')+'</span></div>');
+    });
+    lateS.slice(0,3).forEach(function(s){
+      rows.push('<div class="wb-need"><span class="w late">'+Math.abs(daysUntil(s.followDue))+'d late</span><span><b>'
+        +esc(s.name||'School')+'</b> — '+esc(s.followUp||'follow-up outstanding')+'</span></div>');
+    });
+    lateL.slice(0,3).forEach(function(l){
+      rows.push('<div class="wb-need"><span class="w late">'+Math.abs(daysUntil(l.followDue))+'d late</span><span><b>'
+        +esc(l.name||l.org||'Lead')+'</b> — follow-up'+(l.owner?' · '+esc(l.owner):'')+'</span></div>');
+    });
+    needs.innerHTML=rows.length?rows.join(''):'<div class="wb-none">Nothing waiting on you — every post is cleared and every follow-up is on time.</div>';
+    if(when)when.textContent=d.updatedAt?('Last update '+stamp(d.updatedAt)+(d.updatedBy?' by '+d.updatedBy:'')):'Nothing logged yet';
+  }
+
+  function load(){
+    var local=null;
+    try{local=JSON.parse(localStorage.getItem(LS)||'null');}catch(e){}
+    if(local){render(local);return;}
+    if(!/^https?:$/.test(location.protocol)){render(null);return;}
+    fetch(SNAP,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+      .catch(function(){return null;}).then(render);
+  }
+  window.addEventListener('storage',function(e){if(e.key===LS)load();});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});
+  window.addEventListener('focus',load);
+  load();
+})();
 </script>
 </body>
 </html>

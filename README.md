@@ -46,7 +46,7 @@ Every file here ladders to one of three outcomes:
 | Tab | Who works in it | What goes in |
 |-----|----------------|--------------|
 | **Needs you** | DD | Everything waiting on a sign-off, every follow-up that has gone past its date, and the list of what is cleared to post this week |
-| **Content board** | Sememi · Nono | The week's posts — graphic or video link, channel, format, caption, hashtags, CTA. DD approves; only then does a post read **Cleared to post** |
+| **Content board** | Sememi | The week's posts — graphic or video link, channel, format, caption, hashtags, CTA. DD approves; only then does a post read **Cleared to post** |
 | **Schools** | Kefiloe | Every school visited — who we saw, how they responded, where it sits in the pipeline, what the follow-up is and when it is due |
 | **Events & leads** | Sales team | Every exhibition and conference — turnout, who we spoke to, what it cost — and every lead it produced, with its owner, due date and outcome |
 
@@ -110,7 +110,7 @@ Direct links for the team: `#content` · `#schools` · `#events` · `#approvals`
 | Owner | Role | Responsible for |
 |-------|------|----------------|
 | **Ditshego Ditshego (DD)** | Agency Lead · Director | Master OS · **content sign-off in the Team Workbooks** · Demo Review Card · Client Report · weekly retros · brand QA · Friday data review |
-| **Nono Ditshego** | Social Media Intern | Content board entries · FC Live Tracker · social posts · daily community management · weekly analytics · WhatsApp drops |
+| **Social — vacant** | *Needs an owner* | Content board entries · FC Live Tracker (Friday update) · social posts · daily community management · weekly analytics · WhatsApp drops · trending audio |
 | **Kefiloe Mametse** | School Outreach & Sales | **Schools tracker + events & leads tracker** · School pipeline · sales map · school emailer waves · pod MOUs · conference leads · golf clinic invites · CRM logs |
 | **Sememi Mosupye** | Junior Brand & Creative | Content board entries · Social posters · Reel title cards · email templates · brand library · CapCut edits · Canva masters |
 

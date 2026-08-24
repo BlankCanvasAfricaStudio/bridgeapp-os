@@ -472,7 +472,7 @@ td.nowrap{white-space:nowrap}
 </section>
 
 <footer class="signoff">
-<span>Content <strong>Sememi + Nono</strong> · Schools <strong>Kefiloe</strong> · Events <strong>Sales team</strong> · Sign-off <strong>DD</strong></span>
+<span>Content <strong>Sememi</strong> · Schools <strong>Kefiloe</strong> · Events <strong>Sales team</strong> · Sign-off <strong>DD</strong></span>
 <span class="ba"><span>Blank</span><span>C</span><span>a</span><span>nvas</span></span>
 </footer>
 </div>
@@ -522,7 +522,6 @@ var SNAPSHOT='os_snapshot.json';
 /* ── REFERENCE DATA ─────────────────────────────────────────── */
 var PEOPLE=[
   {id:'DD',name:'Ditshego (DD)',approver:true},
-  {id:'Nono',name:'Nono',approver:false},
   {id:'Sememi',name:'Sememi',approver:false},
   {id:'Kefiloe',name:'Kefiloe',approver:false},
   {id:'Guest',name:'Guest / other',approver:false}
@@ -819,9 +818,14 @@ function opts(list,cur,useObj,escapeLabel){
   }).join('');
 }
 function peopleOpts(cur){
+  var known=PEOPLE.map(function(p){return p.id;});
+  /* Somebody who has left the team keeps their name on old records — dropping
+     the option would quietly reassign their work to nobody on the next save. */
+  var gone=(cur&&known.indexOf(cur)<0)
+    ?'<option value="'+esc(cur)+'" selected>'+esc(cur)+' — no longer on the team</option>':'';
   return '<option value="">Unassigned</option>'+PEOPLE.map(function(p){
     return '<option value="'+esc(p.id)+'"'+(p.id===cur?' selected':'')+'>'+esc(p.name)+'</option>';
-  }).join('');
+  }).join('')+gone;
 }
 function fText(id,lab,val,ph,type,wide,hint){
   return '<div class="f'+(wide?' wide':'')+'"><label for="'+id+'">'+lab+'</label>'
@@ -1591,6 +1595,10 @@ function start(){
   var sel=$('who');
   sel.innerHTML=PEOPLE.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+(p.approver?' — approver':'')+'</option>';}).join('');
   sel.value=who();
+  if(!sel.value){
+    sel.value='Guest';
+    try{localStorage.setItem(LS_WHO,'Guest');}catch(e){}
+  }
   sel.addEventListener('change',function(){
     try{localStorage.setItem(LS_WHO,sel.value);}catch(e){}
     render();

@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradesmatch Team Workbooks</title>
+<meta name="description" content="School outreach, events and the week's BridgeApp content — every visit, decision and follow-up in one place, feeding the operating system live.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --navy:#0f2340;--navy-mid:#1a3355;--navy-deep:#0a1628;
+  --blue:#4a90d9;--blue-light:#dbeafe;
+  --orange:#e8601c;--orange-light:#fff0e8;
+  --yellow:#f0b429;--yellow-light:#fef9c3;
+  --white:#fff;--off-white:#f8fafc;--border:#e2e8f0;--border-strong:#cbd5e1;
+  --text-primary:#0f2340;--text-secondary:#475569;--text-muted:#94a3b8;
+  --success:#10b981;--success-light:#d1fae5;--success-deep:#047857;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c5cd6;--purple-light:#ede9fe;
+  --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Barlow',system-ui,-apple-system,sans-serif;background:var(--navy-deep);color:var(--text-primary);line-height:1.55;-webkit-font-smoothing:antialiased}
+.container{max-width:1400px;margin:0 auto;padding:24px 20px 90px}
+a{color:inherit}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px;border-radius:4px}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{background:var(--navy);border-radius:16px;padding:30px 34px;color:var(--white);position:relative;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.08)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 88% 20%,rgba(240,180,41,.14),transparent 52%)}
+.hero::after{content:'WORKBOOKS';position:absolute;right:-12px;bottom:-28px;font-family:'Barlow Condensed',sans-serif;font-size:120px;font-weight:900;color:rgba(255,255,255,.028);letter-spacing:-4px;line-height:1;pointer-events:none}
+.hero-in{position:relative;z-index:1}
+.kicker{display:inline-block;background:var(--yellow);color:var(--navy);padding:5px 13px;border-radius:6px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:13px}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,5vw,46px);font-weight:900;letter-spacing:-1.1px;line-height:1;margin-bottom:7px;text-wrap:balance}
+.hero h1 .b{color:var(--blue)}.hero h1 .y{color:var(--yellow)}.hero h1 .o{color:var(--orange)}
+.hero p{font-size:14px;color:rgba(255,255,255,.66);max-width:640px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+
+/* who am I */
+.whoami{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:7px 10px}
+.whoami label{font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.whoami select{background:transparent;border:0;color:var(--white);font-weight:800;font-size:13px;cursor:pointer}
+.whoami select option{background:var(--navy);color:var(--white)}
+
+/* ── SUMMARY TILES ────────────────────────────────────── */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:22px}
+.tile{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:12px 14px;border-left:3px solid var(--blue)}
+.tile.ok{border-left-color:var(--success)}
+.tile.warn{border-left-color:var(--yellow)}
+.tile.hot{border-left-color:var(--orange)}
+.tile.done{border-left-color:var(--purple)}
+.tile .n{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;line-height:1;letter-spacing:-1px;color:var(--white);font-variant-numeric:tabular-nums}
+.tile .l{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px}
+
+/* ── QUICK BAR ────────────────────────────────────────── */
+.quick-bar{display:flex;gap:7px;flex-wrap:wrap;padding:12px;background:var(--off-white);border:1px solid var(--border);border-radius:11px;margin-bottom:14px}
+.quick-bar a{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--navy);background:var(--white);padding:6px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);letter-spacing:.02em;text-transform:uppercase;transition:background .12s,color .12s}
+.quick-bar a:hover{background:var(--navy);color:var(--white)}
+.quick-bar a.active{background:var(--navy);color:var(--yellow)}
+
+/* ── COMMAND BAR ──────────────────────────────────────── */
+.cmd{background:var(--white);border-radius:13px;padding:14px 16px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.weeknav{display:flex;align-items:center;gap:6px;background:var(--off-white);border:1px solid var(--border);border-radius:9px;padding:4px}
+.weeknav button{background:var(--white);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;font-weight:900;cursor:pointer;color:var(--navy);line-height:1}
+.weeknav button:hover{background:var(--navy);color:var(--white)}
+.weeknav .wk{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:17px;color:var(--navy);padding:0 8px;letter-spacing:-.3px;white-space:nowrap}
+.weeknav .wk small{display:block;font-family:'Barlow',sans-serif;font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-top:-3px}
+.spacer{flex:1 1 auto}
+.btn{border:1px solid var(--border);background:var(--white);color:var(--navy);font-weight:800;font-size:12px;padding:8px 13px;border-radius:8px;cursor:pointer;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px;transition:background .12s,color .12s,border-color .12s;white-space:nowrap}
+.btn:hover{background:var(--off-white);border-color:var(--border-strong)}
+.btn-primary{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.btn-primary:hover{background:var(--navy-mid);color:var(--white)}
+.btn-go{background:var(--success);border-color:var(--success);color:var(--white)}
+.btn-go:hover{background:var(--success-deep);color:var(--white)}
+.btn-warn{background:var(--orange);border-color:var(--orange);color:var(--white)}
+.btn-warn:hover{background:#c94f13;color:var(--white)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text-secondary)}
+.btn-ghost:hover{background:var(--off-white)}
+.btn-danger{color:var(--danger);border-color:var(--danger-light)}
+.btn-danger:hover{background:var(--danger-light)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── FILTERS ──────────────────────────────────────────── */
+.filters{background:var(--white);border-radius:13px;padding:12px 16px;margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filters .fl{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-right:2px}
+.filters select,.filters input{border:1px solid var(--border);background:var(--off-white);border-radius:7px;padding:7px 10px;font-size:12px;font-weight:600;color:var(--text-primary)}
+.filters input[type=search]{min-width:190px}
+
+/* ── DAY BOARD ────────────────────────────────────────── */
+.day{background:var(--white);border-radius:13px;margin-bottom:12px;overflow:hidden}
+.day-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-bottom:2px solid var(--border);flex-wrap:wrap}
+.day-hd .d-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--navy);letter-spacing:-.4px}
+.day-hd .d-name span{color:var(--text-muted);font-size:14px;font-weight:800;margin-left:7px;letter-spacing:0}
+.day-hd.today .d-name::before{content:'TODAY';display:inline-block;background:var(--yellow);color:var(--navy);font-family:'Barlow',sans-serif;font-size:9px;font-weight:900;letter-spacing:.08em;padding:2px 7px;border-radius:4px;margin-right:9px;vertical-align:middle}
+.day-count{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
+.day-body{padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.day-empty{padding:16px 18px;font-size:12px;color:var(--text-muted);font-style:italic}
+
+/* ── CARD ─────────────────────────────────────────────── */
+.card{border:1px solid var(--border);border-left:4px solid var(--text-muted);border-radius:10px;padding:12px 14px;background:var(--off-white);cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;display:block}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,35,64,.1)}
+.card.s-idea{border-left-color:var(--text-muted)}
+.card.s-draft{border-left-color:var(--blue)}
+.card.s-review{border-left-color:var(--yellow)}
+.card.s-changes{border-left-color:var(--orange)}
+.card.s-approved{border-left-color:var(--success);background:var(--success-light)}
+.card.s-posted{border-left-color:var(--purple);background:var(--purple-light)}
+.card.s-hold{border-left-color:var(--danger)}
+.card-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:7px}
+.card h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--navy);line-height:1.15;letter-spacing:-.3px;margin-bottom:5px;text-wrap:balance}
+.card .cap{font-size:12px;color:var(--text-secondary);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.card-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--border);font-size:10px;font-weight:800;color:var(--text-muted);letter-spacing:.03em;text-transform:uppercase}
+.card .flag{display:block;background:var(--danger-light);color:var(--danger);font-size:10px;font-weight:900;letter-spacing:.04em;padding:4px 8px;border-radius:5px;margin-bottom:8px}
+
+/* chips + pills */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:5px;background:var(--border);color:var(--text-secondary);white-space:nowrap}
+.chip-time{background:var(--navy);color:var(--white);font-family:var(--mono);letter-spacing:0;font-size:10px}
+.chip-ch{background:var(--blue);color:var(--white)}
+.chip-fmt{background:var(--orange-light);color:var(--orange)}
+.chip-eng{background:var(--navy);color:var(--yellow)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-idea{background:#f1f5f9;color:#64748b}
+.p-draft{background:var(--blue-light);color:#1e5fa8}
+.p-review{background:var(--yellow-light);color:#a16207}
+.p-changes{background:var(--orange-light);color:var(--orange)}
+.p-approved{background:var(--success-light);color:var(--success-deep)}
+.p-posted{background:var(--purple-light);color:#5b3ec0}
+.p-hold{background:var(--danger-light);color:var(--danger)}
+
+/* ── DRAWER ───────────────────────────────────────────── */
+.scrim{position:fixed;inset:0;background:rgba(10,22,40,.6);opacity:0;pointer-events:none;transition:opacity .18s;z-index:40}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--white);z-index:50;transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:-14px 0 40px rgba(10,22,40,.3)}
+.drawer.on{transform:none}
+.drawer-hd{padding:16px 22px;background:var(--navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.drawer-hd h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:-.4px}
+.drawer-hd button{background:rgba(255,255,255,.12);border:0;color:var(--white);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:17px;font-weight:700;line-height:1}
+.drawer-hd button:hover{background:rgba(255,255,255,.25)}
+.drawer-body{flex:1;overflow-y:auto;padding:18px 22px 26px}
+.drawer-foot{padding:13px 22px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--off-white)}
+
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.f{display:flex;flex-direction:column;gap:5px}
+.f.wide{grid-column:1/-1}
+.f label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.f input,.f select,.f textarea{border:1px solid var(--border);background:var(--off-white);border-radius:8px;padding:9px 11px;font-size:13px;font-weight:500;width:100%}
+.f textarea{resize:vertical;min-height:80px;line-height:1.5}
+.f .hint{font-size:10.5px;color:var(--text-muted);font-weight:600}
+.f .hint.count{text-align:right;font-variant-numeric:tabular-nums}
+.f .hint.over{color:var(--danger);font-weight:800}
+.fs{border:0;padding:0;margin:0 0 18px}
+.fs legend{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.03em;padding-bottom:8px;margin-bottom:12px;border-bottom:2px solid var(--border);width:100%}
+
+.approval{border-radius:11px;padding:14px 16px;margin-bottom:18px;border:1px solid var(--border);background:var(--off-white)}
+.approval.is-approved{background:var(--success-light);border-color:var(--success)}
+.approval.is-review{background:var(--yellow-light);border-color:var(--yellow)}
+.approval.is-changes{background:var(--orange-light);border-color:var(--orange)}
+.approval .a-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.approval .a-hd strong{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.02em}
+.approval .a-meta{font-size:11.5px;color:var(--text-secondary);font-weight:600}
+.approval .a-meta b{color:var(--navy)}
+.approval .a-acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.approval .a-locked{font-size:11.5px;color:var(--text-secondary);font-weight:600;font-style:italic}
+
+.log{list-style:none;font-size:11.5px;color:var(--text-secondary);display:flex;flex-direction:column;gap:6px}
+.log li{display:flex;gap:8px;padding-bottom:6px;border-bottom:1px dashed var(--border)}
+.log time{font-family:var(--mono);font-size:10px;color:var(--text-muted);white-space:nowrap;padding-top:1px}
+
+/* ── SYNC + TOAST ─────────────────────────────────────── */
+.syncbar{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:var(--text-secondary);letter-spacing:.03em}
+.syncdot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);flex:none}
+.syncdot.ok{background:var(--success)}
+.syncdot.busy{background:var(--yellow)}
+.syncdot.bad{background:var(--danger)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--navy);color:var(--white);padding:11px 20px;border-radius:10px;font-size:13px;font-weight:700;z-index:80;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:min(560px,92vw);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.bad{background:var(--danger)}
+.toast.good{background:var(--success-deep)}
+
+.mode-note{background:var(--white);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:12.5px;color:var(--text-secondary);display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
+.mode-note b{color:var(--navy)}
+.mode-note.local{border-left-color:var(--yellow)}
+.mode-note.ro{border-left-color:var(--orange)}
+
+.empty{background:var(--white);border-radius:13px;padding:44px 30px;text-align:center}
+.empty h3{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--navy);margin-bottom:6px}
+.empty p{font-size:13.5px;color:var(--text-secondary);max-width:440px;margin:0 auto 16px}
+
+.signoff{margin-top:26px;padding:18px 26px;background:var(--navy);border-radius:12px;color:rgba(255,255,255,.5);font-size:11px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.signoff strong{color:rgba(255,255,255,.85)}
+.ba{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:-.3px;color:var(--white)}
+.ba span:nth-child(2){color:var(--blue)}.ba span:nth-child(3){color:var(--orange)}.ba span:nth-child(4){color:var(--yellow)}
+
+@media(max-width:860px){
+  .container{padding:16px 13px 70px}
+  .hero{padding:22px 20px}
+  .fgrid{grid-template-columns:1fr}
+  .day-body{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff}
+  .quick-bar,.cmd,.filters,.drawer,.scrim,.toast,.mode-note,.whoami{display:none!important}
+  .card{break-inside:avoid;box-shadow:none}
+  .hero{background:#0f2340!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* ── ROLL-UP STRIP ────────────────────────────────────── */
+.rollup{background:var(--white);border-radius:13px;padding:16px 18px;margin-bottom:14px}
+.rollup-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:13px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.rollup-hd h2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.02em}
+.rollup-hd .sub{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.rstat{background:var(--off-white);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:9px;padding:11px 13px;text-align:left;cursor:pointer;transition:transform .12s,box-shadow .12s;width:100%;display:block}
+.rstat:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,35,64,.09)}
+.rstat.ok{border-left-color:var(--success)}
+.rstat.warn{border-left-color:var(--yellow)}
+.rstat.hot{border-left-color:var(--orange)}
+.rstat.bad{border-left-color:var(--danger)}
+.rstat.cool{border-left-color:var(--purple)}
+.rstat .n{font-family:'Barlow Condensed',sans-serif;font-size:31px;font-weight:900;line-height:1;letter-spacing:-1px;color:var(--navy);font-variant-numeric:tabular-nums}
+.rstat.bad .n{color:var(--danger)}
+.rstat.ok .n{color:var(--success-deep)}
+.rstat .l{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;line-height:1.35}
+.rstat .sub2{font-size:10.5px;font-weight:700;color:var(--text-secondary);margin-top:3px}
+
+/* ── TABS ─────────────────────────────────────────────── */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:rgba(255,255,255,.7);font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;letter-spacing:-.2px;padding:9px 17px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .13s,color .13s}
+.tabs button:hover{background:rgba(255,255,255,.14);color:var(--white)}
+.tabs button.on{background:var(--white);color:var(--navy);border-color:var(--white)}
+.tabs button .badge{font-family:'Barlow',sans-serif;font-size:10px;font-weight:900;background:var(--orange);color:var(--white);border-radius:20px;padding:2px 7px;letter-spacing:.03em}
+.tabs button.on .badge{background:var(--orange)}
+.tabs button .badge.zero{display:none}
+.panel{display:none}
+.panel.on{display:block}
+
+/* ── TABLE ────────────────────────────────────────────── */
+.tablewrap{background:var(--white);border-radius:13px;overflow:hidden}
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:12.5px}
+thead th{background:var(--navy);color:rgba(255,255,255,.8);font-size:9.5px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;text-align:left;padding:10px 12px;white-space:nowrap;position:sticky;top:0}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover{background:var(--off-white)}
+tbody tr.overdue{background:var(--danger-light)}
+tbody tr.overdue:hover{background:#fbd5d5}
+tbody tr.won{background:var(--success-light)}
+td .main{font-weight:800;color:var(--navy);font-size:13px;line-height:1.3}
+td .sub{font-size:11px;color:var(--text-muted);font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+td.nowrap{white-space:nowrap}
+.due{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.due.late{color:var(--danger)}
+.due.soon{color:var(--orange)}
+.due.done{color:var(--success-deep);text-decoration:line-through;font-weight:600}
+.tfoot{padding:11px 16px;background:var(--off-white);border-top:1px solid var(--border);font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* stage + response pills */
+.p-prospect{background:#f1f5f9;color:#64748b}
+.p-contacted{background:var(--blue-light);color:#1e5fa8}
+.p-visited{background:var(--yellow-light);color:#a16207}
+.p-proposal{background:var(--orange-light);color:var(--orange)}
+.p-mou{background:var(--purple-light);color:#5b3ec0}
+.p-signed{background:var(--success-light);color:var(--success-deep)}
+.p-lost{background:var(--danger-light);color:var(--danger)}
+.p-hot{background:var(--orange-light);color:var(--orange)}
+.p-warm{background:var(--yellow-light);color:#a16207}
+.p-info{background:var(--blue-light);color:#1e5fa8}
+.p-later{background:#f1f5f9;color:#64748b}
+.p-no{background:var(--danger-light);color:var(--danger)}
+.p-none{background:#f1f5f9;color:#94a3b8}
+.p-cold{background:var(--blue-light);color:#1e5fa8}
+.p-planned{background:#f1f5f9;color:#64748b}
+.p-confirmed{background:var(--blue-light);color:#1e5fa8}
+.p-attended{background:var(--success-light);color:var(--success-deep)}
+.p-cancelled{background:var(--danger-light);color:var(--danger)}
+.p-todo{background:var(--yellow-light);color:#a16207}
+.p-doing{background:var(--blue-light);color:#1e5fa8}
+.p-done{background:var(--success-light);color:var(--success-deep)}
+.p-noresponse{background:#f1f5f9;color:#64748b}
+.p-pipeline{background:var(--blue-light);color:#1e5fa8}
+.p-converted{background:var(--success-light);color:var(--success-deep)}
+.p-nurture{background:var(--yellow-light);color:#a16207}
+
+.note{display:inline-block;max-width:210px;font-size:11.5px;line-height:1.4;color:var(--text-secondary);background:var(--yellow-light);border-left:2px solid var(--yellow);border-radius:0 5px 5px 0;padding:4px 8px}
+
+/* ── APPROVALS QUEUE ──────────────────────────────────── */
+.queue{background:var(--white);border-radius:13px;padding:16px 18px;margin-bottom:12px}
+.queue h3{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.02em;padding-bottom:9px;margin-bottom:12px;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.queue h3 .c{font-family:'Barlow',sans-serif;font-size:11px;font-weight:800;color:var(--text-muted);letter-spacing:.05em}
+.qrow{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border);cursor:pointer}
+.qrow:last-child{border-bottom:0}
+.qrow:hover .q-title{color:var(--blue)}
+.qrow .q-when{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);white-space:nowrap;padding-top:3px;min-width:64px}
+.qrow .q-body{flex:1;min-width:0}
+.qrow .q-title{font-weight:800;color:var(--navy);font-size:13.5px;line-height:1.3}
+.qrow .q-meta{font-size:11.5px;color:var(--text-secondary);margin-top:2px}
+.qrow .q-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.qempty{padding:26px 10px;text-align:center;color:var(--text-muted);font-size:13px}
+.qempty b{color:var(--success-deep);display:block;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;margin-bottom:3px}
+
+.section-intro{font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;max-width:70ch}
+.subhead{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;color:var(--white);text-transform:uppercase;letter-spacing:.03em;margin:18px 0 9px;display:flex;align-items:center;gap:10px}
+.subhead::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.13)}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+<div class="hero-in">
+<div class="hero-top">
+<div>
+<div class="kicker">★ Gradesmatch Team Workbooks</div>
+<h1>Where the team <span class="y">works the week</span>.</h1>
+<p>School outreach, the events we say yes to, and the week's BridgeApp content. Every visit, decision and follow-up in one place — and everything you approve updates the operating system straight away.</p>
+</div>
+<div class="whoami">
+<label for="who">Working as</label>
+<select id="who" aria-label="Who is using this workbook"></select>
+</div>
+</div>
+<nav class="tabs" id="tabs" aria-label="Workbooks">
+<button type="button" data-tab="approvals" class="on">Needs you <span class="badge zero" id="badge-approvals">0</span></button>
+<button type="button" data-tab="content">Content board <span class="badge zero" id="badge-content">0</span></button>
+<button type="button" data-tab="schools">Schools <span class="badge zero" id="badge-schools">0</span></button>
+<button type="button" data-tab="events">Events &amp; leads <span class="badge zero" id="badge-events">0</span></button>
+</nav>
+</div>
+</header>
+
+<nav class="quick-bar" aria-label="Operating system links">
+<a href="../index.html">★ Master OS</a>
+<a href="index.html" class="active">Team Workbooks</a>
+<a href="../BridgeApp_SA_RegionalSalesMap.html">Sales Map</a>
+<a href="../BridgeApp_OS_Directory.html">Directory</a>
+<a href="../BridgeApp_DemoReviewCard.html">Review Card</a>
+</nav>
+
+<div class="mode-note" id="mode-note" hidden></div>
+
+<section class="rollup" aria-label="Live operating system roll-up">
+<div class="rollup-hd">
+<div>
+<h2>Live on the operating system</h2>
+<div class="sub" id="rollup-when">Nothing logged yet</div>
+</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<div class="syncbar"><span class="syncdot" id="syncdot"></span><span id="syncmsg">Ready</span></div>
+<button class="btn" type="button" id="btn-snapshot">Publish to OS</button>
+<button class="btn" type="button" id="btn-backup">Backup</button>
+<button class="btn" type="button" id="btn-restore">Restore</button>
+</div>
+</div>
+<div class="rgrid" id="rollup" data-dyn></div>
+</section>
+
+<!-- ══ NEEDS YOU ═══════════════════════════════════════════ -->
+<section class="panel on" id="panel-approvals">
+<div class="queue">
+<h3>Waiting on sign-off <span class="c" id="q-content-count"></span></h3>
+<div id="q-content" data-dyn></div>
+</div>
+<div class="queue">
+<h3>Events waiting on a go / no-go <span class="c" id="q-events-count"></span></h3>
+<div id="q-events" data-dyn></div>
+</div>
+<div class="queue">
+<h3>Follow-ups that are late <span class="c" id="q-follow-count"></span></h3>
+<div id="q-follow" data-dyn></div>
+</div>
+<div class="queue">
+<h3>Cleared to post this week <span class="c" id="q-cleared-count"></span></h3>
+<div id="q-cleared" data-dyn></div>
+</div>
+</section>
+
+<!-- ══ CONTENT ═════════════════════════════════════════════ -->
+<section class="panel" id="panel-content">
+<div class="cmd">
+<div class="weeknav">
+<button type="button" id="wk-prev" aria-label="Previous week">‹</button>
+<div class="wk" id="wk-label">Week of —</div>
+<button type="button" id="wk-next" aria-label="Next week">›</button>
+</div>
+<button class="btn btn-ghost" type="button" id="wk-today">This week</button>
+<div class="spacer"></div>
+<button class="btn" type="button" id="btn-copy">Copy approved list</button>
+<button class="btn" type="button" id="btn-csv-content">Export CSV</button>
+<button class="btn btn-primary" type="button" id="btn-new-content">+ Add content</button>
+</div>
+<div class="filters">
+<span class="fl">Filter</span>
+<select id="cf-status" aria-label="Filter content by status"><option value="">All statuses</option></select>
+<select id="cf-channel" aria-label="Filter content by channel"><option value="">All channels</option></select>
+<select id="cf-owner" aria-label="Filter content by owner"><option value="">All owners</option></select>
+<select id="cf-engine" aria-label="Filter content by growth engine"><option value="">All engines</option></select>
+<input type="search" id="cf-q" placeholder="Search title or caption…" aria-label="Search content">
+<button class="btn btn-ghost" type="button" id="cf-clear">Clear</button>
+</div>
+<div id="board" data-dyn></div>
+</section>
+
+<!-- ══ SCHOOLS ═════════════════════════════════════════════ -->
+<section class="panel" id="panel-schools">
+<div class="cmd">
+<strong style="font-family:'Barlow Condensed',sans-serif;font-size:19px;color:var(--navy);letter-spacing:-.3px">School visits &amp; follow-ups</strong>
+<div class="spacer"></div>
+<button class="btn" type="button" id="btn-csv-schools">Export CSV</button>
+<button class="btn btn-primary" type="button" id="btn-new-school">+ Log a school</button>
+</div>
+<div class="filters">
+<span class="fl">Filter</span>
+<select id="sf-stage" aria-label="Filter schools by stage"><option value="">All statuses</option></select>
+<select id="sf-province" aria-label="Filter schools by province"><option value="">All provinces</option></select>
+<select id="sf-owner" aria-label="Filter schools by follow-up owner"><option value="">All follow-up owners</option></select>
+<select id="sf-due" aria-label="Filter schools by follow-up state"><option value="">All follow-ups</option><option value="late">Late</option><option value="open">Still open</option><option value="done">Done</option></select>
+<input type="search" id="sf-q" placeholder="Search school, town or contact…" aria-label="Search schools">
+<button class="btn btn-ghost" type="button" id="sf-clear">Clear</button>
+</div>
+<div class="tablewrap">
+<div class="tscroll"><table id="schools-table">
+<thead><tr>
+<th>School</th><th>Province / town</th><th>Last contact</th><th>Status</th><th>Contact</th><th>Follow-up needed</th><th>Due</th><th>Notes</th><th class="num">Learners</th>
+</tr></thead>
+<tbody id="schools-body" data-dyn></tbody>
+</table></div>
+<div class="tfoot"><span id="schools-foot">—</span><span id="schools-target">—</span></div>
+</div>
+</section>
+
+<!-- ══ EVENTS & LEADS ══════════════════════════════════════ -->
+<section class="panel" id="panel-events">
+<div class="cmd">
+<strong style="font-family:'Barlow Condensed',sans-serif;font-size:19px;color:var(--navy);letter-spacing:-.3px">Events, exhibitions &amp; the leads they brought in</strong>
+<div class="spacer"></div>
+<button class="btn" type="button" id="btn-csv-events">Export CSV</button>
+<button class="btn" type="button" id="btn-new-lead">+ Add a lead</button>
+<button class="btn btn-primary" type="button" id="btn-new-event">+ Add an event</button>
+</div>
+<h4 class="subhead">Events attended</h4>
+<div class="tablewrap">
+<div class="tscroll"><table id="events-table">
+<thead><tr>
+<th>Event</th><th>Dates</th><th>Where</th><th>Status</th><th>Who went</th><th class="num">Turnout</th><th class="num">Talked to</th><th class="num">Leads</th><th class="num">Cost / lead</th><th>Outcome</th><th>Notes</th>
+</tr></thead>
+<tbody id="events-body" data-dyn></tbody>
+</table></div>
+<div class="tfoot"><span id="events-foot">—</span><span id="events-spend">—</span></div>
+</div>
+<h4 class="subhead">Leads &amp; follow-ups</h4>
+<div class="filters">
+<span class="fl">Filter</span>
+<select id="lf-event" aria-label="Filter leads by event"><option value="">All events</option></select>
+<select id="lf-interest" aria-label="Filter leads by interest"><option value="">All interest levels</option></select>
+<select id="lf-follow" aria-label="Filter leads by follow-up state"><option value="">All follow-ups</option></select>
+<select id="lf-owner" aria-label="Filter leads by owner"><option value="">All owners</option></select>
+<input type="search" id="lf-q" placeholder="Search name or organisation…" aria-label="Search leads">
+<button class="btn btn-ghost" type="button" id="lf-clear">Clear</button>
+</div>
+<div class="tablewrap">
+<div class="tscroll"><table id="leads-table">
+<thead><tr>
+<th>Lead</th><th>From</th><th>Type</th><th>Interest</th><th>What they want</th><th>Follow-up</th><th>Due</th><th>Outcome</th><th class="num">Value</th>
+</tr></thead>
+<tbody id="leads-body" data-dyn></tbody>
+</table></div>
+<div class="tfoot"><span id="leads-foot">—</span><span id="leads-value">—</span></div>
+</div>
+</section>
+
+<footer class="signoff">
+<span>Content <strong>Sememi</strong> · Schools &amp; events <strong>Kefiloe</strong> · Outreach <strong>Omphile · Shitshembiso · Moses · Sthe · Didi</strong> · Sign-off <strong>DD</strong></span>
+<span class="ba"><span>Blank</span><span>C</span><span>a</span><span>nvas</span></span>
+</footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+<div class="drawer-hd">
+<h3 id="drawer-title">Details</h3>
+<button type="button" id="drawer-close" aria-label="Close">✕</button>
+</div>
+<div class="drawer-body" id="drawer-body" data-dyn></div>
+<div class="drawer-foot" id="drawer-foot" data-dyn></div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file-in" accept="application/json" hidden>
+<script id="wb-seed" type="application/json">{"v":1,"kind":"bridgeapp_team_workbooks","content":[],"schools":[{"id":"s-imp-001","name":"Hoer Overkruin Pretoria","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://overkruin.com","email":"info@overkruin.com","phone":"+27 12 567 5115","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-002","name":"Hoerskool Oos-Moot","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.oos-moot.co.za","email":"admin@oos-moot.co.za","phone":"+27 12 332 0601","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-003","name":"Acudeo College Kirkney","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.acudeo.co.za","email":"admin.kirkney@acudeo.co.za","phone":"+27 12 941 9681","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"meeting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-004","name":"Gerrit Maritz","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://gerries.co.za","email":"hsgerries@yebo.co.za","phone":"+27 12 546 6685","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-005","name":"Hoerskool Pretoria Noord","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://pnhs.co.za","email":"administrasie@pnhs.co.za","phone":"+27 12 546 6590","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-006","name":"St Stithians College","type":"Independent","province":"Gauteng","city":"Johannesburg","website":"https://www.stithian.com","email":"info@stithian.com","phone":"+27 11 577 6000","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-007","name":"Redhill School","type":"Independent","province":"Gauteng","city":"Johannesburg","website":"https://www.redhill.co.za","email":"info@redhill.co.za","phone":"+27 11 783 4707","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-008","name":"Reddam House Helderfontein","type":"Independent","province":"Gauteng","city":"Johannesburg","website":"https://www.reddamhouse.com/helderfontein","email":"helderfontein@reddamhouse.com","phone":"+27 10 025 6000","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-009","name":"Hoerskool Menlopark","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.menlopark.co.za","email":"bemarking@menlopark.co.za","phone":"+27 12 361 7738","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-010","name":"Hoer Tegniese Skool Pretoria Tuine","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://htstuine.co.za","email":"kantoor@htstuine.co.za","phone":"+27 12 379 2181","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"notinterested","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-011","name":"Hoerskool Akasia","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.hsakasia.co.za","email":"admin@hsakasia.co.za","phone":"+27 12 542 1178","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-012","name":"Hoerskool Elandspoort","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://elandspoort.co.za","email":"admin@elandspoorths.co.za","phone":"+27 12 386 65651","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-013","name":"Pretoria Central High School","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://schoolhive.co.za","email":"","phone":"+27 12 327 5772","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"notinterested","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-014","name":"Pretoria Technical High School","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.edarabia.com","email":"admin@pths.co.za","phone":"+27 12 343 2357","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-015","name":"Hoerskool Pretoria-Wes","type":"Independent","province":"Gauteng","city":"Pretoria","website":"https://www.ptaweshs.co.za","email":"hsptawes@gmail.com","phone":"+27 12 327 5163","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-016","name":"Bethel College High School","type":"Independent","province":"Eastern Cape","city":"","website":"https://bethelcollege.org.za","email":"info@bethelcollege.org.za","phone":"+27 61 844 6216","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"meeting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-017","name":"Stirling High School","type":"Independent","province":"Eastern Cape","city":"East London","website":"https://stirlinghigh.co.za","email":"marketing@stirlinghs.co.za","phone":"+27 43 735 1444","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-018","name":"Redwood College Gonubie","type":"Independent","province":"Eastern Cape","city":"Gonubie","website":"https://redwoodschools.co.za/gonubie","email":"gonubie@redwoodschools.co.za","phone":"+27 43 740 4811","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-019","name":"Mida English Medium","type":"Independent","province":"Eastern Cape","city":"","website":"https://midaenglish.co.za","email":"midaschool@gmail.com","phone":"+27 47 489 1498","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-020","name":"St Thomas Private School","type":"Independent","province":"Eastern Cape","city":"East London","website":"https://stthomaspvtschool.co.za","email":"stpschool@yahoo.com","phone":"+27 43 642 5946","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-021","name":"Molteno High School","type":"Independent","province":"Eastern Cape","city":"Molteno","website":"https://moltenohigh.co.za","email":"moltenohighschool@yahoo.co.za","phone":"+27 45 967 0167","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-022","name":"Queens College Boys High","type":"Independent","province":"Eastern Cape","city":"Queenstown","website":"https://www.queenscollege.co.za","email":"headmaster@queenscollege.co.za","phone":"+27 45 839 4188","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-023","name":"Queenstown Girls High School","type":"Independent","province":"Eastern Cape","city":"Queenstown","website":"https://www.qtghs.co.za","email":"admin@qtghs.co.za","phone":"+27 45 839 4160","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-024","name":"Bellafides Private High School","type":"Independent","province":"Eastern Cape","city":"","website":"https://www.bellafidesprivate.co.za","email":"principal@bellafidesprivateschool.com","phone":"+27 82 826 5209","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-025","name":"Happy Home Academy","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.hhacademy.co.za","email":"admin@hhacademy.co.za","phone":"+27 41 451 1243","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-026","name":"Kabega Christian School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.kabegachristiansch.wixsite.com","email":"marketing@kcschool.co.za","phone":"+27 41 369 0644","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-027","name":"Harvest Christian School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.harvestschool.co.za","email":"reception@harvestcs.co.za","phone":"+27 41 581 2007","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-028","name":"Theodor Herzl School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.theodorherzl.co.za","email":"marketing@theordorherzl.co.za","phone":"+27 41 581 4244","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"contacted","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-029","name":"Urban Academy School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.urbanacademyschool.com","email":"admissions@urbanacademy.co.za","phone":"+27 41 585 0886","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-030","name":"The Hill College","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://hillcollege.co.za","email":"admin@hillcollege.co.za","phone":"+27 41 373 7043","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-031","name":"St Dominics Priory","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://www.priory.co.za","email":"info@priory.co.za","phone":"+27 41 396 2800/2801","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-032","name":"Elsen Academy","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"https://elsen.co.za","email":"elsen@elsen.co.za","phone":"+27 41 585 3289","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-033","name":"Woodridge College","type":"Independent","province":"Eastern Cape","city":"","website":"www.woodridge.co.za","email":"marketing@woodridge.co.za","phone":"+27 41 492 0005","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-034","name":"Stedin College","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"stedin.co.za","email":"marketing@stedin.co.za","phone":"+27 41 205 0929","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-035","name":"Grey High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"www.greyhighschool.com","email":"info@greyhighschool.com","phone":"+27 41 374 3300","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-036","name":"Pearson High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"pearsonhigh.com","email":"phs@pearsonhighschool.com","phone":"+27 41 583 2111","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-037","name":"Victoria Park High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"victoriaparkhigh.com","email":"info@vphigh.co.za","phone":"+27 41 508 6400","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-038","name":"Alexander Road High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"www.arhs.co.za","email":"info@arhsco.za","phone":"+27 41 365 1270","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-039","name":"Westview School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"westviewpe.co.za","email":"school@westview.co.za","phone":"+27 41 365 1223","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-040","name":"Collegiate Girls High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"www.collegiatehigh.co.za","email":"collegiate@cghs.co.za","phone":"+27 41 373 7705","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-041","name":"Westering High School","type":"Independent","province":"Eastern Cape","city":"Gqeberha","website":"westeringhigh.co.za","email":"whs@westeringhigh.co.za","phone":"+27 41 360 7805","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-042","name":"Durban High School","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.durbanhighschool.co.za","email":"info@durbanhighschool.co.za","phone":"+27 31 277 1500","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-043","name":"Westville Boys High School","type":"Independent","province":"KwaZulu-Natal","city":"Westville","website":"https://www.wbhs.co.za","email":"school@wbhs.co.za","phone":"+27 31 267 1330","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-044","name":"Westville Girls High School","type":"Independent","province":"KwaZulu-Natal","city":"Westville","website":"https://www.wghs.co.za","email":"school@wghs.co.za","phone":"+27 31 266 1258","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-045","name":"Glenwood High School","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.glenwoodhighschool.co.za","email":"glenwood@glenwoodhighschool.co.za","phone":"+27 31 205 5241","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-046","name":"Pinetown Girls High","type":"Independent","province":"KwaZulu-Natal","city":"Pinetown","website":"https://pghs.co.za","email":"pghsadmin@pghs.co.za","phone":"+27 31 701 1394","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-047","name":"Durban Girls College","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://dgc.co.za","email":"marketingadmin@dgc.co.za","phone":"+27 31 268 7200","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-048","name":"Northwood School","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://northwoodschool.co.za","email":"marketing@nwood.co.za","phone":"+27 31 563 6501","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-049","name":"Clifton School","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.cliftonschool.co.za","email":"clifton@cliftonschool.co.za","phone":"+27 31 312 2147","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-050","name":"St Henrys Marist College","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.sthenrys.co.za","email":"office@sthenrys.co.za","phone":"+27 31 261 7369","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-051","name":"Maris Stella","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.marisstella.co.za","email":"marketing@marisstella.co.za","phone":"+27 31 209 9426","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-052","name":"Grace Academy","type":"Independent","province":"KwaZulu-Natal","city":"","website":"https://grace-academy.co.za","email":"info@grace-academy.co.za","phone":"+27 31 065 1847","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-053","name":"Holy Family College","type":"Independent","province":"KwaZulu-Natal","city":"Durban","website":"https://www.holyfamilycollege.co.za","email":"reception@holyfamilycollege.co.za","phone":"+27 31 205 5083","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"awaiting","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"s-imp-054","name":"St Benedict School","type":"Independent","province":"KwaZulu-Natal","city":"","website":"https://stbenedictschool.co.za","email":"reception@holyfamilycollege.co.za","phone":"+27 31 702 6989","contact":"","role":"","learners":"","lastVisit":"","visitType":"Email","visitedBy":"Kefiloe","stage":"prospect","followUp":"","followOwner":"Kefiloe","followDue":"","followDone":false,"notes":"","fee":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]}],"events":[{"id":"e-imp-001","name":"EASA Conference — “Education for a Sustainable Future”","type":"Conference","audience":"Education Leadership Conference","startDate":"2026-01-12","endDate":"2026-01-15","city":"","province":"","venue":"","contact":"info@easa.ac.za / www.easa.ac.za","team":"","cost":"R5,000 – R8,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Missed","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-002","name":"High School Expo — Fourways Mall","type":"Careers expo","audience":"Student & Parent Expo","startDate":"2026-01-30","endDate":"2026-01-31","city":"","province":"","venue":"","contact":"ask@highschoolexpo.co.za / 082 821 6516","team":"","cost":"R8,250","status":"declined","expected":"","actual":"","conversations":"","motivation":"Missed","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-003","name":"SchoolScape CPT","type":"Activation","audience":"Education Industry Networking","startDate":"2026-02-05","endDate":"","city":"","province":"","venue":"","contact":"exhibit@schoolscape.co.za / www.schoolscape.co.za","team":"","cost":"R26,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Missed","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-004","name":"Private & Model C School Open Days","type":"School fair","audience":"School Activations","startDate":"2026-03-07","endDate":"","city":"","province":"","venue":"","contact":"School admin offices","team":"","cost":"R2,000 – R5,000 per school","status":"declined","expected":"","actual":"","conversations":"","motivation":"Missed","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-005","name":"Schoolscape Gauteng 2026","type":"Conference","audience":"Education Innovation Summit","startDate":"2026-03-05","endDate":"","city":"","province":"","venue":"","contact":"exhibit@schoolscape.co.za","team":"","cost":"±R25,000","status":"approved","expected":"","actual":"","conversations":"","motivation":"20 leads captured","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-006","name":"SchoolScape KZN 2026","type":"Conference","audience":"Education Innovation Summit","startDate":"2026-03-12","endDate":"","city":"","province":"","venue":"","contact":"exhibit@schoolscape.co.za","team":"","cost":"±R25,000","status":"approved","expected":"","actual":"","conversations":"","motivation":"10 leads for follow up, 2 reverted","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-007","name":"Kingsmead Career Day","type":"Careers expo","audience":"Career Talk","startDate":"2026-03-08","endDate":"","city":"","province":"","venue":"","contact":"Microsoft Forms response page","team":"","cost":"R500","status":"blocked","expected":"","actual":"","conversations":"","motivation":"Parents attendance. Sales team advised against attendance from last year's small outcome","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"","decidedAt":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-008","name":"Midstream Open Day","type":"School fair","audience":"Open Day","startDate":"2026-03-18","endDate":"","city":"","province":"","venue":"","contact":"facebook.com/MidstreamCollege","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Oriented toward school marketing and not bringing in 3rd parties","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-009","name":"International Conference on Digital Transformation in Curriculum Design","type":"Conference","audience":"International conference","startDate":"2026-03-19","endDate":"2026-03-20","city":"","province":"","venue":"","contact":"isit.org.in/event/index.php?id=100271645","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Conference for academics","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-010","name":"Reddford Fourways Open Day","type":"School fair","audience":"Open Day","startDate":"2026-03-14","endDate":"","city":"","province":"","venue":"","contact":"northcliff.reddford.co.za/visit-us/open-day","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Oriented toward school marketing and not bringing in 3rd parties","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-011","name":"International Conference on Innovation and Change in Teacher Education","type":"Conference","audience":"International conference","startDate":"2026-04-02","endDate":"2026-04-03","city":"","province":"","venue":"","contact":"sciencenet.co/event/index.php?id=100290756","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Conference for academics","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-012","name":"St John's Rugby Fest","type":"Activation","audience":"Rugby Festival","startDate":"2026-04-02","endDate":"2026-04-06","city":"","province":"","venue":"","contact":"stjohnscollege.co.za/news/2026/erf26-sponsorship-opportunities","team":"","cost":"R15,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Review with team on type of sponsorship to pursue, team availability on selected days, and how many days to get involved in — Missed","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-013","name":"Rocking Future Expo / Magazine","type":"Careers expo","audience":"National Education Expo","startDate":"2026-04-22","endDate":"","city":"","province":"","venue":"","contact":"info@3rc.co.za / 010 822 2000","team":"","cost":"R75,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"No decision makers present","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-014","name":"Kingsmead Career Day","type":"Careers expo","audience":"Careers Day","startDate":"2026-05-07","endDate":"","city":"","province":"","venue":"","contact":"kingsmead.co.za/careers-at-kingsmead","team":"","cost":"","status":"approved","expected":"","actual":"","conversations":"","motivation":"Annual Careers Day: supporting students as they explore future study and career pathways, and many have already contributed significantly to the journeys of our alumnae.","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-015","name":"The Education + Graduates Summit (TEGS)","type":"Conference","audience":"Summit","startDate":"2026-05-09","endDate":"","city":"","province":"","venue":"","contact":"thinkerneur.co.za/tegs","team":"","cost":"","status":"pending","expected":"","actual":"","conversations":"","motivation":"TEGS: hosting teachers, students, lecturers, schools, universities.","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"","decidedAt":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-016","name":"Career Indaba","type":"Careers expo","audience":"Education Career Expo","startDate":"2026-05-15","endDate":"2026-05-16","city":"","province":"","venue":"","contact":"(012) 003 6663","team":"","cost":"R50,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Misaligned","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-017","name":"Royal Schools — Princess Park","type":"School fair","audience":"Open Day","startDate":"2026-05-30","endDate":"","city":"","province":"","venue":"","contact":"royalschools.co.za","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Oriented toward school marketing and not bringing in 3rd parties","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-018","name":"Alfred Nzo East District","type":"Roadshow","audience":"District visit","startDate":"2026-06-11","endDate":"2026-06-12","city":"","province":"","venue":"","contact":"","team":"","cost":"","status":"approved","expected":"","actual":"","conversations":"","motivation":"Omphile's Eastern Cape visit","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-019","name":"Limpopo","type":"Roadshow","audience":"Province visit","startDate":"2026-06-21","endDate":"2026-06-23","city":"","province":"","venue":"","contact":"","team":"","cost":"","status":"approved","expected":"","actual":"","conversations":"","motivation":"Shitshembiso's Limpopo visit","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-020","name":"Western Cape","type":"Roadshow","audience":"Province visit","startDate":"2026-07-19","endDate":"2026-07-26","city":"","province":"","venue":"","contact":"","team":"","cost":"","status":"approved","expected":"","actual":"","conversations":"","motivation":"Moses's Western Cape visit","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-021","name":"4th Annual TVET & Higher Education Conference","type":"Conference","audience":"Higher Education Conference — The Maslow Hotel","startDate":"2026-07-23","endDate":"2026-07-24","city":"","province":"","venue":"","contact":"federatedinstitute.co.za/events-training/4th-annual-tvet-higher-education-conference-expo-2026/","team":"","cost":"R2,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Waiting for attendance confirmation. Valuable for BridgeOne, not so much for sales","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-022","name":"Diversity High School","type":"Other","audience":"Gradesmatch Presentation","startDate":"2026-08-12","endDate":"","city":"","province":"","venue":"","contact":"xolani536@gmail.com","team":"","cost":"","status":"approved","expected":"","actual":"","conversations":"","motivation":"Invitation from the Learner Support Agent to present to the Grade 12s. Sthe and Didi going. MEETING POSTPONED — school expected sponsored packages being a Q5; further engagement with clarity to be had with the Learner Support Agent.","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-023","name":"Jeppe High School for Girls — Fun Run & Grade 9 Market Day","type":"Activation","audience":"Students and parents","startDate":"2026-08-15","endDate":"","city":"","province":"","venue":"","contact":"marketing@jeppegirls.co.za","team":"","cost":"","status":"pending","expected":"","actual":"","conversations":"","motivation":"Waiting for approval for exhibitorship","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"","decidedAt":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-024","name":"Midstream Spring Fest","type":"Activation","audience":"Festival","startDate":"2026-09-05","endDate":"","city":"","province":"","venue":"","contact":"facebook.com/midstreamspringfest — Melanie 083 763 6092","team":"","cost":"","status":"queries","expected":"","actual":"","conversations":"","motivation":"Tricky — confirm what is possible there, what the costs are, and whether we want to be included in other Spring Fests","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"","decidedAt":"","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-025","name":"SAHISA “Waves of Renewal” — Durban","type":"Conference","audience":"ISASA Conference","startDate":"2026-09-13","endDate":"2026-09-16","city":"","province":"","venue":"","contact":"isasa.org/sahisa-conference-2026/","team":"","cost":"R36,600","status":"approved","expected":"","actual":"","conversations":"","motivation":"250 schools attending","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-026","name":"ISASA Deputy Heads' Conference — Uplands College, Mpumalanga","type":"Conference","audience":"ISASA Conference","startDate":"2026-09-21","endDate":"2026-09-23","city":"","province":"","venue":"","contact":"isasa.org/isasa-deputy-heads-conference-2025/","team":"","cost":"R19,000","status":"approved","expected":"","actual":"","conversations":"","motivation":"Can 3rd parties attend? But it's the right place…","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-027","name":"The World Education Summit","type":"Conference","audience":"Education Summit","startDate":"2026-09-29","endDate":"","city":"","province":"","venue":"","contact":"timeshighered-events.com/world-academic-summit-2026","team":"","cost":"£1,349 ≈ R30,000","status":"declined","expected":"","actual":"","conversations":"","motivation":"Global leaders in higher education, research and policy. Academic in nature","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]},{"id":"e-imp-028","name":"SABISA — SA Bursars of Independent Schools' Association","type":"Conference","audience":"ISASA Conference","startDate":"2026-10-28","endDate":"2026-10-31","city":"","province":"","venue":"","contact":"isasa.org/sabisa-conference-2026/","team":"","cost":"","status":"declined","expected":"","actual":"","conversations":"","motivation":"Independent school bursars — is it relevant for us?","nextAction":"","outcome":"","worked":"","didnt":"","decidedBy":"DD","decidedAt":"2026-08-24T00:00:00.000Z","createdBy":"Kefiloe","createdAt":"2026-08-24T00:00:00.000Z","log":[{"t":"2026-08-24T00:00:00.000Z","who":"Kefiloe","what":"imported from the outreach tracker"}]}],"leads":[],"updatedAt":"2026-08-24T00:00:00.000Z","updatedBy":"Kefiloe","source":"Imported from the School Events & Outreach Tracker (Google Doc)"}</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   BRIDGEAPP × FUTURE CLUB — TEAM WORKBOOKS
+   Blank Canvas Agency · Phase 2 OS
+
+   Three workbooks, one shared store:
+     • Content board   — what goes out this week, and DD's sign-off
+     • Schools         — every visit, the response, the follow-up
+     • Events & leads  — turnout, leads captured, outcomes, follow-ups
+
+   Everything written here feeds the roll-up at the top of the page and
+   the live panel on the master OS dashboard, the moment it is saved.
+
+   WHERE THE DATA LIVES
+   • Opened as a shared Claude Artifact → saved inside the artifact, so
+     the whole team reads and writes the same board.
+   • Opened on GitHub Pages or from disk → saved in that browser
+     (localStorage, key ba_os_v1), which the master OS dashboard on the
+     same site reads live. "Publish to OS" writes a snapshot file the
+     team can commit so everyone sees the same numbers.
+   ═════════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+var DATA_PATH='data/team_workbooks.json';
+var LS_KEY='ba_os_v1';
+var LS_WHO='ba_wb_who';
+var SNAPSHOT='os_snapshot.json';
+
+/* ── REFERENCE DATA ─────────────────────────────────────────── */
+var PEOPLE=[
+  {id:'DD',name:'Ditshego (DD)',approver:true},
+  {id:'Sememi',name:'Sememi',approver:false},
+  {id:'Kefiloe',name:'Kefiloe',approver:false},
+  {id:'Guest',name:'Guest / other',approver:false}
+];
+/* The Gradesmatch internal outreach team. They do not work in the workbook —
+   they report to Kefiloe, who logs it — so they are assignable as the person
+   who went or who owns a follow-up, but never appear in "Working as". */
+var FIELD_TEAM=['Omphile','Shitshembiso','Moses','Sthe','Didi'];
+var CHANNELS=['Instagram Feed','Instagram Reel','Instagram Story','TikTok','Facebook','LinkedIn','YouTube Shorts','X / Twitter','WhatsApp Broadcast','WhatsApp Status','Email'];
+var FORMATS=['Graphic','Video','Reel','Carousel','Story','Photo','Text only'];
+var ENGINES=[
+  {id:'E01',label:'E01 · Sales Product Campaigns'},
+  {id:'E02',label:'E02 · The Future Club (from 2027)'},
+  {id:'E03',label:'E03 · School Sales'},
+  {id:'E04',label:'E04 · Systems &amp; Data'},
+  {id:'BRAND',label:'Brand / always-on'}
+];
+var STATUSES=[
+  {id:'idea',label:'Idea'},{id:'draft',label:'Drafting'},{id:'review',label:'Ready for review'},
+  {id:'changes',label:'Changes requested'},{id:'approved',label:'Cleared to post'},
+  {id:'posted',label:'Posted'},{id:'hold',label:'On hold'}
+];
+var PROVINCES=['Gauteng','Western Cape','KwaZulu-Natal','Eastern Cape','Free State','Limpopo','Mpumalanga','North West','Northern Cape'];
+var SCHOOL_TYPES=['Public','Former Model C','Independent','Private','Special needs','Other'];
+var VISIT_TYPES=['In-person visit','Phone call','Email','Meeting','Conference','Exhibition','Referral'];
+/* Kefiloe's own status ladder, straight from the outreach tracker. Signed and
+   Lost are added at the end — her sheet had no way to record a school that
+   actually signs, and signed schools are the Phase 2 target. */
+var STAGES=[
+  {id:'prospect',label:'Prospect',hint:'Identified but not yet contacted'},
+  {id:'contacted',label:'Contacted',hint:'Email or call made'},
+  {id:'awaiting',label:'Awaiting response',hint:'Email sent, waiting for a reply'},
+  {id:'followup',label:'Follow up required',hint:'Need to call again / contact unavailable'},
+  {id:'meeting',label:'Meeting scheduled',hint:'School agreed to a discussion'},
+  {id:'interested',label:'Interested',hint:'Interested but date not confirmed'},
+  {id:'notinterested',label:'Not interested',hint:'Declined the opportunity'},
+  {id:'future',label:'Future opportunity',hint:'Suggested next year or later'},
+  {id:'signed',label:'Signed',hint:'Contract signed'},
+  {id:'lost',label:'Lost',hint:'Dead — no further approach'}
+];
+var EVENT_TYPES=['Exhibition','Conference','Careers expo','School fair','Golf clinic','Activation','Roadshow','Sponsor meeting','Other'];
+var EVENT_STATUS=[
+  {id:'pending',label:'Pending approval'},
+  {id:'queries',label:'Questions outstanding'},
+  {id:'approved',label:'Approved — going'},
+  {id:'declined',label:'Declined'},
+  {id:'blocked',label:'Blocked'},
+  {id:'attended',label:'Attended'},
+  {id:'cancelled',label:'Cancelled'}
+];
+var LEAD_TYPES=['School','Parent','Student','Sponsor','Partner','Media','Government','Other'];
+var INTEREST=[{id:'hot',label:'Hot'},{id:'warm',label:'Warm'},{id:'cold',label:'Cold'}];
+var FOLLOW=[
+  {id:'todo',label:'Not started'},{id:'doing',label:'In progress'},{id:'done',label:'Done'},{id:'noresponse',label:'No response'}
+];
+var OUTCOMES=[
+  {id:'pipeline',label:'In the pipeline'},{id:'converted',label:'Converted'},
+  {id:'nurture',label:'Nurture'},{id:'lost',label:'Lost'}
+];
+var DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+var LOCKED_FIELDS=['channel','format','title','caption','hashtags','cta','asset','date','time'];
+var CAPTION_LIMITS={'Instagram Feed':2200,'Instagram Reel':2200,'Instagram Story':2200,'TikTok':2200,'Facebook':63206,'LinkedIn':3000,'YouTube Shorts':1000,'X / Twitter':280,'WhatsApp Broadcast':4096,'WhatsApp Status':700,'Email':100000};
+var SCHOOL_TARGET=20;
+var NOTE_PH='Awaiting the invoice from the organisers · Contract still to be signed';
+
+/* ── STATE ──────────────────────────────────────────────────── */
+var state=blank();
+var shared=null, saver=null, mode='local', canWrite=true;
+var pubTimer=null, pubBusy=false, pubQueued=false;
+var selWeek=weekOf(todayISO());
+var tab='approvals';
+var openKind=null, openId=null, draft=null;
+var cFilters={status:'',channel:'',owner:'',engine:'',q:''};
+var sFilters={stage:'',province:'',owner:'',due:'',q:''};
+var lFilters={event:'',interest:'',follow:'',owner:'',q:''};
+
+function blank(){return{v:1,kind:'bridgeapp_team_workbooks',content:[],schools:[],events:[],leads:[],updatedAt:null,updatedBy:null};}
+function coll(kind){return kind==='content'?state.content:kind==='school'?state.schools:kind==='event'?state.events:state.leads;}
+function setColl(kind,arr){
+  if(kind==='content')state.content=arr;
+  else if(kind==='school')state.schools=arr;
+  else if(kind==='event')state.events=arr;
+  else state.leads=arr;
+}
+
+/* ── HELPERS ────────────────────────────────────────────────── */
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function uid(p){return (p||'x')+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);}
+function todayISO(){return iso(new Date());}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseISO(s){var p=String(s||'').split('-');return new Date(+p[0],(+p[1]||1)-1,+p[2]||1);}
+function weekOf(s){var d=parseISO(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return iso(d);}
+function addDays(s,n){var d=parseISO(s);d.setDate(d.getDate()+n);return iso(d);}
+function daysUntil(s){if(!s)return null;return Math.round((parseISO(s)-parseISO(todayISO()))/86400000);}
+function fmtDate(s){if(!s)return'';return parseISO(s).toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'});}
+function fmtShort(s){if(!s)return'';return parseISO(s).toLocaleDateString('en-ZA',{day:'numeric',month:'short'});}
+function fmtStamp(t){if(!t)return'';var d=new Date(t);return d.toLocaleDateString('en-ZA',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});}
+function rands(n){n=+n||0;return 'R'+n.toLocaleString('en-ZA');}
+function who(){try{return localStorage.getItem(LS_WHO)||'Guest';}catch(e){return'Guest';}}
+function isApprover(){var p=PEOPLE.filter(function(x){return x.id===who();})[0];return!!(p&&p.approver);}
+function label(list,id,fallback){var m=list.filter(function(x){return x.id===id;})[0];return m?m.label:(fallback||id||'');}
+function byTime(a,b){return String(a.time||'99:99').localeCompare(String(b.time||'99:99'));}
+function eventName(id){var e=state.events.filter(function(x){return x.id===id;})[0];return e?e.name:'';}
+
+/* ── TOAST + SYNC ───────────────────────────────────────────── */
+var toastTimer=null;
+function toast(msg,kind){
+  var el=$('toast');el.textContent=msg;el.className='toast on'+(kind?' '+kind:'');
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.className='toast';},4200);
+}
+function setSync(kind,msg){$('syncdot').className='syncdot '+(kind||'');$('syncmsg').textContent=msg;}
+function showModeNote(kind,msg){var n=$('mode-note');n.hidden=false;n.className='mode-note '+kind;n.innerHTML=msg;}
+
+/* ── STORAGE ────────────────────────────────────────────────── */
+function mirror(){try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}}
+function save(){
+  state.updatedAt=new Date().toISOString();
+  state.updatedBy=who();
+  mirror();
+  if(mode==='shared'&&canWrite)queuePublish();
+  else setSync('ok','Saved · OS updated');
+}
+function queuePublish(){clearTimeout(pubTimer);setSync('busy','Saving…');pubTimer=setTimeout(publish,900);}
+function publish(){
+  if(pubBusy){pubQueued=true;return;}
+  pubBusy=true;setSync('busy','Saving…');
+  var files={};files[DATA_PATH]=JSON.stringify(state);
+  shared.publish(files).then(function(){
+    setSync('ok','Saved for the team');
+  }).catch(function(err){
+    var code=(err&&err.code)||'upstream_error';
+    if(code==='not_writer'||code==='not_granted'||code==='consent_required'||code==='not_declared'){
+      goLocal('<span><b>You have view-only access to this board.</b> You can read everything, but what you change is being kept in this browser only. Ask DD for edit access, or use <b>Backup</b> to send your changes across.</span>');
+    }else if(code==='capability_disabled'||code==='capability_removed'){
+      goLocal('<span><b>Team saving is not available on this view.</b> Your changes are kept in this browser only — use <b>Backup</b> or the CSV exports to share them.</span>');
+    }else if(code==='conflict'){
+      setSync('bad','Someone saved first');
+      toast('Someone else saved the board a moment ago. Reload the page to pick up their version, then re-enter this change.','bad');
+    }else if(code==='rate_limited'){
+      setSync('busy','Saving…');pubBusy=false;clearTimeout(pubTimer);pubTimer=setTimeout(publish,6000);return;
+    }else{
+      setSync('bad','Save failed');
+      toast('That change could not be saved to the team board. It is safe in this browser — try again in a moment.','bad');
+    }
+  }).then(function(){
+    pubBusy=false;
+    if(pubQueued){pubQueued=false;queuePublish();}
+  });
+}
+function goLocal(msg){mode='local';canWrite=false;mirror();setSync('bad','This browser only');showModeNote('ro',msg);}
+
+function normalise(d){
+  if(!d||typeof d!=='object')return null;
+  var out=blank();
+  out.content=(d.content||d.items||[]).map(function(i){
+    i.id=i.id||uid('c');i.log=i.log||[];i.status=i.status||'draft';
+    i.week=i.date?weekOf(i.date):(i.week||weekOf(todayISO()));return i;});
+  out.schools=(d.schools||[]).map(function(i){i.id=i.id||uid('s');i.log=i.log||[];i.stage=i.stage||'prospect';return i;});
+  out.events=(d.events||[]).map(function(i){i.id=i.id||uid('e');i.log=i.log||[];i.status=i.status||'planned';return i;});
+  out.leads=(d.leads||[]).map(function(i){i.id=i.id||uid('l');i.log=i.log||[];i.follow=i.follow||'todo';i.outcome=i.outcome||'pipeline';i.interest=i.interest||'warm';return i;});
+  out.updatedAt=d.updatedAt||null;out.updatedBy=d.updatedBy||null;
+  return out;
+}
+
+function boot(){
+  try{
+    if(window.claude&&typeof window.claude.use==='function'){
+      /* Downloads are mediated when the page runs inside the Claude viewer;
+         on GitHub Pages a plain blob link does the job. */
+      window.claude.use('downloads').then(function(d){saver=d||null;},function(){saver=null;});
+      window.claude.use('artifact').then(onCap,function(){onCap(null);});
+      return;
+    }
+  }catch(e){}
+  onCap(null);
+}
+function seedState(){
+  try{
+    var el=$('wb-seed');
+    if(el&&el.textContent.trim())return normalise(JSON.parse(el.textContent));
+  }catch(e){}
+  return null;
+}
+function onCap(cap){
+  shared=cap||null;
+  if(shared){
+    mode='shared';
+    fetch(DATA_PATH,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+      .catch(function(){return null;})
+      .then(function(data){
+        state=normalise(data)||seedState()||blank();
+        setSync('ok','Shared with the team');
+        start();
+      });
+  }else{
+    mode='local';
+    var LOCAL_NOTE='<span><b>This copy saves to this browser.</b> The master OS dashboard on this site reads it live, so your approvals show up there straight away — but other people on other devices will not see them until you press <b>Publish to OS</b> and upload the file to the repo. For one board the whole team edits at once, open the Claude Artifact copy of this workbook.</span>';
+    var ls=null;try{ls=JSON.parse(localStorage.getItem(LS_KEY)||'null');}catch(e){}
+    if(ls){
+      state=normalise(ls)||blank();
+      setSync('ok','Saved in this browser');
+      showModeNote('local',LOCAL_NOTE);
+      start();return;
+    }
+    if(!/^https?:$/.test(location.protocol)){
+      state=seedState()||blank();setSync('','This browser');showModeNote('local',LOCAL_NOTE);start();return;
+    }
+    fetch(SNAPSHOT,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+      .catch(function(){return null;})
+      .then(function(snap){
+        state=normalise(snap)||seedState()||blank();
+        setSync('','This browser');
+        showModeNote('local',LOCAL_NOTE);
+        start();
+      });
+  }
+}
+
+/* ── TABS ───────────────────────────────────────────────────── */
+function setTab(next,silent){
+  tab=next;
+  Array.prototype.forEach.call($('tabs').querySelectorAll('button'),function(b){
+    b.classList.toggle('on',b.getAttribute('data-tab')===next);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.panel'),function(p){
+    p.classList.toggle('on',p.id==='panel-'+next);
+  });
+  if(!silent&&window.history&&window.history.replaceState)
+    window.history.replaceState(null,'','#'+next);
+}
+function tabFromHash(){
+  var h=(location.hash||'').replace('#','');
+  return ['approvals','content','schools','events'].indexOf(h)>=0?h:'approvals';
+}
+
+/* ── GENERIC DRAWER ─────────────────────────────────────────── */
+var KINDS={};
+
+function openDrawer(kind,id){
+  var K=KINDS[kind];if(!K)return;
+  var existing=id?coll(kind).filter(function(i){return i.id===id;})[0]:null;
+  draft=existing?JSON.parse(JSON.stringify(existing)):K.blank();
+  openKind=kind;openId=existing?existing.id:null;
+  $('drawer-title').textContent=(existing?K.titleEdit:K.titleNew);
+  $('drawer-body').innerHTML=K.form(draft);
+  $('drawer-foot').innerHTML=foot(!!existing);
+  bindFields(K.fields);
+  if(K.wire)K.wire(draft);
+  on('s-save',function(){commit('saved the details');});
+  on('s-cancel',closeDrawer);
+  on('s-del',del);
+  $('drawer').hidden=false;
+  requestAnimationFrame(function(){$('drawer').classList.add('on');$('scrim').classList.add('on');});
+  var first=$(K.focus);if(first)first.focus();
+}
+function closeDrawer(){
+  if($('drawer').hidden)return;
+  $('drawer').classList.remove('on');$('scrim').classList.remove('on');
+  setTimeout(function(){$('drawer').hidden=true;$('drawer-body').innerHTML='';$('drawer-foot').innerHTML='';},220);
+  openKind=null;openId=null;draft=null;
+}
+function foot(existing){
+  return '<button class="btn btn-primary" type="button" id="s-save">Save</button>'
+    +'<button class="btn btn-ghost" type="button" id="s-cancel">Cancel</button>'
+    +'<div class="spacer"></div>'
+    +(existing?'<button class="btn btn-danger" type="button" id="s-del">Delete</button>':'');
+}
+function on(id,fn){var el=$(id);if(el)el.addEventListener('click',fn);}
+function bindFields(map){
+  Object.keys(map).forEach(function(id){
+    var el=$(id);if(!el)return;
+    var key=map[id];
+    var read=function(){
+      draft[key]=el.type==='checkbox'?el.checked:el.value;
+      var K=KINDS[openKind];if(K&&K.onInput)K.onInput(id);
+    };
+    el.addEventListener('input',read);
+    el.addEventListener('change',read);
+  });
+}
+function logEntry(what){
+  draft.log=draft.log||[];
+  draft.log.push({t:new Date().toISOString(),who:who(),what:what});
+  if(draft.log.length>60)draft.log=draft.log.slice(-60);
+}
+function commit(what){
+  var K=KINDS[openKind];if(!K)return;
+  if(K.validate&&!K.validate(draft))return;
+  var kind=openKind;
+  var prev=openId?coll(kind).filter(function(i){return i.id===openId;})[0]:null;
+  if(K.beforeCommit)what=K.beforeCommit(prev,draft,what);
+  draft.updatedBy=who();draft.updatedAt=new Date().toISOString();
+  if(what)logEntry(what);
+  if(prev){setColl(kind,coll(kind).map(function(i){return i.id===openId?draft:i;}));}
+  else{logEntry('added this');coll(kind).push(draft);}
+  save();render();closeDrawer();
+  if(what)toast('Saved. The OS roll-up has been updated.','good');
+}
+function del(){
+  if(!openId||!openKind)return;
+  var K=KINDS[openKind];
+  if(!window.confirm('Delete '+(K.noun||'this')+'? This cannot be undone.'))return;
+  var kind=openKind;
+  if(kind==='event'){
+    var orphans=state.leads.filter(function(l){return l.eventId===openId;});
+    if(orphans.length&&!window.confirm(orphans.length+' lead'+(orphans.length===1?' is':'s are')+' linked to this event. They will be kept but no longer linked. Continue?'))return;
+    state.leads.forEach(function(l){if(l.eventId===openId)l.eventId='';});
+  }
+  setColl(kind,coll(kind).filter(function(i){return i.id!==openId;}));
+  save();render();closeDrawer();toast('Deleted.');
+}
+
+/* ── FORM WIDGETS ───────────────────────────────────────────── */
+function opts(list,cur,useObj,escapeLabel){
+  return list.map(function(o){
+    var v=useObj?o.id:o, l=useObj?o.label:o;
+    return '<option value="'+esc(v)+'"'+(String(v)===String(cur||'')?' selected':'')+'>'+(escapeLabel===false?l:esc(l))+'</option>';
+  }).join('');
+}
+/* Anyone who can own a visit or a follow-up: the three who work the workbook,
+   plus the Gradesmatch outreach agents. */
+function ownerOpts(cur){
+  var all=PEOPLE.filter(function(p){return p.id!=='Guest';}).map(function(p){return{id:p.id,name:p.name};})
+    .concat(FIELD_TEAM.map(function(n){return{id:n,name:n+' — outreach'};}));
+  var known=all.map(function(o){return o.id;});
+  var gone=(cur&&known.indexOf(cur)<0)
+    ?'<option value="'+esc(cur)+'" selected>'+esc(cur)+' — no longer on the team</option>':'';
+  return '<option value="">Unassigned</option>'+all.map(function(o){
+    return '<option value="'+esc(o.id)+'"'+(o.id===cur?' selected':'')+'>'+esc(o.name)+'</option>';
+  }).join('')+gone;
+}
+function peopleOpts(cur){
+  var known=PEOPLE.map(function(p){return p.id;});
+  /* Somebody who has left the team keeps their name on old records — dropping
+     the option would quietly reassign their work to nobody on the next save. */
+  var gone=(cur&&known.indexOf(cur)<0)
+    ?'<option value="'+esc(cur)+'" selected>'+esc(cur)+' — no longer on the team</option>':'';
+  return '<option value="">Unassigned</option>'+PEOPLE.map(function(p){
+    return '<option value="'+esc(p.id)+'"'+(p.id===cur?' selected':'')+'>'+esc(p.name)+'</option>';
+  }).join('')+gone;
+}
+function fText(id,lab,val,ph,type,wide,hint){
+  return '<div class="f'+(wide?' wide':'')+'"><label for="'+id+'">'+lab+'</label>'
+    +'<input type="'+(type||'text')+'" id="'+id+'" value="'+esc(val)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'
+    +(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+}
+function fArea(id,lab,val,ph,rows,hint){
+  return '<div class="f wide"><label for="'+id+'">'+lab+'</label>'
+    +'<textarea id="'+id+'" rows="'+(rows||4)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'+esc(val)+'</textarea>'
+    +(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+}
+function fSel(id,lab,inner,wide,hint){
+  return '<div class="f'+(wide?' wide':'')+'"><label for="'+id+'">'+lab+'</label>'
+    +'<select id="'+id+'">'+inner+'</select>'+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+}
+function fs(legend,inner){return '<fieldset class="fs"><legend>'+legend+'</legend><div class="fgrid">'+inner+'</div></fieldset>';}
+function historyHTML(it){
+  if(!it.log||!it.log.length)return '';
+  return '<fieldset class="fs"><legend>History</legend><ul class="log">'
+    +it.log.slice().reverse().slice(0,25).map(function(l){
+      return '<li><time>'+esc(fmtStamp(l.t))+'</time><span><b>'+esc(l.who)+'</b> '+esc(l.what)+'</span></li>';
+    }).join('')+'</ul></fieldset>';
+}
+function dueClass(due,done){
+  if(done)return 'due done';
+  var d=daysUntil(due);
+  if(d===null)return 'due';
+  if(d<0)return 'due late';
+  if(d<=3)return 'due soon';
+  return 'due';
+}
+function dueText(due,done){
+  if(!due)return '<span class="sub">no date</span>';
+  var d=daysUntil(due);
+  var when=fmtShort(due);
+  if(done)return when;
+  if(d<0)return when+' · '+Math.abs(d)+'d late';
+  if(d===0)return when+' · today';
+  if(d<=3)return when+' · in '+d+'d';
+  return when;
+}
+
+/* ═══ WORKBOOK 1 — CONTENT BOARD ════════════════════════════ */
+function weekItems(w){
+  w=w||selWeek;
+  return state.content.filter(function(it){return (it.date?weekOf(it.date):it.week)===w;});
+}
+function cPasses(it){
+  if(cFilters.status&&it.status!==cFilters.status)return false;
+  if(cFilters.channel&&it.channel!==cFilters.channel)return false;
+  if(cFilters.owner&&it.owner!==cFilters.owner)return false;
+  if(cFilters.engine&&it.engine!==cFilters.engine)return false;
+  if(cFilters.q){
+    var hay=((it.title||'')+' '+(it.caption||'')+' '+(it.hashtags||'')+' '+(it.channel||'')).toLowerCase();
+    if(hay.indexOf(cFilters.q)<0)return false;
+  }
+  return true;
+}
+function renderContent(){
+  var all=weekItems(), shown=all.filter(cPasses);
+  $('wk-label').innerHTML='Week of '+esc(fmtShort(selWeek))+'<small>'+esc(fmtShort(selWeek))+' – '+esc(fmtDate(addDays(selWeek,6)))+'</small>';
+  var board=$('board');
+  if(!all.length){
+    board.innerHTML='<div class="empty"><h3>Nothing on this week yet</h3><p>Add the graphic or video, choose the channel, paste the caption, then send it to DD for sign-off. Anything cleared shows up green — that is the go-ahead to post.</p><button class="btn btn-primary" type="button" id="empty-new">+ Add the first post</button></div>';
+    on('empty-new',function(){openDrawer('content',null);});
+    return;
+  }
+  var html='';
+  for(var d=0;d<7;d++){
+    var date=addDays(selWeek,d);
+    var dayAll=all.filter(function(i){return i.date===date;});
+    var day=shown.filter(function(i){return i.date===date;}).sort(byTime);
+    var cleared=dayAll.filter(function(i){return i.status==='approved'||i.status==='posted';}).length;
+    html+='<section class="day"><div class="day-hd'+(date===todayISO()?' today':'')+'">'
+      +'<div class="d-name">'+DAYS[d]+'<span>'+esc(fmtShort(date))+'</span></div>'
+      +'<div class="day-count">'+dayAll.length+(dayAll.length===1?' post':' posts')+(dayAll.length?' · '+cleared+' cleared':'')+'</div></div>'
+      +(day.length?'<div class="day-body">'+day.map(cardHTML).join('')+'</div>'
+        :'<div class="day-empty">'+(dayAll.length?'Nothing matching the current filter.':'No posts scheduled.')+'</div>')
+      +'</section>';
+  }
+  var looseAll=all.filter(function(i){return !i.date;});
+  if(looseAll.length){
+    var loose=shown.filter(function(i){return !i.date;}).sort(byTime);
+    html+='<section class="day"><div class="day-hd"><div class="d-name">Not scheduled yet<span>backlog</span></div>'
+      +'<div class="day-count">'+looseAll.length+' waiting on a date</div></div>'
+      +(loose.length?'<div class="day-body">'+loose.map(cardHTML).join('')+'</div>':'<div class="day-empty">Nothing matching the current filter.</div>')
+      +'</section>';
+  }
+  board.innerHTML=html;
+  clickable(board,'.card','content');
+}
+function cardHTML(it){
+  return '<div class="card s-'+esc(it.status)+'" data-id="'+esc(it.id)+'" role="button" tabindex="0" aria-label="Open '+esc(it.title||'untitled post')+'">'
+    +(it.reopened&&it.status==='review'?'<span class="flag">⚠ Edited after sign-off — DD needs to look again</span>':'')
+    +'<div class="card-top">'
+    +(it.time?'<span class="chip chip-time">'+esc(it.time)+'</span>':'')
+    +(it.channel?'<span class="chip chip-ch">'+esc(it.channel)+'</span>':'')
+    +(it.format?'<span class="chip chip-fmt">'+esc(it.format)+'</span>':'')
+    +'</div><h4>'+esc(it.title||'Untitled post')+'</h4>'
+    +(it.caption?'<p class="cap">'+esc(it.caption)+'</p>':'')
+    +'<div class="card-foot"><span class="pill p-'+esc(it.status)+'">'+esc(label(STATUSES,it.status))+'</span>'
+    +(it.owner?'<span>'+esc(it.owner)+'</span>':'')
+    +(it.engine?'<span class="chip chip-eng">'+esc(it.engine)+'</span>':'')
+    +(it.asset?'<span>📎 asset</span>':'<span style="color:var(--danger)">no asset</span>')
+    +'</div></div>';
+}
+function clickable(root,sel,kind){
+  Array.prototype.forEach.call(root.querySelectorAll(sel),function(el){
+    var go=function(){openDrawer(kind,el.getAttribute('data-id'));};
+    el.addEventListener('click',go);
+    el.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}
+    });
+  });
+}
+
+KINDS.content={
+  noun:'this post', titleNew:'New content', titleEdit:'Edit content', focus:'f-title',
+  fields:{'f-date':'date','f-time':'time','f-channel':'channel','f-format':'format','f-title':'title',
+    'f-asset':'asset','f-caption':'caption','f-hashtags':'hashtags','f-cta':'cta','f-engine':'engine',
+    'f-owner':'owner','f-stage':'status','f-posted':'postedUrl','f-results':'results'},
+  blank:function(){
+    return{id:uid('c'),week:selWeek,date:'',time:'',channel:CHANNELS[0],format:FORMATS[0],title:'',
+      caption:'',hashtags:'',cta:'',asset:'',engine:'E01',owner:who()==='Guest'?'':who(),status:'draft',
+      notes:'',approvedBy:'',approvedAt:'',reopened:false,postedUrl:'',postedAt:'',results:'',
+      createdBy:who(),createdAt:new Date().toISOString(),log:[]};
+  },
+  validate:function(d){
+    if(!(d.title||'').trim()){toast('Give the post a title so the team knows what it is.','bad');var t=$('f-title');if(t)t.focus();return false;}
+    return true;
+  },
+  onInput:function(id){if(id==='f-caption'||id==='f-channel')capCount();},
+  beforeCommit:function(prev,d,what){
+    if(prev&&prev.status==='approved'&&d.status==='approved'){
+      var changed=LOCKED_FIELDS.filter(function(f){return (prev[f]||'')!==(d[f]||'');});
+      if(changed.length){
+        d.status='review';d.reopened=true;d.approvedBy='';d.approvedAt='';
+        logEntry('changed '+changed.join(', ')+' after sign-off — sent back to DD');
+        toast('That post was already cleared. Because the '+changed.join(', ')+' changed, the sign-off was withdrawn and it has gone back to DD.','bad');
+        return null;
+      }
+    }
+    d.week=d.date?weekOf(d.date):(d.week||selWeek);
+    return what;
+  },
+  form:function(it){
+    var gated=['review','changes','approved','posted'].indexOf(it.status)>=0;
+    var h=approvalHTML(it);
+    h+=fs('When &amp; where',
+      fText('f-date','Post date',it.date,'','date',false,'Leave empty to park it in the backlog.')
+      +fText('f-time','Time',it.time,'','time')
+      +fSel('f-channel','Channel',opts(CHANNELS,it.channel))
+      +fSel('f-format','Format',opts(FORMATS,it.format)));
+    h+=fs('The post',
+      fText('f-title','Title / hook <span style="color:var(--danger)">*</span>',it.title,'Built Different — Term 3 winners','text',true)
+      +fText('f-asset','Graphic or video link',it.asset,'https://… Canva, Drive or Descript link','url',true,
+        'DD cannot sign off without seeing the asset.'+(it.asset?' <a style="font-weight:800;color:var(--blue)" href="'+esc(it.asset)+'" target="_blank" rel="noopener">Open it ↗</a>':''))
+      +'<div class="f wide"><label for="f-caption">Caption</label><textarea id="f-caption" rows="6" placeholder="Write the caption exactly as it should go out.">'+esc(it.caption)+'</textarea><span class="hint count" id="cap-count"></span></div>'
+      +fText('f-hashtags','Hashtags',it.hashtags,'#BuiltDifferent #FutureClub #BridgeApp','text',true)
+      +fText('f-cta','Call to action',it.cta,'Link in bio · Sign up')
+      +fSel('f-engine','Growth engine',opts(ENGINES,it.engine,true,false))
+      +fSel('f-owner','Owner',peopleOpts(it.owner))
+      +(gated?'':fSel('f-stage','Stage',opts([{id:'idea',label:'Idea'},{id:'draft',label:'Drafting'},{id:'hold',label:'On hold'}],it.status,true))));
+    if(it.status==='approved'||it.status==='posted'){
+      h+=fs('After it goes out',
+        fText('f-posted','Live post link',it.postedUrl,'https://instagram.com/p/…','url',true)
+        +fText('f-results','Results so far',it.results,'4.2K reach · 310 likes · 22 saves','text',true));
+    }
+    return h+historyHTML(it);
+  },
+  wire:function(){
+    capCount();
+    on('a-approve',approveContent);
+    on('a-changes',requestChanges);
+    on('a-submit',function(){draft.status='review';draft.reopened=false;commit('sent it to DD for sign-off');});
+    on('a-posted',function(){draft.status='posted';draft.postedAt=draft.postedAt||new Date().toISOString();commit('marked it posted');});
+    on('a-withdraw',function(){draft.status='review';draft.approvedBy='';draft.approvedAt='';commit('withdrew the sign-off');});
+  }
+};
+function capCount(){
+  var el=$('cap-count');if(!el||!draft)return;
+  var n=(draft.caption||'').length, lim=CAPTION_LIMITS[draft.channel]||2200;
+  el.textContent=n+' / '+lim+' characters';
+  el.className='hint count'+(n>lim?' over':'');
+}
+function approvalHTML(it){
+  var cls=it.status==='approved'?'is-approved':it.status==='review'?'is-review':it.status==='changes'?'is-changes':'';
+  var h='<div class="approval '+cls+'"><div class="a-hd"><strong>Sign-off</strong><span class="pill p-'+esc(it.status)+'">'+esc(label(STATUSES,it.status))+'</span></div>';
+  if(it.status==='approved')
+    h+='<div class="a-meta">✓ Cleared to post by <b>'+esc(it.approvedBy||'—')+'</b> on '+esc(fmtStamp(it.approvedAt))+'. Post it exactly as written here.</div>';
+  else if(it.status==='posted')
+    h+='<div class="a-meta">Posted'+(it.postedAt?' on '+esc(fmtStamp(it.postedAt)):'')+'. Approved by <b>'+esc(it.approvedBy||'—')+'</b>.</div>';
+  else if(it.status==='review'){
+    h+='<div class="a-meta">Waiting on <b>DD</b>. Do not post until this is cleared.</div>';
+    if(it.reopened)h+='<div class="a-meta" style="color:var(--danger);font-weight:800">⚠ This was approved before and then edited, so the sign-off was withdrawn.</div>';
+  }
+  else if(it.status==='changes')h+='<div class="a-meta">DD asked for changes. Fix it, then send it back.</div>';
+  else h+='<div class="a-meta">Not submitted yet. Send it to DD once the asset and caption are ready.</div>';
+  if(it.notes)h+='<div class="a-meta" style="margin-top:8px;padding:9px 11px;background:rgba(255,255,255,.7);border-radius:7px"><b>DD’s note:</b> '+esc(it.notes)+'</div>';
+  h+='<div class="a-acts">';
+  if(isApprover()){
+    if(it.status!=='approved'&&it.status!=='posted')
+      h+='<button class="btn btn-go" type="button" id="a-approve">✓ Approve — cleared to post</button>'
+        +'<button class="btn btn-warn" type="button" id="a-changes">↩ Request changes</button>';
+    else if(it.status==='approved')
+      h+='<button class="btn btn-primary" type="button" id="a-posted">Mark as posted</button>'
+        +'<button class="btn btn-danger" type="button" id="a-withdraw">Withdraw sign-off</button>';
+  }else{
+    if(it.status==='approved')h+='<button class="btn btn-primary" type="button" id="a-posted">Mark as posted</button>';
+    else if(it.status==='review')h+='<span class="a-locked">Only DD can clear this to post.</span>';
+    else if(it.status!=='posted')h+='<button class="btn btn-go" type="button" id="a-submit">Send to DD for sign-off</button>';
+  }
+  return h+'</div></div>';
+}
+function approveContent(){
+  if(!isApprover()){toast('Only DD can clear content to post.','bad');return;}
+  if(!(draft.asset||'').trim()){
+    toast('There is no asset link on this post yet. Add the graphic or video link before signing it off.','bad');
+    var a=$('f-asset');if(a)a.focus();return;
+  }
+  draft.status='approved';draft.approvedBy=who();draft.approvedAt=new Date().toISOString();draft.reopened=false;
+  commit('cleared it to post');
+}
+function requestChanges(){
+  if(!isApprover())return;
+  var note=window.prompt('What needs to change? The team will see this note on the card.',draft.notes||'');
+  if(note===null)return;
+  draft.notes=note;draft.status='changes';draft.approvedBy='';draft.approvedAt='';
+  commit('asked for changes');
+}
+function approveEventById(id){
+  var e=state.events.filter(function(x){return x.id===id;})[0];
+  if(!e||!isApprover())return;
+  e.status='approved';e.decidedBy=who();e.decidedAt=new Date().toISOString();
+  e.log=e.log||[];e.log.push({t:new Date().toISOString(),who:who(),what:'approved the event'});
+  save();render();toast('“'+(e.name||'Event')+'” is approved. The team can book it.','good');
+}
+/* quick approve straight from the "Needs you" queue */
+function approveById(id){
+  var it=state.content.filter(function(i){return i.id===id;})[0];
+  if(!it||!isApprover())return;
+  if(!(it.asset||'').trim()){toast('That post has no asset link yet — open it and add the graphic or video first.','bad');openDrawer('content',id);return;}
+  it.status='approved';it.approvedBy=who();it.approvedAt=new Date().toISOString();it.reopened=false;
+  it.log=it.log||[];it.log.push({t:new Date().toISOString(),who:who(),what:'cleared it to post'});
+  save();render();toast('“'+(it.title||'Untitled')+'” is cleared to post.','good');
+}
+
+/* ═══ WORKBOOK 2 — SCHOOLS ══════════════════════════════════ */
+/* Working notes — "awaiting the invoice", "contract still to be signed".
+   Marked so they read as a note rather than another data column. */
+function noteCell(v){
+  var t=String(v||'').trim();
+  if(!t)return '<span class="sub">—</span>';
+  return '<span class="note" title="'+esc(t)+'">'+esc(t)+'</span>';
+}
+function stageHint(id){
+  var m=STAGES.filter(function(x){return x.id===id;})[0];
+  return m&&m.hint?m.hint:'';
+}
+function isLate(due,done){return !!due&&!done&&daysUntil(due)<0;}
+function schoolLate(s){return isLate(s.followDue,s.followDone);}
+function sPasses(s){
+  if(sFilters.stage&&s.stage!==sFilters.stage)return false;
+  if(sFilters.province&&s.province!==sFilters.province)return false;
+  if(sFilters.owner&&s.followOwner!==sFilters.owner)return false;
+  if(sFilters.due==='late'&&!schoolLate(s))return false;
+  if(sFilters.due==='open'&&(s.followDone||!(s.followUp||'').trim()))return false;
+  if(sFilters.due==='done'&&!s.followDone)return false;
+  if(sFilters.q){
+    var hay=((s.name||'')+' '+(s.city||'')+' '+(s.province||'')+' '+(s.contact||'')+' '+(s.email||'')+' '+(s.followUp||'')+' '+(s.website||'')+' '+(s.notes||'')).toLowerCase();
+    if(hay.indexOf(sFilters.q)<0)return false;
+  }
+  return true;
+}
+function renderSchools(){
+  var all=state.schools.slice().sort(function(a,b){
+    var la=schoolLate(a)?0:1, lb=schoolLate(b)?0:1;
+    if(la!==lb)return la-lb;
+    return String(b.lastVisit||'').localeCompare(String(a.lastVisit||''));
+  });
+  var shown=all.filter(sPasses);
+  var body=$('schools-body');
+  if(!shown.length){
+    body.innerHTML='<tr><td colspan="9"><div class="qempty">'+(all.length?'Nothing matching the current filter.':'<b>No schools logged yet</b>After every visit, call or email, log the school here — where it stands, and what needs to happen next.')+'</div></td></tr>';
+  }else{
+    body.innerHTML=shown.map(function(s){
+      return '<tr data-id="'+esc(s.id)+'" tabindex="0" class="'+(schoolLate(s)?'overdue':(s.stage==='signed'?'won':''))+'">'
+        +'<td><div class="main">'+esc(s.name||'Unnamed school')+'</div><div class="sub">'+esc(s.type||'')+(s.visitedBy?' · '+esc(s.visitedBy):'')+'</div></td>'
+        +'<td><div class="main" style="font-weight:700;font-size:12.5px">'+esc(s.province||'—')+'</div><div class="sub">'+esc(s.city||'')+'</div></td>'
+        +'<td class="nowrap">'+(s.lastVisit?esc(fmtShort(s.lastVisit)):'<span class="sub">not yet</span>')+'<div class="sub">'+esc(s.visitType||'')+'</div></td>'
+        +'<td><span class="pill p-'+esc(s.stage)+'">'+esc(label(STAGES,s.stage))+'</span></td>'
+        +'<td>'+(s.contact||s.email||s.phone
+            ?'<div class="main" style="font-weight:700;font-size:12.5px">'+esc(s.contact||s.email)+'</div><div class="sub">'+esc(s.contact?(s.role||s.email||''):(s.phone||''))+'</div>'
+            :'<span class="sub">no contact yet</span>')+'</td>'
+        +'<td>'+(s.followUp?esc(s.followUp):'<span class="sub">nothing outstanding</span>')+(s.followOwner?'<div class="sub">'+esc(s.followOwner)+'</div>':'')+'</td>'
+        +'<td class="nowrap"><span class="'+dueClass(s.followDue,s.followDone)+'">'+dueText(s.followDue,s.followDone)+'</span></td>'
+        +'<td>'+noteCell(s.notes)+'</td>'
+        +'<td class="num">'+(s.learners?Number(s.learners).toLocaleString('en-ZA'):'—')+'</td>'
+        +'</tr>';
+    }).join('');
+    clickable(body,'tr','school');
+  }
+  var signed=all.filter(function(s){return s.stage==='signed';}).length;
+  var visited=all.filter(function(s){return !!s.lastVisit;}).length;
+  var late=all.filter(schoolLate).length;
+  $('schools-foot').textContent=shown.length+' of '+all.length+' schools · '+visited+' visited · '+late+' follow-up'+(late===1?'':'s')+' late';
+  $('schools-target').textContent=signed+' signed of '+SCHOOL_TARGET+'–30 target';
+}
+
+KINDS.school={
+  noun:'this school', titleNew:'Log a school', titleEdit:'School record', focus:'sc-name',
+  fields:{'sc-name':'name','sc-type':'type','sc-province':'province','sc-city':'city','sc-learners':'learners',
+    'sc-contact':'contact','sc-role':'role','sc-email':'email','sc-phone':'phone',
+    'sc-visit':'lastVisit','sc-vtype':'visitType','sc-by':'visitedBy','sc-stage':'stage','sc-website':'website',
+    'sc-follow':'followUp','sc-fowner':'followOwner','sc-fdue':'followDue','sc-fdone':'followDone',
+    'sc-notes':'notes','sc-fee':'fee'},
+  blank:function(){
+    return{id:uid('s'),name:'',type:SCHOOL_TYPES[0],province:PROVINCES[0],city:'',learners:'',
+      contact:'',role:'',email:'',phone:'',website:'',lastVisit:'',visitType:VISIT_TYPES[0],
+      visitedBy:who()==='Guest'?'':who(),stage:'prospect',
+      followUp:'',followOwner:who()==='Guest'?'':who(),followDue:'',followDone:false,
+      notes:'',fee:'',createdBy:who(),createdAt:new Date().toISOString(),log:[]};
+  },
+  validate:function(d){
+    if(!(d.name||'').trim()){toast('Which school is this? Add the name.','bad');var n=$('sc-name');if(n)n.focus();return false;}
+    return true;
+  },
+  form:function(s){
+    var h='';
+    if(schoolLate(s))h+='<div class="approval is-changes"><div class="a-hd"><strong>Follow-up is late</strong><span class="pill p-hot">'+Math.abs(daysUntil(s.followDue))+' days over</span></div>'
+      +'<div class="a-meta">'+esc(s.followUp||'A follow-up was due and has not been marked done.')+'</div>'
+      +'<div class="a-acts"><button class="btn btn-go" type="button" id="sc-donebtn">Mark this follow-up done</button></div></div>';
+    h+=fs('The school',
+      fText('sc-name','School name <span style="color:var(--danger)">*</span>',s.name,'Hoërskool Menlopark','text',true)
+      +fSel('sc-province','Province',opts(PROVINCES,s.province))
+      +fText('sc-city','Town / suburb',s.city,'Pretoria East')
+      +fSel('sc-type','Sector',opts(SCHOOL_TYPES,s.type))
+      +fText('sc-website','Website',s.website,'https://www.school.co.za','url',true,
+        s.website?'<a style="font-weight:800;color:var(--blue)" href="'+esc(/^https?:/.test(s.website)?s.website:'https://'+s.website)+'" target="_blank" rel="noopener">Open the site ↗</a>':'')
+      +fText('sc-learners','Learners',s.learners,'1200','number',false,'Roughly how many learners we could reach.'));
+    h+=fs('Who we spoke to',
+      fText('sc-contact','Contact person',s.contact,'Mr T Mahlangu')
+      +fText('sc-role','Their role',s.role,'Deputy Principal')
+      +fText('sc-email','Email',s.email,'name@school.co.za','email')
+      +fText('sc-phone','Phone',s.phone,'012 345 6789','tel'));
+    h+=fs('The visit',
+      fText('sc-visit','Date of last contact',s.lastVisit,'','date')
+      +fSel('sc-vtype','How we made contact',opts(VISIT_TYPES,s.visitType))
+      +fSel('sc-by','Who went',ownerOpts(s.visitedBy))
+      +fSel('sc-stage','Where it stands',opts(STAGES,s.stage,true),true,
+        esc(stageHint(s.stage)))
+      +fText('sc-fee','Contract value if signed',s.fee,'60000','number',false,'Rand per year.'));
+    h+=fs('What happens next',
+      fArea('sc-follow','Follow-up needed',s.followUp,'Send the pod MOU and book a meeting with the SGB.',3)
+      +fSel('sc-fowner','Who does it',ownerOpts(s.followOwner))
+      +fText('sc-fdue','Due by',s.followDue,'','date')
+      +'<div class="f wide"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font-size:13px;font-weight:700;color:var(--text-primary);cursor:pointer">'
+      +'<input type="checkbox" id="sc-fdone" style="width:18px;height:18px"'+(s.followDone?' checked':'')+'> This follow-up is done</label></div>');
+    h+=fs('Notes',fArea('sc-notes','Anything outstanding on this one',s.notes,NOTE_PH,3,
+      'Whatever is in flight — invoices, contracts, who still owes us an answer.'));
+    return h+historyHTML(s);
+  },
+  wire:function(){
+    on('sc-donebtn',function(){draft.followDone=true;commit('marked the follow-up done');});
+  },
+  onInput:function(id){
+    if(id!=='sc-stage')return;
+    var f=$('sc-stage');if(!f)return;
+    var hint=f.parentNode.querySelector('.hint');
+    if(hint)hint.textContent=stageHint(draft.stage);
+  }
+};
+
+/* ═══ WORKBOOK 3 — EVENTS & LEADS ═══════════════════════════ */
+/* Costs come off the organiser's quote as text — "R25,000", "±R25,000",
+   "R2,000 – R5,000 per school". Take the first number so cost-per-lead still
+   works, and show the quote as written. */
+function costNum(v){
+  if(typeof v==='number')return v;
+  var m=String(v||'').replace(/[\s,]/g,'').match(/\d+(?:\.\d+)?/);
+  return m?Number(m[0]):0;
+}
+function leadsFor(id){return state.leads.filter(function(l){return l.eventId===id;});}
+function leadLate(l){return isLate(l.followDue,l.follow==='done');}
+function renderEvents(){
+  var all=state.events.slice().sort(function(a,b){return String(b.startDate||'').localeCompare(String(a.startDate||''));});
+  var body=$('events-body');
+  if(!all.length){
+    body.innerHTML='<tr><td colspan="11"><div class="qempty"><b>No events logged yet</b>Add every exhibition, conference and expo the team goes to — then log the leads it brought in.</div></td></tr>';
+  }else{
+    body.innerHTML=all.map(function(e){
+      var n=leadsFor(e.id).length;
+      var cpl=(costNum(e.cost)&&n)?Math.round(costNum(e.cost)/n):null;
+      var dates=e.startDate?(fmtShort(e.startDate)+(e.endDate&&e.endDate!==e.startDate?' – '+fmtShort(e.endDate):'')):'—';
+      return '<tr data-id="'+esc(e.id)+'" tabindex="0" class="'+(e.status==='attended'||e.status==='approved'?'won':(e.status==='pending'||e.status==='queries'?'overdue':''))+'">'
+        +'<td><div class="main">'+esc(e.name||'Unnamed event')+'</div><div class="sub">'+esc(e.type||'')+(e.audience?' · '+esc(e.audience):'')+'</div></td>'
+        +'<td class="nowrap">'+esc(dates)+'</td>'
+        +'<td><div class="main" style="font-weight:700;font-size:12.5px">'+esc(e.city||'—')+'</div><div class="sub">'+esc(e.province||'')+'</div></td>'
+        +'<td><span class="pill p-'+esc(e.status)+'">'+esc(label(EVENT_STATUS,e.status))+'</span></td>'
+        +'<td>'+(e.team?esc(e.team):'<span class="sub">—</span>')+(e.cost?'<div class="sub">'+esc(e.cost)+'</div>':'')+'</td>'
+        +'<td class="num">'+(e.actual?Number(e.actual).toLocaleString('en-ZA'):'—')+(e.expected?'<div class="sub">of '+Number(e.expected).toLocaleString('en-ZA')+' expected</div>':'')+'</td>'
+        +'<td class="num">'+(e.conversations?Number(e.conversations).toLocaleString('en-ZA'):'—')+'</td>'
+        +'<td class="num">'+n+'</td>'
+        +'<td class="num">'+(cpl?rands(cpl):'—')+'</td>'
+        +'<td>'+(e.outcome?esc(e.outcome):(e.motivation?'<span class="sub">'+esc(e.motivation)+'</span>':'<span class="sub">not written up yet</span>'))+'</td>'
+        +'<td>'+noteCell(e.notes)+'</td>'
+        +'</tr>';
+    }).join('');
+    clickable(body,'tr','event');
+  }
+  var going=all.filter(function(e){return e.status==='approved'||e.status==='attended';}).length;
+  var pending=all.filter(function(e){return e.status==='pending'||e.status==='queries';}).length;
+  var spend=all.filter(function(e){return e.status==='approved'||e.status==='attended';})
+    .reduce(function(a,e){return a+costNum(e.cost);},0);
+  $('events-foot').textContent=all.length+' event'+(all.length===1?'':'s')+' · '+going+' approved · '
+    +pending+' waiting on a decision · '+state.leads.length+' lead'+(state.leads.length===1?'':'s')+' captured';
+  $('events-spend').textContent=rands(spend)+' committed'+(state.leads.length?' · '+rands(Math.round(spend/state.leads.length))+' per lead':'');
+}
+function lPasses(l){
+  if(lFilters.event&&l.eventId!==lFilters.event)return false;
+  if(lFilters.interest&&l.interest!==lFilters.interest)return false;
+  if(lFilters.follow&&l.follow!==lFilters.follow)return false;
+  if(lFilters.owner&&l.owner!==lFilters.owner)return false;
+  if(lFilters.q){
+    var hay=((l.name||'')+' '+(l.org||'')+' '+(l.want||'')+' '+(l.email||'')).toLowerCase();
+    if(hay.indexOf(lFilters.q)<0)return false;
+  }
+  return true;
+}
+function renderLeads(){
+  var all=state.leads.slice().sort(function(a,b){
+    var la=leadLate(a)?0:1, lb=leadLate(b)?0:1;
+    if(la!==lb)return la-lb;
+    var rank={hot:0,warm:1,cold:2};
+    return (rank[a.interest]||3)-(rank[b.interest]||3);
+  });
+  var shown=all.filter(lPasses);
+  var body=$('leads-body');
+  if(!shown.length){
+    body.innerHTML='<tr><td colspan="9"><div class="qempty">'+(all.length?'Nothing matching the current filter.':'<b>No leads captured yet</b>Every card, scan and sign-up sheet from an event goes in here, with who owns the follow-up.')+'</div></td></tr>';
+  }else{
+    body.innerHTML=shown.map(function(l){
+      return '<tr data-id="'+esc(l.id)+'" tabindex="0" class="'+(leadLate(l)?'overdue':(l.outcome==='converted'?'won':''))+'">'
+        +'<td><div class="main">'+esc(l.name||'Unnamed lead')+'</div><div class="sub">'+esc(l.org||'')+(l.role?' · '+esc(l.role):'')+'</div></td>'
+        +'<td>'+(l.eventId?esc(eventName(l.eventId)):'<span class="sub">not from an event</span>')+'</td>'
+        +'<td>'+esc(l.type||'—')+'</td>'
+        +'<td><span class="pill p-'+esc(l.interest)+'">'+esc(label(INTEREST,l.interest))+'</span></td>'
+        +'<td>'+(l.want?esc(l.want):'<span class="sub">—</span>')+'</td>'
+        +'<td><span class="pill p-'+esc(l.follow)+'">'+esc(label(FOLLOW,l.follow))+'</span>'+(l.owner?'<div class="sub">'+esc(l.owner)+'</div>':'')+'</td>'
+        +'<td class="nowrap"><span class="'+dueClass(l.followDue,l.follow==='done')+'">'+dueText(l.followDue,l.follow==='done')+'</span></td>'
+        +'<td><span class="pill p-'+esc(l.outcome)+'">'+esc(label(OUTCOMES,l.outcome))+'</span></td>'
+        +'<td class="num">'+(l.value?rands(l.value):'—')+'</td>'
+        +'</tr>';
+    }).join('');
+    clickable(body,'tr','lead');
+  }
+  var late=all.filter(leadLate).length;
+  var conv=all.filter(function(l){return l.outcome==='converted';}).length;
+  var value=all.filter(function(l){return l.outcome!=='lost';}).reduce(function(a,l){return a+(Number(l.value)||0);},0);
+  $('leads-foot').textContent=shown.length+' of '+all.length+' leads · '+conv+' converted · '+late+' follow-up'+(late===1?'':'s')+' late';
+  $('leads-value').textContent=rands(value)+' still in play';
+}
+function eventOpts(cur){
+  return '<option value="">Not from an event</option>'+state.events.slice().sort(function(a,b){
+    return String(b.startDate||'').localeCompare(String(a.startDate||''));
+  }).map(function(e){
+    return '<option value="'+esc(e.id)+'"'+(e.id===cur?' selected':'')+'>'+esc(e.name||'Unnamed event')+'</option>';
+  }).join('');
+}
+
+function eventDecisionHTML(e,n){
+  var go=e.status==='approved'||e.status==='attended';
+  var cls=go?'is-approved':e.status==='pending'?'is-review':e.status==='queries'?'is-changes':'';
+  var h='<div class="approval '+cls+'"><div class="a-hd"><strong>Go or no-go</strong>'
+    +'<span class="pill p-'+esc(e.status)+'">'+esc(label(EVENT_STATUS,e.status))+'</span></div>';
+  if(e.status==='pending')h+='<div class="a-meta">Waiting on <b>DD</b>. Nothing is booked until this is approved.</div>';
+  else if(e.status==='queries')h+='<div class="a-meta">DD has questions before deciding. Answer them in <b>Next action</b> and send it back.</div>';
+  else if(e.status==='approved')h+='<div class="a-meta">✓ Approved'+(e.decidedBy?' by <b>'+esc(e.decidedBy)+'</b>':'')+(e.decidedAt?' on '+esc(fmtStamp(e.decidedAt)):'')+'. Book it.</div>';
+  else if(e.status==='declined')h+='<div class="a-meta">Not going'+(e.decidedBy?' — decided by <b>'+esc(e.decidedBy)+'</b>':'')+'.</div>';
+  else if(e.status==='blocked')h+='<div class="a-meta">Blocked — something has to change before this can be decided.</div>';
+  else if(e.status==='attended')h+='<div class="a-meta">Attended. Fill in the turnout and log the leads it brought in.</div>';
+  h+='<div class="a-meta" style="margin-top:8px">'+(n?('<b>'+n+' lead'+(n===1?'':'s')+'</b> captured here.'):'No leads captured from this one yet.')+'</div>';
+  h+='<div class="a-acts">';
+  if(isApprover()){
+    if(e.status!=='approved'&&e.status!=='attended')
+      h+='<button class="btn btn-go" type="button" id="ef-approve">✓ Approve — we go</button>'
+        +'<button class="btn btn-warn" type="button" id="ef-queries">Questions first</button>'
+        +'<button class="btn btn-danger" type="button" id="ef-decline">Decline</button>';
+    else
+      h+='<button class="btn btn-primary" type="button" id="ef-attended">Mark as attended</button>';
+  }else if(e.status==='pending'){
+    h+='<span class="a-locked">Only DD decides which events we attend.</span>';
+  }else if(e.status==='approved'){
+    h+='<button class="btn btn-primary" type="button" id="ef-attended">Mark as attended</button>';
+  }else if(e.status!=='attended'){
+    h+='<button class="btn btn-go" type="button" id="ef-submit">Send to DD for a decision</button>';
+  }
+  if(e.id&&(e.status==='approved'||e.status==='attended'))
+    h+='<button class="btn" type="button" id="ef-addlead">+ Add a lead</button>';
+  return h+'</div></div>';
+}
+KINDS.event={
+  noun:'this event', titleNew:'Add an event', titleEdit:'Event write-up', focus:'ef-name',
+  fields:{'ef-name':'name','ef-type':'type','ef-start':'startDate','ef-end':'endDate','ef-city':'city',
+    'ef-province':'province','ef-venue':'venue','ef-team':'team','ef-cost':'cost',
+    'ef-audience':'audience','ef-contact':'contact','ef-motivation':'motivation','ef-next':'nextAction',
+    'ef-notes':'notes',
+    'ef-expected':'expected','ef-actual':'actual','ef-conversations':'conversations',
+    'ef-outcome':'outcome','ef-worked':'worked','ef-didnt':'didnt'},
+  blank:function(){
+    return{id:uid('e'),name:'',type:EVENT_TYPES[0],startDate:todayISO(),endDate:'',city:'',province:'',
+      venue:'',audience:'',contact:'',team:'',cost:'',status:'pending',expected:'',actual:'',conversations:'',
+      motivation:'',nextAction:'',notes:'',outcome:'',worked:'',didnt:'',decidedBy:'',decidedAt:'',
+      createdBy:who(),createdAt:new Date().toISOString(),log:[]};
+  },
+  validate:function(d){
+    if(!(d.name||'').trim()){toast('Give the event a name.','bad');var n=$('ef-name');if(n)n.focus();return false;}
+    return true;
+  },
+  form:function(e){
+    var n=leadsFor(e.id).length;
+    var h=eventDecisionHTML(e,n);
+    h+=fs('The event',
+      fText('ef-name','Event name <span style="color:var(--danger)">*</span>',e.name,'SchoolScape Gauteng 2026','text',true)
+      +fSel('ef-type','What kind',opts(EVENT_TYPES,e.type))
+      +fText('ef-audience','Who it is for',e.audience,'Education Innovation Summit')
+      +fText('ef-start','Starts',e.startDate,'','date')
+      +fText('ef-end','Ends',e.endDate,'','date',false,'Leave empty for a one-day event.')
+      +fSel('ef-province','Province',opts([''].concat(PROVINCES),e.province))
+      +fText('ef-city','City / town',e.city,'Sandton')
+      +fText('ef-venue','Venue',e.venue,'Sandton Convention Centre','text',true)
+      +fText('ef-contact','Contact details',e.contact,'exhibit@schoolscape.co.za','text',true)
+      +fText('ef-team','Who goes',e.team,'Kefiloe + Omphile','text',true)
+      +fText('ef-cost','Cost estimate',e.cost,'R25,000','text',false,'A figure or a range — whatever the organiser quoted.'));
+    h+=fs('Why we would go',
+      fArea('ef-motivation','What it is worth to us',e.motivation,'250 schools attending. Right decision makers in the room.',3)
+      +fArea('ef-next','Next action',e.nextAction,'Confirm stand size and send the invoice to finance.',2));
+    h+=fs('Notes',fArea('ef-notes','Anything outstanding on this one',e.notes,NOTE_PH,3,
+      'Whatever is in flight — invoices, contracts, who still owes us an answer.'));
+    h+=fs('Turnout',
+      fText('ef-expected','Turnout expected',e.expected,'2500','number')
+      +fText('ef-actual','Turnout on the day',e.actual,'2100','number')
+      +fText('ef-conversations','People we actually spoke to',e.conversations,'180','number',true,'Real conversations at the stand, not footfall past it.'));
+    h+=fs('How it went',
+      fArea('ef-outcome','Outcome in one line',e.outcome,'42 leads, 6 schools booked follow-up meetings.',2)
+      +fArea('ef-worked','What worked',e.worked,'The pod drew a crowd; the competition QR got scanned all day.',3)
+      +fArea('ef-didnt','What did not',e.didnt,'Stand was too far from the main hall. Ran out of flyers by 11am.',3));
+    return h+historyHTML(e);
+  },
+  wire:function(){
+    on('ef-approve',function(){
+      if(!isApprover()){toast('Only DD decides which events the team attends.','bad');return;}
+      draft.status='approved';draft.decidedBy=who();draft.decidedAt=new Date().toISOString();
+      commit('approved the event');
+    });
+    on('ef-decline',function(){
+      if(!isApprover())return;
+      var why=window.prompt('Why is this one a no? The team will see this on the row.',draft.motivation||'');
+      if(why===null)return;
+      draft.motivation=why;draft.status='declined';draft.decidedBy=who();draft.decidedAt=new Date().toISOString();
+      commit('declined the event');
+    });
+    on('ef-queries',function(){
+      if(!isApprover())return;
+      draft.status='queries';commit('flagged questions on the event');
+    });
+    on('ef-submit',function(){draft.status='pending';commit('sent the event to DD for a decision');});
+    on('ef-attended',function(){draft.status='attended';commit('marked the event attended');});
+    on('ef-addlead',function(){
+      var id=openId;
+      if(!id){toast('Save the event first, then add its leads.','bad');return;}
+      closeDrawer();
+      setTimeout(function(){openDrawer('lead',null);var s=$('lf-event-i');if(s){s.value=id;draft.eventId=id;}},260);
+    });
+  }
+};
+
+KINDS.lead={
+  noun:'this lead', titleNew:'Add a lead', titleEdit:'Lead &amp; follow-up', focus:'lf-name',
+  fields:{'lf-name':'name','lf-org':'org','lf-role':'role','lf-email':'email','lf-phone':'phone',
+    'lf-event-i':'eventId','lf-type-i':'type','lf-interest-i':'interest','lf-want':'want',
+    'lf-owner-i':'owner','lf-due':'followDue','lf-follow-i':'follow','lf-outcome-i':'outcome',
+    'lf-value':'value','lf-notes':'notes'},
+  blank:function(){
+    return{id:uid('l'),name:'',org:'',role:'',email:'',phone:'',eventId:'',type:LEAD_TYPES[0],
+      interest:'warm',want:'',owner:who()==='Guest'?'':who(),followDue:addDays(todayISO(),3),
+      follow:'todo',outcome:'pipeline',value:'',notes:'',
+      createdBy:who(),createdAt:new Date().toISOString(),log:[]};
+  },
+  validate:function(d){
+    if(!(d.name||'').trim()&&!(d.org||'').trim()){toast('Add at least a name or an organisation for this lead.','bad');var n=$('lf-name');if(n)n.focus();return false;}
+    return true;
+  },
+  form:function(l){
+    var h='';
+    if(leadLate(l))h+='<div class="approval is-changes"><div class="a-hd"><strong>Follow-up is late</strong><span class="pill p-hot">'+Math.abs(daysUntil(l.followDue))+' days over</span></div>'
+      +'<div class="a-meta">'+esc(l.want||'This lead was due a follow-up.')+'</div>'
+      +'<div class="a-acts"><button class="btn btn-go" type="button" id="lf-donebtn">Mark the follow-up done</button></div></div>';
+    h+=fs('Who they are',
+      fText('lf-name','Name',l.name,'Mrs P Nkosi')
+      +fText('lf-org','School / company',l.org,'Curro Hazeldean')
+      +fText('lf-role','Their role',l.role,'Head of Grade 11')
+      +fSel('lf-type-i','Lead type',opts(LEAD_TYPES,l.type))
+      +fText('lf-email','Email',l.email,'name@school.co.za','email')
+      +fText('lf-phone','Phone',l.phone,'082 123 4567','tel'));
+    h+=fs('Where they came from',
+      fSel('lf-event-i','Event',eventOpts(l.eventId),true)
+      +fSel('lf-interest-i','How interested',opts(INTEREST,l.interest,true))
+      +fText('lf-value','Value if it lands',l.value,'60000','number',false,'Rand.')
+      +fArea('lf-want','What they asked for',l.want,'Wants pricing for a whole-grade Pathfinder rollout.',3));
+    h+=fs('Follow-up',
+      fSel('lf-owner-i','Who owns it',peopleOpts(l.owner))
+      +fText('lf-due','Due by',l.followDue,'','date')
+      +fSel('lf-follow-i','Where the follow-up is',opts(FOLLOW,l.follow,true))
+      +fSel('lf-outcome-i','Outcome so far',opts(OUTCOMES,l.outcome,true))
+      +fArea('lf-notes','Notes',l.notes,'Call after 14:00 — she teaches in the mornings.',2));
+    return h+historyHTML(l);
+  },
+  wire:function(){
+    on('lf-donebtn',function(){draft.follow='done';commit('marked the follow-up done');});
+  }
+};
+
+/* ═══ LIVE OS ROLL-UP ═══════════════════════════════════════ */
+function stats(){
+  var wk=weekItems();
+  var lateSchools=state.schools.filter(schoolLate);
+  var lateLeads=state.leads.filter(leadLate);
+  return {
+    cleared:wk.filter(function(i){return i.status==='approved';}).length,
+    posted:wk.filter(function(i){return i.status==='posted';}).length,
+    waiting:state.content.filter(function(i){return i.status==='review';}).length,
+    eventsPending:state.events.filter(function(e){return e.status==='pending'||e.status==='queries';}).length,
+    eventsGoing:state.events.filter(function(e){return e.status==='approved'||e.status==='attended';}).length,
+    changes:state.content.filter(function(i){return i.status==='changes';}).length,
+    weekTotal:wk.length,
+    lateSchools:lateSchools.length,
+    lateLeads:lateLeads.length,
+    late:lateSchools.length+lateLeads.length,
+    visited:state.schools.filter(function(s){return !!s.lastVisit;}).length,
+    signed:state.schools.filter(function(s){return s.stage==='signed';}).length,
+    schools:state.schools.length,
+    events:state.events.length,
+    attended:state.events.filter(function(e){return e.status==='attended';}).length,
+    leads:state.leads.length,
+    hot:state.leads.filter(function(l){return l.interest==='hot';}).length,
+    converted:state.leads.filter(function(l){return l.outcome==='converted';}).length
+  };
+}
+function renderRollup(){
+  var s=stats();
+  var tiles=[
+    {n:s.cleared,l:'Cleared to post<br>this week',c:'ok',sub:s.weekTotal?s.weekTotal+' planned · '+s.posted+' already out':'nothing planned yet',go:'content'},
+    {n:s.waiting+s.eventsPending,l:'Waiting on<br>your decision',c:'warn',sub:s.waiting+' post'+(s.waiting===1?'':'s')+' · '+s.eventsPending+' event'+(s.eventsPending===1?'':'s'),go:'approvals'},
+    {n:s.late,l:'Follow-ups<br>past due',c:s.late?'bad':'ok',sub:s.lateSchools+' school · '+s.lateLeads+' lead',go:'approvals'},
+    {n:s.signed,l:'Schools<br>signed',c:'ok',sub:'of '+SCHOOL_TARGET+'–30 by December',go:'schools'},
+    {n:s.visited,l:'Schools<br>visited',c:'cool',sub:s.schools+' on the list',go:'schools'},
+    {n:s.leads,l:'Leads from<br>events',c:'hot',sub:s.hot+' hot · '+s.converted+' converted',go:'events'},
+    {n:s.eventsGoing,l:'Events<br>approved',c:'cool',sub:s.events+' considered · '+s.attended+' attended',go:'events'}
+  ];
+  $('rollup').innerHTML=tiles.map(function(t){
+    return '<button type="button" class="rstat '+t.c+'" data-goto="'+t.go+'">'
+      +'<div class="n">'+t.n+'</div><div class="l">'+t.l+'</div><div class="sub2">'+esc(t.sub)+'</div></button>';
+  }).join('');
+  Array.prototype.forEach.call($('rollup').querySelectorAll('[data-goto]'),function(b){
+    b.addEventListener('click',function(){setTab(b.getAttribute('data-goto'));});
+  });
+  $('rollup-when').textContent=state.updatedAt
+    ? 'Last update '+fmtStamp(state.updatedAt)+(state.updatedBy?' by '+state.updatedBy:'')
+    : 'Nothing logged yet';
+  var b=function(id,n){var el=$(id);el.textContent=n;el.className='badge'+(n?'':' zero');};
+  b('badge-approvals',s.waiting+s.eventsPending+s.late);
+  b('badge-content',s.waiting);
+  b('badge-schools',s.lateSchools);
+  b('badge-events',s.lateLeads+s.eventsPending);
+}
+
+/* ═══ NEEDS YOU ═════════════════════════════════════════════ */
+function renderQueue(){
+  var waiting=state.content.filter(function(i){return i.status==='review';})
+    .sort(function(a,b){return String(a.date||'zz').localeCompare(String(b.date||'zz'))||byTime(a,b);});
+  $('q-content-count').textContent=waiting.length?waiting.length+' waiting':'';
+  $('q-content').innerHTML=waiting.length?waiting.map(function(i){
+    return '<div class="qrow" data-open="content" data-id="'+esc(i.id)+'">'
+      +'<div class="q-when">'+esc(i.date?fmtShort(i.date):'no date')+(i.time?'<br>'+esc(i.time):'')+'</div>'
+      +'<div class="q-body"><div class="q-title">'+esc(i.title||'Untitled post')+(i.reopened?' <span class="chip" style="background:var(--danger-light);color:var(--danger)">edited after sign-off</span>':'')+'</div>'
+      +'<div class="q-meta">'+esc(i.channel||'')+(i.format?' · '+esc(i.format):'')+(i.owner?' · '+esc(i.owner):'')
+      +(i.asset?'':' · <b style="color:var(--danger)">no asset attached</b>')+'</div></div>'
+      +'<div class="q-acts">'+(isApprover()?'<button class="btn btn-go" type="button" data-approve="'+esc(i.id)+'">✓ Clear it</button>':'')
+      +'<button class="btn" type="button" data-open="content" data-id="'+esc(i.id)+'">Open</button></div></div>';
+  }).join(''):'<div class="qempty"><b>Nothing waiting</b>Everything the team has sent through has been dealt with.</div>';
+
+  var pendingEvents=state.events.filter(function(e){return e.status==='pending'||e.status==='queries';})
+    .sort(function(a,b){return String(a.startDate||'zz').localeCompare(String(b.startDate||'zz'));});
+  $('q-events-count').textContent=pendingEvents.length?pendingEvents.length+' to decide':'';
+  $('q-events').innerHTML=pendingEvents.length?pendingEvents.map(function(e){
+    var d=daysUntil(e.startDate);
+    return '<div class="qrow" data-open="event" data-id="'+esc(e.id)+'">'
+      +'<div class="q-when'+(d!==null&&d<14?' ':'')+'">'+esc(e.startDate?fmtShort(e.startDate):'no date')
+      +(d!==null&&d>=0?'<br>in '+d+'d':(d!==null?'<br>past':''))+'</div>'
+      +'<div class="q-body"><div class="q-title">'+esc(e.name||'Unnamed event')+'</div>'
+      +'<div class="q-meta">'+esc(e.audience||e.type||'')+(e.cost?' · '+esc(e.cost):'')
+      +(e.motivation?' — '+esc(e.motivation):'')+'</div></div>'
+      +'<div class="q-acts">'+(isApprover()?'<button class="btn btn-go" type="button" data-goevent="'+esc(e.id)+'">✓ We go</button>':'')
+      +'<button class="btn" type="button" data-open="event" data-id="'+esc(e.id)+'">Open</button></div></div>';
+  }).join(''):'<div class="qempty"><b>Nothing to decide</b>Every event the team has put forward has an answer.</div>';
+
+  var late=[];
+  state.schools.filter(schoolLate).forEach(function(s){
+    late.push({kind:'school',id:s.id,due:s.followDue,title:s.name||'Unnamed school',
+      meta:(s.followUp||'Follow-up outstanding')+(s.followOwner?' · '+s.followOwner:'')});
+  });
+  state.leads.filter(leadLate).forEach(function(l){
+    late.push({kind:'lead',id:l.id,due:l.followDue,title:(l.name||l.org||'Unnamed lead'),
+      meta:(l.org?l.org+' · ':'')+(l.eventId?eventName(l.eventId):'no event')+(l.owner?' · '+l.owner:'')});
+  });
+  late.sort(function(a,b){return String(a.due).localeCompare(String(b.due));});
+  $('q-follow-count').textContent=late.length?late.length+' late':'';
+  $('q-follow').innerHTML=late.length?late.map(function(f){
+    return '<div class="qrow" data-open="'+f.kind+'" data-id="'+esc(f.id)+'">'
+      +'<div class="q-when" style="color:var(--danger);font-weight:700">'+Math.abs(daysUntil(f.due))+'d late</div>'
+      +'<div class="q-body"><div class="q-title">'+esc(f.title)+'</div><div class="q-meta">'+esc(f.meta)+'</div></div>'
+      +'<div class="q-acts"><button class="btn" type="button" data-open="'+f.kind+'" data-id="'+esc(f.id)+'">Open</button></div></div>';
+  }).join(''):'<div class="qempty"><b>Nothing late</b>Every school and lead follow-up is either done or still has time on it.</div>';
+
+  var cleared=weekItems().filter(function(i){return i.status==='approved';})
+    .sort(function(a,b){return String(a.date||'zz').localeCompare(String(b.date||'zz'))||byTime(a,b);});
+  $('q-cleared-count').textContent=cleared.length?cleared.length+' cleared':'';
+  $('q-cleared').innerHTML=cleared.length?cleared.map(function(i){
+    return '<div class="qrow" data-open="content" data-id="'+esc(i.id)+'">'
+      +'<div class="q-when">'+esc(i.date?fmtShort(i.date):'no date')+(i.time?'<br>'+esc(i.time):'')+'</div>'
+      +'<div class="q-body"><div class="q-title">'+esc(i.title||'Untitled post')+'</div>'
+      +'<div class="q-meta">'+esc(i.channel||'')+' · cleared by '+esc(i.approvedBy||'—')+' on '+esc(fmtStamp(i.approvedAt))+'</div></div>'
+      +'<div class="q-acts"><button class="btn" type="button" data-open="content" data-id="'+esc(i.id)+'">Open</button></div></div>';
+  }).join(''):'<div class="qempty">Nothing cleared for this week yet.</div>';
+
+  Array.prototype.forEach.call(document.querySelectorAll('#panel-approvals [data-approve]'),function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();approveById(b.getAttribute('data-approve'));});
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#panel-approvals [data-goevent]'),function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();approveEventById(b.getAttribute('data-goevent'));});
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#panel-approvals [data-open]'),function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();openDrawer(b.getAttribute('data-open'),b.getAttribute('data-id'));});
+  });
+}
+
+function render(){
+  renderRollup();renderQueue();renderContent();renderSchools();renderLeads();renderEvents();
+  refreshEventFilter();
+}
+
+/* ═══ EXPORT ════════════════════════════════════════════════ */
+function csvCell(v){var s=String(v==null?'':v);return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function csv(head,rows){return '﻿'+head.join(',')+'\n'+rows.map(function(r){return r.map(csvCell).join(',');}).join('\n');}
+function download(name,text,type,done){
+  if(saver){
+    saver.save({filename:name,data:text}).then(function(){if(done)done();},function(err){
+      var code=(err&&err.code)||'unavailable';
+      if(code==='declined')return;
+      if(code==='extension_not_enabled'||code==='rejected_extension'){
+        /* CSV is not always allowed here — same file, .txt name, opens in Sheets. */
+        saver.save({filename:name.replace(/\.[^.]+$/,'')+'.txt',data:text}).then(function(){
+          toast('Saved as a .txt file — it is still the same spreadsheet, so open it with File → Import in Sheets or Excel.','good');
+        },function(e2){
+          if((e2&&e2.code)!=='declined')toast('This view could not save the file. Open the workbook on the OS site to export it.','bad');
+        });
+        return;
+      }
+      toast('This view could not save the file. Open the workbook on the OS site to export it.','bad');
+    });
+    return;
+  }
+  var blob=new Blob([text],{type:type||'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},600);
+  if(done)done();
+}
+function exportContent(){
+  var rows=weekItems().slice().sort(function(a,b){return String(a.date||'zz').localeCompare(String(b.date||'zz'))||byTime(a,b);});
+  if(!rows.length){toast('Nothing on this week to export.','bad');return;}
+  download('BridgeApp_Content_Week_'+selWeek+'.csv',csv(
+    ['Week','Date','Time','Channel','Format','Title','Caption','Hashtags','CTA','Asset link','Engine','Owner','Status','Cleared by','Cleared at','DD note','Live link','Posted at','Results'],
+    rows.map(function(i){return [selWeek,i.date,i.time,i.channel,i.format,i.title,i.caption,i.hashtags,i.cta,i.asset,i.engine,i.owner,label(STATUSES,i.status),i.approvedBy,i.approvedAt,i.notes,i.postedUrl,i.postedAt,i.results];})
+  ),'text/csv;charset=utf-8',function(){toast('CSV exported — drop it in the Drive folder.','good');});
+}
+function exportSchools(){
+  if(!state.schools.length){toast('No schools logged yet.','bad');return;}
+  download('BridgeApp_Schools_'+todayISO()+'.csv',csv(
+    ['School','Sector','Province','Town','Website','Learners','Contact','Role','Email','Phone','Last contact','How','Who went','Status','Contract value','Follow-up needed','Follow-up owner','Due','Done','Notes'],
+    state.schools.map(function(s){return [s.name,s.type,s.province,s.city,s.website,s.learners,s.contact,s.role,s.email,s.phone,s.lastVisit,s.visitType,s.visitedBy,label(STAGES,s.stage),s.fee,s.followUp,s.followOwner,s.followDue,s.followDone?'Yes':'No',s.notes];})
+  ),'text/csv;charset=utf-8',function(){toast('Schools exported.','good');});
+}
+function exportEvents(){
+  if(!state.events.length&&!state.leads.length){toast('No events or leads logged yet.','bad');return;}
+  if(state.events.length)download('BridgeApp_Events_'+todayISO()+'.csv',csv(
+    ['Event','Type','Who it is for','Starts','Ends','Venue','City','Province','Contact','Status','Decided by','Decided at','Who goes','Cost estimate','Why we would go','Next action','Turnout expected','Turnout actual','Spoke to','Leads captured','Outcome','Notes','What worked','What did not'],
+    state.events.map(function(e){return [e.name,e.type,e.audience,e.startDate,e.endDate,e.venue,e.city,e.province,e.contact,label(EVENT_STATUS,e.status),e.decidedBy,e.decidedAt,e.team,e.cost,e.motivation,e.nextAction,e.expected,e.actual,e.conversations,leadsFor(e.id).length,e.outcome,e.notes,e.worked,e.didnt];})
+  ),'text/csv;charset=utf-8');
+  if(state.leads.length)download('BridgeApp_Leads_'+todayISO()+'.csv',csv(
+    ['Lead','Organisation','Role','Type','Email','Phone','From event','Interest','What they want','Follow-up owner','Due','Follow-up','Outcome','Value','Notes'],
+    state.leads.map(function(l){return [l.name,l.org,l.role,l.type,l.email,l.phone,eventName(l.eventId),label(INTEREST,l.interest),l.want,l.owner,l.followDue,label(FOLLOW,l.follow),label(OUTCOMES,l.outcome),l.value,l.notes];})
+  ),'text/csv;charset=utf-8',function(){
+    toast('Exported '+(state.events.length&&state.leads.length?'two files — events and leads':'the file')+'.','good');
+  });
+}
+function copyApproved(){
+  var rows=weekItems().filter(function(i){return i.status==='approved';})
+    .sort(function(a,b){return String(a.date||'zz').localeCompare(String(b.date||'zz'))||byTime(a,b);});
+  if(!rows.length){toast('Nothing is cleared to post on this week yet.','bad');return;}
+  var out='GRADESMATCH · BRIDGEAPP — CLEARED TO POST\nWeek of '+fmtDate(selWeek)+'\n', last=null;
+  rows.forEach(function(i){
+    if(i.date!==last){out+='\n— '+(i.date?fmtDate(i.date).toUpperCase():'NO DATE SET')+' —\n';last=i.date;}
+    out+='\n'+(i.time?i.time+' · ':'')+i.channel+(i.format?' ('+i.format+')':'')+(i.owner?' · '+i.owner:'')+'\n'+i.title+'\n';
+    if(i.asset)out+='Asset: '+i.asset+'\n';
+    if(i.caption)out+=i.caption+'\n';
+    if(i.hashtags)out+=i.hashtags+'\n';
+    if(i.cta)out+='CTA: '+i.cta+'\n';
+    out+='Cleared by '+(i.approvedBy||'—')+'\n';
+  });
+  copyText(out);
+}
+function copyText(text){
+  var done=function(){toast('Copied — paste it into the team WhatsApp.','good');};
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+    navigator.clipboard.writeText(text).then(done,function(){fallbackCopy(text,done);});
+  else fallbackCopy(text,done);
+}
+function fallbackCopy(text,done){
+  var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');done();}catch(e){toast('Could not copy automatically — export the CSV instead.','bad');}
+  ta.remove();
+}
+function snapshot(){
+  download(SNAPSHOT,JSON.stringify(state,null,1),'application/json',function(){
+    toast('os_snapshot.json saved. Upload it to 04_Team_Workbooks/ in the repo and the whole team sees these numbers on the OS.','good');
+  });
+}
+function backup(){
+  download('BridgeApp_TeamWorkbooks_'+todayISO()+'.json',JSON.stringify(state,null,1),'application/json',function(){
+    toast('Backup saved.','good');
+  });
+}
+function restore(e){
+  var file=e.target.files&&e.target.files[0];if(!file)return;
+  var fr=new FileReader();
+  fr.onload=function(){
+    var data;
+    try{data=JSON.parse(fr.result);}catch(err){toast('That file is not a workbook backup.','bad');return;}
+    var incoming=normalise(data);
+    if(!incoming){toast('That file is not a team workbook backup.','bad');return;}
+    var added=0;
+    [['content','content'],['schools','schools'],['events','events'],['leads','leads']].forEach(function(pair){
+      var seen={};state[pair[0]].forEach(function(i){seen[i.id]=true;});
+      incoming[pair[1]].forEach(function(i){if(!seen[i.id]){state[pair[0]].push(i);added++;}});
+    });
+    save();render();
+    toast(added?('Restored — '+added+' record'+(added===1?'':'s')+' added.'):'Nothing new in that file — everything was already here.','good');
+  };
+  fr.readAsText(file);
+  e.target.value='';
+}
+
+/* ═══ WIRING ════════════════════════════════════════════════ */
+function fillSel(id,list,useObj){
+  var sel=$(id);
+  (list||[]).forEach(function(o){
+    var op=document.createElement('option');
+    op.value=useObj?o.id:o;op.innerHTML=useObj?o.label:esc(o);
+    sel.appendChild(op);
+  });
+}
+function refreshEventFilter(){
+  var sel=$('lf-event'),cur=sel.value;
+  sel.innerHTML='<option value="">All events</option>'+state.events.map(function(e){
+    return '<option value="'+esc(e.id)+'">'+esc(e.name||'Unnamed event')+'</option>';
+  }).join('');
+  sel.value=cur;
+}
+function start(){
+  var sel=$('who');
+  sel.innerHTML=PEOPLE.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+(p.approver?' — approver':'')+'</option>';}).join('');
+  sel.value=who();
+  if(!sel.value){
+    sel.value='Guest';
+    try{localStorage.setItem(LS_WHO,'Guest');}catch(e){}
+  }
+  sel.addEventListener('change',function(){
+    try{localStorage.setItem(LS_WHO,sel.value);}catch(e){}
+    render();
+    if(openKind&&openId)openDrawer(openKind,openId);
+    toast('Working as '+sel.options[sel.selectedIndex].text);
+  });
+
+  fillSel('cf-status',STATUSES,true);fillSel('cf-channel',CHANNELS);fillSel('cf-owner',PEOPLE.map(function(p){return{id:p.id,label:esc(p.name)};}),true);fillSel('cf-engine',ENGINES,true);
+  fillSel('sf-stage',STAGES,true);fillSel('sf-province',PROVINCES);fillSel('sf-owner',PEOPLE.map(function(p){return{id:p.id,label:esc(p.name)};}),true);
+  fillSel('lf-interest',INTEREST,true);fillSel('lf-follow',FOLLOW,true);fillSel('lf-owner',PEOPLE.map(function(p){return{id:p.id,label:esc(p.name)};}),true);
+
+  Array.prototype.forEach.call($('tabs').querySelectorAll('button'),function(b){
+    b.addEventListener('click',function(){setTab(b.getAttribute('data-tab'));});
+  });
+  window.addEventListener('hashchange',function(){setTab(tabFromHash(),true);});
+
+  $('wk-prev').addEventListener('click',function(){selWeek=addDays(selWeek,-7);render();});
+  $('wk-next').addEventListener('click',function(){selWeek=addDays(selWeek,7);render();});
+  $('wk-today').addEventListener('click',function(){selWeek=weekOf(todayISO());render();});
+  $('btn-new-content').addEventListener('click',function(){openDrawer('content',null);});
+  $('btn-new-school').addEventListener('click',function(){openDrawer('school',null);});
+  $('btn-new-event').addEventListener('click',function(){openDrawer('event',null);});
+  $('btn-new-lead').addEventListener('click',function(){openDrawer('lead',null);});
+  $('btn-csv-content').addEventListener('click',exportContent);
+  $('btn-csv-schools').addEventListener('click',exportSchools);
+  $('btn-csv-events').addEventListener('click',exportEvents);
+  $('btn-copy').addEventListener('click',copyApproved);
+  $('btn-snapshot').addEventListener('click',snapshot);
+  $('btn-backup').addEventListener('click',backup);
+  $('btn-restore').addEventListener('click',function(){$('file-in').click();});
+  $('file-in').addEventListener('change',restore);
+  $('drawer-close').addEventListener('click',closeDrawer);
+  $('scrim').addEventListener('click',closeDrawer);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDrawer();});
+
+  filterBind(['cf-status','cf-channel','cf-owner','cf-engine'],'cf-q','cf-clear',cFilters,
+    {'cf-status':'status','cf-channel':'channel','cf-owner':'owner','cf-engine':'engine'});
+  filterBind(['sf-stage','sf-province','sf-owner','sf-due'],'sf-q','sf-clear',sFilters,
+    {'sf-stage':'stage','sf-province':'province','sf-owner':'owner','sf-due':'due'});
+  filterBind(['lf-event','lf-interest','lf-follow','lf-owner'],'lf-q','lf-clear',lFilters,
+    {'lf-event':'event','lf-interest':'interest','lf-follow':'follow','lf-owner':'owner'});
+
+  /* another tab on this browser changed the workbook — pick it up live */
+  window.addEventListener('storage',function(e){
+    if(e.key!==LS_KEY||mode!=='local')return;
+    var next=null;try{next=JSON.parse(e.newValue||'null');}catch(err){}
+    if(!next)return;
+    state=normalise(next)||state;render();
+    setSync('ok','Updated from another tab');
+  });
+
+  setTab(tabFromHash(),true);
+  render();
+}
+function filterBind(ids,qId,clearId,store,map){
+  ids.forEach(function(id){
+    $(id).addEventListener('change',function(){store[map[id]]=$(id).value;render();});
+  });
+  $(qId).addEventListener('input',function(){store.q=$(qId).value.toLowerCase();render();});
+  $(clearId).addEventListener('click',function(){
+    Object.keys(store).forEach(function(k){store[k]='';});
+    ids.concat([qId]).forEach(function(id){$(id).value='';});
+    render();
+  });
+}
+
+boot();
+})();
+
+</script>
+</body>
+</html>

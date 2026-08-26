@@ -1,7 +1,7 @@
 # BridgeApp × Future Club — Phase 2 Operating System
 
 > South Africa's most aspirational youth excellence brand.
-> One operating system. Eight deliverables. May – December 2026.
+> One operating system. Nine deliverables. May – December 2026.
 
 **Built by [Blank Canvas Agency](mailto:info@blankcanvasafrica.co.za)** · OS v2.0 · Last updated May 2026
 
@@ -37,6 +37,28 @@ Every file here ladders to one of three outcomes:
 | **`BridgeApp_SA_RegionalSalesMap.html`** | Live SA provincial sales dashboard — pipeline by region, school priorities | Kefiloe | Weekly |
 | **`BridgeApp_FCLaunch_SocialPoster.html`** | Brand-aligned Instagram-ratio Future Club launch poster | Sememi | Per campaign |
 | **`BridgeApp_SchoolCompetition_Emailer.html`** | School competition launch email — outreach to 250+ schools | Kefiloe | Per wave |
+| **`04_Team_Workbooks/index.html`** | **Team Workbooks** — content board + sign-off, schools tracker, events & leads tracker. Feeds the OS roll-up live | Whole team · sign-off DD | Daily |
+
+### Team workbooks
+
+`04_Team_Workbooks/index.html` — one page, three workbooks, one shared store.
+
+| Tab | Who works in it | What goes in |
+|-----|----------------|--------------|
+| **Needs you** | DD | Everything waiting on a sign-off, every follow-up that has gone past its date, and the list of what is cleared to post this week |
+| **Content board** | Sememi | The week's posts — graphic or video link, channel, format, caption, hashtags, CTA. DD approves; only then does a post read **Cleared to post** |
+| **Schools** | Kefiloe | Every school visited — who we saw, how they responded, where it sits in the pipeline, what the follow-up is and when it is due |
+| **Events & leads** | Sales team | Every exhibition and conference — turnout, who we spoke to, what it cost — and every lead it produced, with its owner, due date and outcome |
+
+Direct links for the team: `#content` · `#schools` · `#events` · `#approvals`
+
+**The sign-off rule.** Nobody posts anything that does not read *Cleared to post*. Only DD can clear it, and a post with no asset link cannot be cleared. If anyone edits the caption, asset, channel or date **after** sign-off, the approval is automatically withdrawn and the post goes back to DD — so what gets posted is always what was approved.
+
+**How it reaches the OS.** Every save updates the roll-up at the top of the workbook and the **Live from the team workbooks** panel on the master dashboard — cleared to post, waiting on sign-off, follow-ups past due, schools signed, leads captured. No copying numbers across by hand.
+
+**Where the data sits.** Opened from this site, the workbook saves to that person's browser and the master OS on the same site reads it live. To put the team's numbers in front of everyone, press **Publish to OS**, then upload the downloaded `os_snapshot.json` into `04_Team_Workbooks/` the same way you upload any other file. For one board the whole team edits at the same time, use the Claude Artifact copy of the workbook, where every save is shared instantly.
+
+**Getting data out.** Every workbook exports CSV for Drive or Sheets, and **Copy approved list** puts the week's cleared posts on the clipboard, formatted for the team WhatsApp.
 
 ### Brand outputs folder
 
@@ -58,6 +80,7 @@ Every file here ladders to one of three outcomes:
 ## 🔗 Quick Access Links
 
 ### For the team
+- **Team Workbooks** — `/04_Team_Workbooks/` ← the week's content, schools and events
 - **Master OS dashboard** — `/`
 - **OS Directory** — `/BridgeApp_OS_Directory.html`
 - **Sales Map (Kefiloe)** — `/BridgeApp_SA_RegionalSalesMap.html`
@@ -68,12 +91,17 @@ Every file here ladders to one of three outcomes:
 - **Demo Review Card** — `/BridgeApp_DemoReviewCard.html`
 
 ### For school outreach
+- **Schools tracker (Kefiloe)** — `/04_Team_Workbooks/#schools`
 - **Sales Map** — `/BridgeApp_SA_RegionalSalesMap.html`
 - **School Competition Emailer** — `/BridgeApp_SchoolCompetition_Emailer.html`
 - **MOU Template** — `/03_Brand_Outputs/btl_pod/school_mou_template.html`
 
 ### For social
+- **Content board & sign-off** — `/04_Team_Workbooks/#content`
 - **FC Launch Poster** — `/BridgeApp_FCLaunch_SocialPoster.html`
+
+### For events & exhibitions
+- **Events & leads tracker** — `/04_Team_Workbooks/#events`
 
 ---
 
@@ -81,10 +109,10 @@ Every file here ladders to one of three outcomes:
 
 | Owner | Role | Responsible for |
 |-------|------|----------------|
-| **Ditshego Ditshego (DD)** | Agency Lead · Director | Master OS · Demo Review Card · Client Report · weekly retros · brand QA · Friday data review |
-| **Nono Ditshego** | Social Media Intern | FC Live Tracker · social posts · daily community management · weekly analytics · WhatsApp drops |
-| **Kefiloe Mametse** | School Outreach & Sales | School pipeline · sales map · school emailer waves · pod MOUs · conference leads · golf clinic invites · CRM logs |
-| **Sememi Mosupye** | Junior Brand & Creative | Social posters · Reel title cards · email templates · brand library · CapCut edits · Canva masters |
+| **Ditshego Ditshego (DD)** | Agency Lead · Director | Master OS · **content sign-off in the Team Workbooks** · Demo Review Card · Client Report · weekly retros · brand QA · Friday data review |
+| **Social — vacant** | *Needs an owner* | Content board entries · FC Live Tracker (Friday update) · social posts · daily community management · weekly analytics · WhatsApp drops · trending audio |
+| **Kefiloe Mametse** | School Outreach & Sales | **Schools tracker + events & leads tracker** · School pipeline · sales map · school emailer waves · pod MOUs · conference leads · golf clinic invites · CRM logs |
+| **Sememi Mosupye** | Junior Brand & Creative | Content board entries · Social posters · Reel title cards · email templates · brand library · CapCut edits · Canva masters |
 
 ---
 
@@ -138,6 +166,8 @@ Every file here ladders to one of three outcomes:
 5. Commit changes → URL updates automatically (no DNS, no rebuild needed)
 
 The team workflow stays the same — Drive for organised storage, GitHub for live access.
+
+**The Team Workbooks are the exception.** Nobody needs Claude to update those — the team types straight into `04_Team_Workbooks/` and the numbers on the master OS move on their own. The only time a workbook file gets uploaded is when someone presses **Publish to OS** and drops the `os_snapshot.json` into the folder so everyone sees the same totals.
 
 ---
 

@@ -38,6 +38,8 @@ Every file here ladders to one of three outcomes:
 | **`BridgeApp_FCLaunch_SocialPoster.html`** | Brand-aligned Instagram-ratio Future Club launch poster | Sememi | Per campaign |
 | **`BridgeApp_SchoolCompetition_Emailer.html`** | School competition launch email — outreach to 250+ schools | Kefiloe | Per wave |
 | **`04_Team_Workbooks/index.html`** | **Team Workbooks** — content board + sign-off, schools tracker, events & leads tracker. Feeds the OS roll-up live | Whole team · sign-off DD | Daily |
+| **`04_Team_Workbooks/apps_script/Code.gs`** | The Apps Script that turns a Google Sheet into the shared store behind the workbooks | DD | Once |
+| **`04_Team_Workbooks/os_snapshot.json`** | Fallback data so the dashboard is never blank for someone not connected to the Sheet | Auto | Per publish |
 
 ### Team workbooks
 
@@ -56,7 +58,30 @@ Direct links for the team: `#content` · `#schools` · `#events` · `#approvals`
 
 **How it reaches the OS.** Every save updates the roll-up at the top of the workbook and the **Live from the team workbooks** panel on the master dashboard — cleared to post, waiting on sign-off, follow-ups past due, schools signed, leads captured. No copying numbers across by hand.
 
-**Where the data sits.** Opened from this site, the workbook saves to that person's browser and the master OS on the same site reads it live. To put the team's numbers in front of everyone, press **Publish to OS**, then upload the downloaded `os_snapshot.json` into `04_Team_Workbooks/` the same way you upload any other file. For one board the whole team edits at the same time, use the Claude Artifact copy of the workbook, where every save is shared instantly.
+**Where the data sits.** The workbook looks for its data in three places, in this order:
+
+1. **The team Sheet** — a Google Sheet of your own, reached through a small Apps Script. This is the one to use: everybody edits the same board, changes cross between people within about ten seconds, and the OS dashboard reads the same numbers. Setup below.
+2. **This browser** — if no Sheet is connected. Private to that person and that device.
+3. **`os_snapshot.json`** — the committed fallback, so a fresh visitor still sees the real pipeline instead of an empty board.
+
+### Connecting the team Sheet — once, about five minutes
+
+1. Make a new Google Sheet. Call it **Gradesmatch Team Workbooks**.
+2. In it: **Extensions → Apps Script**.
+3. Delete what's in the editor. Paste in all of [`04_Team_Workbooks/apps_script/Code.gs`](04_Team_Workbooks/apps_script/Code.gs). Save.
+4. **Deploy → New deployment → ⚙ → Web app.** Execute as **Me**, Who has access **Anyone**. Deploy, then authorise it.
+5. Copy the **Web app URL** (it ends in `/exec`).
+6. Open the workbook, press **Team Sheet**, paste the URL.
+7. Send the team this link and they're connected in one click, nothing to paste:
+   `…/04_Team_Workbooks/?api=PASTE_THE_URL_HERE`
+
+The first person to connect pushes the imported book into the Sheet, so the team starts on the real pipeline.
+
+**Treat that URL like a key.** Anyone who has it can write to the Sheet, so it goes in WhatsApp or email — never into this repo, which is public. That's why the workbook keeps it in each person's browser rather than in the page. If it ever leaks: Apps Script → **Deploy → Manage deployments → Archive**, then deploy again for a fresh URL.
+
+**Reading the Sheet directly.** Each workbook gets its own tab, in plain readable columns, so the Sheet is worth opening for reporting or a quick filter. Edit in the workbook though, not in the Sheet — the app round-trips through the hidden `_json` column, so typing into a readable cell won't take.
+
+**If the Sheet is unreachable**, the workbook says so and drops back to that browser rather than locking anyone out. Nothing is lost; reconnect when it's back.
 
 **Getting data out.** Every workbook exports CSV for Drive or Sheets, and **Copy approved list** puts the week's cleared posts on the clipboard, formatted for the team WhatsApp.
 
@@ -167,7 +192,7 @@ Direct links for the team: `#content` · `#schools` · `#events` · `#approvals`
 
 The team workflow stays the same — Drive for organised storage, GitHub for live access.
 
-**The Team Workbooks are the exception.** Nobody needs Claude to update those — the team types straight into `04_Team_Workbooks/` and the numbers on the master OS move on their own. The only time a workbook file gets uploaded is when someone presses **Publish to OS** and drops the `os_snapshot.json` into the folder so everyone sees the same totals.
+**The Team Workbooks are the exception.** Nobody needs Claude to update those — the team types straight into `04_Team_Workbooks/` and, with the team Sheet connected, everyone else and the master OS dashboard see it within seconds. No uploads, no copying numbers across.
 
 ---
 

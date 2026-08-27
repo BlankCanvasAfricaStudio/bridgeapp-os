@@ -187,6 +187,7 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 .mode-note b{color:var(--navy)}
 .mode-note.local{border-left-color:var(--yellow)}
 .mode-note.ro{border-left-color:var(--orange)}
+.mode-note.cloud{border-left-color:var(--success)}
 
 .empty{background:var(--white);border-radius:13px;padding:44px 30px;text-align:center}
 .empty h3{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--navy);margin-bottom:6px}
@@ -354,6 +355,7 @@ td.nowrap{white-space:nowrap}
 </div>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 <div class="syncbar"><span class="syncdot" id="syncdot"></span><span id="syncmsg">Ready</span></div>
+<button class="btn" type="button" id="btn-connect">Team Sheet</button>
 <button class="btn" type="button" id="btn-snapshot">Publish to OS</button>
 <button class="btn" type="button" id="btn-backup">Backup</button>
 <button class="btn" type="button" id="btn-restore">Restore</button>
@@ -521,6 +523,7 @@ td.nowrap{white-space:nowrap}
 'use strict';
 
 var DATA_PATH='data/team_workbooks.json';
+var TABS=['content','schools','events','leads'];
 var LS_KEY='ba_os_v1';
 var LS_WHO='ba_wb_who';
 var SNAPSHOT='os_snapshot.json';
@@ -596,6 +599,14 @@ var NOTE_PH='Awaiting the invoice from the organisers · Contract still to be si
 /* ── STATE ──────────────────────────────────────────────────── */
 var state=blank();
 var shared=null, saver=null, mode='local', canWrite=true;
+/* Cloud mode: the team Sheet, reached through the Apps Script web app.
+   The endpoint is a key, so it lives in each person's browser — never in
+   this file, which sits in a public repo. */
+var LS_API='ba_os_api';
+var api=null, pollTimer=null, pulling=false;
+var pending={content:{},schools:{},events:{},leads:{}};
+var pendingDel={content:{},schools:{},events:{},leads:{}};
+var pushTimer=null, pushing=false, pushAgain=false;
 var pubTimer=null, pubBusy=false, pubQueued=false;
 var selWeek=weekOf(todayISO());
 var tab='approvals';
@@ -649,7 +660,7 @@ function save(){
   state.updatedBy=who();
   mirror();
   if(mode==='shared'&&canWrite)queuePublish();
-  else setSync('ok','Saved · OS updated');
+  else if(mode!=='cloud')setSync('ok','Saved · OS updated');
 }
 function queuePublish(){clearTimeout(pubTimer);setSync('busy','Saving…');pubTimer=setTimeout(publish,900);}
 function publish(){
@@ -693,7 +704,70 @@ function normalise(d){
   return out;
 }
 
+function bootCloud(){
+  mode='cloud';
+  setSync('busy','Opening the team Sheet\u2026');
+  fetch(api+(api.indexOf('?')<0?'?':'&')+'action=state',{cache:'no-store'})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res||!res.ok)throw new Error((res&&res.error)||'The Sheet did not answer properly.');
+      state=normalise(res.state)||blank();
+      /* First run against an empty Sheet: push the imported book up so the
+         team starts on the real pipeline rather than a blank board. */
+      if(!state.content.length&&!state.schools.length&&!state.events.length&&!state.leads.length){
+        var seed=seedState();
+        if(seed){
+          state=seed;
+          TABS.forEach(function(t){state[t].forEach(function(r){pending[t][r.id]=r;});});
+          schedulePush();
+        }
+      }
+      mirror();
+      setSync('ok','Live on the team Sheet');
+      showModeNote('cloud','<span><b>You are on the team Sheet.</b> What you save here reaches the rest of the team within seconds, and the OS dashboard reads the same numbers. <button class="btn btn-ghost" type="button" id="api-forget" style="padding:2px 8px;margin-left:4px">Disconnect this browser</button></span>');
+      start();startPolling();
+      var f=$('api-forget');
+      if(f)f.addEventListener('click',function(){
+        if(!window.confirm('Disconnect this browser from the team Sheet? Your work stays in the Sheet — this browser just stops reading it.'))return;
+        setApi('');location.reload();
+      });
+    })
+    .catch(function(err){
+      /* A bad or expired endpoint must never lock anyone out of their work. */
+      setSync('bad','Could not reach the Sheet');
+      mode='local';
+      var ls=null;try{ls=JSON.parse(localStorage.getItem(LS_KEY)||'null');}catch(e){}
+      state=normalise(ls)||seedState()||blank();
+      showModeNote('ro','<span><b>The team Sheet did not answer.</b> You are working in this browser for now — nothing is lost. <button class="btn btn-ghost" type="button" id="api-retry" style="padding:2px 8px;margin-left:4px">Try again</button></span>');
+      start();
+      var r=$('api-retry');
+      if(r)r.addEventListener('click',function(){location.reload();});
+    });
+}
+function connectPrompt(){
+  var cur=apiUrl();
+  var url=window.prompt(
+    'Paste the team Sheet link (the Web app URL from Apps Script, ending in /exec).\n\n'+
+    'DD sets this up once and sends it to the team. Leave it empty to disconnect.',cur||'');
+  if(url===null)return;
+  url=url.trim();
+  if(url&&!/^https:\/\/script\.google\.com\/.*\/exec/.test(url)){
+    toast('That does not look like an Apps Script Web app link. It should start with https://script.google.com/ and end in /exec.','bad');
+    return;
+  }
+  setApi(url);
+  location.reload();
+}
 function boot(){
+  /* A link can carry the endpoint so nobody has to paste anything:
+     .../04_Team_Workbooks/?api=<web app url>#schools */
+  var m=/[?&]api=([^&#]+)/.exec(location.search);
+  if(m){
+    try{
+      setApi(decodeURIComponent(m[1]));
+      history.replaceState(null,'',location.pathname+location.hash);
+    }catch(e){}
+  }
   try{
     if(window.claude&&typeof window.claude.use==='function'){
       /* Downloads are mediated when the page runs inside the Claude viewer;
@@ -714,6 +788,8 @@ function seedState(){
 }
 function onCap(cap){
   shared=cap||null;
+  api=apiUrl();
+  if(api&&!shared){bootCloud();return;}
   if(shared){
     mode='shared';
     fetch(DATA_PATH,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
@@ -725,7 +801,7 @@ function onCap(cap){
       });
   }else{
     mode='local';
-    var LOCAL_NOTE='<span><b>This copy saves to this browser.</b> The master OS dashboard on this site reads it live, so your approvals show up there straight away — but other people on other devices will not see them until you press <b>Publish to OS</b> and upload the file to the repo. For one board the whole team edits at once, open the Claude Artifact copy of this workbook.</span>';
+    var LOCAL_NOTE='<span><b>This copy saves to this browser.</b> The master OS dashboard on this site reads it live, so your approvals show up there straight away — but other people on other devices will not see them until you press <b>Publish to OS</b> and upload the file to the repo. To put the whole team on one live board, press <b>Team Sheet</b> above and connect it to your Google Sheet.</span>';
     var ls=null;try{ls=JSON.parse(localStorage.getItem(LS_KEY)||'null');}catch(e){}
     if(ls){
       state=normalise(ls)||blank();
@@ -748,6 +824,113 @@ function onCap(cap){
 }
 
 /* ── TABS ───────────────────────────────────────────────────── */
+/* ── THE TEAM SHEET ──────────────────────────────────────────────────
+   Every change is queued as a record-level upsert or delete, never as a
+   whole-state overwrite, so two people saving at the same moment merge
+   instead of wiping each other. */
+function apiUrl(){
+  try{return localStorage.getItem(LS_API)||'';}catch(e){return '';}
+}
+function setApi(url){
+  try{ if(url)localStorage.setItem(LS_API,url); else localStorage.removeItem(LS_API); }catch(e){}
+}
+function tabOf(kind){return kind==='school'?'schools':kind==='event'?'events':kind==='lead'?'leads':'content';}
+function queueUpsert(kind,rec){
+  if(!api||!rec||!rec.id)return;
+  pending[tabOf(kind)][rec.id]=rec;
+  schedulePush();
+}
+function queueDelete(kind,id){
+  if(!api||!id)return;
+  var t=tabOf(kind);
+  delete pending[t][id];
+  pendingDel[t][id]=true;
+  schedulePush();
+}
+function hasPending(){
+  return TABS.some(function(t){
+    return Object.keys(pending[t]).length||Object.keys(pendingDel[t]).length;
+  });
+}
+function schedulePush(){
+  clearTimeout(pushTimer);
+  setSync('busy','Saving to the team Sheet\u2026');
+  pushTimer=setTimeout(pushChanges,700);
+}
+function pushChanges(){
+  if(!api||!hasPending())return;
+  if(pushing){pushAgain=true;return;}
+  pushing=true;setSync('busy','Saving to the team Sheet\u2026');
+  var body={action:'sync',upserts:{},deletes:{}}, sent={upserts:{},deletes:{}};
+  TABS.forEach(function(t){
+    body.upserts[t]=Object.keys(pending[t]).map(function(k){return pending[t][k];});
+    body.deletes[t]=Object.keys(pendingDel[t]);
+    sent.upserts[t]=Object.keys(pending[t]);
+    sent.deletes[t]=Object.keys(pendingDel[t]);
+  });
+  /* text/plain keeps this a simple request — Apps Script cannot answer a
+     CORS preflight, so an application/json header would fail outright. */
+  fetch(api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res||!res.ok)throw new Error((res&&res.error)||'The Sheet refused that change.');
+      TABS.forEach(function(t){
+        sent.upserts[t].forEach(function(id){delete pending[t][id];});
+        sent.deletes[t].forEach(function(id){delete pendingDel[t][id];});
+      });
+      adopt(res.state);
+      setSync('ok','Saved to the team Sheet');
+    })
+    .catch(function(err){
+      setSync('bad','Could not reach the Sheet');
+      toast('That change could not reach the team Sheet. It is safe in this browser and will be sent again.','bad');
+    })
+    .then(function(){
+      pushing=false;
+      if(pushAgain){pushAgain=false;schedulePush();}
+      else if(hasPending())schedulePush();
+    });
+}
+function pullChanges(quiet){
+  if(!api||pulling||pushing||hasPending())return;
+  pulling=true;
+  fetch(api+(api.indexOf('?')<0?'?':'&')+'action=state',{cache:'no-store'})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res||!res.ok)return;
+      var before=stamp();
+      adopt(res.state);
+      if(before!==stamp()&&!quiet)setSync('ok','Updated from the team');
+    })
+    .catch(function(){ if(!quiet)setSync('bad','Could not reach the Sheet'); })
+    .then(function(){pulling=false;});
+}
+function stamp(){
+  return [state.content.length,state.schools.length,state.events.length,state.leads.length,state.updatedAt].join('|');
+}
+/* Whatever the Sheet says is the truth, except for edits still in flight
+   from this browser — those would otherwise flicker back to their old value. */
+function adopt(next){
+  var norm=normalise(next);
+  if(!norm)return;
+  TABS.forEach(function(t){
+    var mine=pending[t], gone=pendingDel[t];
+    norm[t]=norm[t].filter(function(r){return !gone[r.id];})
+      .map(function(r){return mine[r.id]||r;});
+    Object.keys(mine).forEach(function(id){
+      if(!norm[t].some(function(r){return r.id===id;}))norm[t].push(mine[id]);
+    });
+  });
+  state=norm;mirror();
+  if($('drawer').hidden)render();   /* never yank the form out from under someone */
+}
+function startPolling(){
+  clearInterval(pollTimer);
+  pollTimer=setInterval(function(){ if(!document.hidden)pullChanges(true); },10000);
+  window.addEventListener('focus',function(){pullChanges(true);});
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden)pullChanges(true); });
+}
+
 function setTab(next,silent){
   tab=next;
   Array.prototype.forEach.call($('tabs').querySelectorAll('button'),function(b){
@@ -824,6 +1007,7 @@ function commit(what){
   if(what)logEntry(what);
   if(prev){setColl(kind,coll(kind).map(function(i){return i.id===openId?draft:i;}));}
   else{logEntry('added this');coll(kind).push(draft);}
+  queueUpsert(kind,draft);
   save();render();closeDrawer();
   if(what)toast('Saved. The OS roll-up has been updated.','good');
 }
@@ -837,6 +1021,7 @@ function del(){
     if(orphans.length&&!window.confirm(orphans.length+' lead'+(orphans.length===1?' is':'s are')+' linked to this event. They will be kept but no longer linked. Continue?'))return;
     state.leads.forEach(function(l){if(l.eventId===openId)l.eventId='';});
   }
+  queueDelete(kind,openId);
   setColl(kind,coll(kind).filter(function(i){return i.id!==openId;}));
   save();render();closeDrawer();toast('Deleted.');
 }
@@ -1104,6 +1289,8 @@ function approveEventById(id){
   if(!e||!isApprover())return;
   e.status='approved';e.decidedBy=who();e.decidedAt=new Date().toISOString();
   e.log=e.log||[];e.log.push({t:new Date().toISOString(),who:who(),what:'approved the event'});
+  e.updatedBy=who();e.updatedAt=new Date().toISOString();
+  queueUpsert('event',e);
   save();render();toast('“'+(e.name||'Event')+'” is approved. The team can book it.','good');
 }
 /* quick approve straight from the "Needs you" queue */
@@ -1113,6 +1300,8 @@ function approveById(id){
   if(!(it.asset||'').trim()){toast('That post has no asset link yet — open it and add the graphic or video first.','bad');openDrawer('content',id);return;}
   it.status='approved';it.approvedBy=who();it.approvedAt=new Date().toISOString();it.reopened=false;
   it.log=it.log||[];it.log.push({t:new Date().toISOString(),who:who(),what:'cleared it to post'});
+  it.updatedBy=who();it.updatedAt=new Date().toISOString();
+  queueUpsert('content',it);
   save();render();toast('“'+(it.title||'Untitled')+'” is cleared to post.','good');
 }
 
@@ -1725,8 +1914,14 @@ function restore(e){
     var added=0;
     [['content','content'],['schools','schools'],['events','events'],['leads','leads']].forEach(function(pair){
       var seen={};state[pair[0]].forEach(function(i){seen[i.id]=true;});
-      incoming[pair[1]].forEach(function(i){if(!seen[i.id]){state[pair[0]].push(i);added++;}});
+      incoming[pair[1]].forEach(function(i){
+        if(!seen[i.id]){
+          state[pair[0]].push(i);added++;
+          if(api)pending[pair[0]][i.id]=i;
+        }
+      });
     });
+    if(api&&added)schedulePush();
     save();render();
     toast(added?('Restored — '+added+' record'+(added===1?'':'s')+' added.'):'Nothing new in that file — everything was already here.','good');
   };
@@ -1785,6 +1980,7 @@ function start(){
   $('btn-csv-schools').addEventListener('click',exportSchools);
   $('btn-csv-events').addEventListener('click',exportEvents);
   $('btn-copy').addEventListener('click',copyApproved);
+  $('btn-connect').addEventListener('click',connectPrompt);
   $('btn-snapshot').addEventListener('click',snapshot);
   $('btn-backup').addEventListener('click',backup);
   $('btn-restore').addEventListener('click',function(){$('file-in').click();});

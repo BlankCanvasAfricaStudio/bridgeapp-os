@@ -248,6 +248,7 @@ body{font-family:var(--font-body);background:#f0f4f8;color:var(--text-primary);m
 .wb-stat .v{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
 .wb-stat.wb-bad .v{color:#dc2626}
 .wb-stat .l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-top:4px;line-height:1.35}
+.wb-stat .s{font-size:10.5px;font-weight:700;color:var(--text-secondary);margin-top:3px;line-height:1.3}
 .wb-need{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--border);font-size:12.5px;color:var(--text-secondary)}
 .wb-need:last-child{border-bottom:0}
 .wb-need b{color:var(--navy)}
@@ -323,6 +324,7 @@ body{font-family:var(--font-body);background:#f0f4f8;color:var(--text-primary);m
       <div>
         <strong>What the team has logged</strong>
         <span id="wb-when">Nothing logged on this device yet</span>
+        <span id="wb-live" style="color:var(--success);font-weight:800"></span>
       </div>
       <a class="wb-open" href="04_Team_Workbooks/index.html">Open the workbooks →</a>
     </div>
@@ -1462,17 +1464,26 @@ window.addEventListener('load',function(){loadFC();});
     var lateS=schools.filter(function(s){return late(s.followDue,s.followDone);});
     var lateL=leads.filter(function(l){return late(l.followDue,l.follow==='done');});
     var signed=schools.filter(function(s){return s.stage==='signed';}).length;
+    var pendingEvents=events.filter(function(e){return e.status==='pending'||e.status==='queries';});
+    var going=events.filter(function(e){return e.status==='approved'||e.status==='attended';}).length;
+    var visited=schools.filter(function(s){return !!s.lastVisit;}).length;
     var tiles=[
-      {v:cleared,l:'Cleared to post this week',c:'wb-ok'},
-      {v:waiting.length,l:'Waiting on DD’s sign-off',c:waiting.length?'wb-warn':''},
-      {v:lateS.length+lateL.length,l:'Follow-ups past due',c:(lateS.length+lateL.length)?'wb-bad':'wb-ok'},
-      {v:signed,l:'Schools signed of 20–30',c:'wb-ok'},
-      {v:schools.filter(function(s){return !!s.lastVisit;}).length,l:'Schools visited'},
-      {v:leads.length,l:'Leads from events'},
-      {v:events.filter(function(e){return e.status==='attended';}).length,l:'Events attended'}
+      {v:cleared,l:'Cleared to post this week',c:'wb-ok',
+       s:week.length?(week.length+' planned this week'):'nothing planned yet'},
+      {v:waiting.length+pendingEvents.length,l:'Waiting on your decision',
+       c:(waiting.length+pendingEvents.length)?'wb-warn':'',
+       s:waiting.length+' post'+(waiting.length===1?'':'s')+' · '+pendingEvents.length+' event'+(pendingEvents.length===1?'':'s')},
+      {v:lateS.length+lateL.length,l:'Follow-ups past due',c:(lateS.length+lateL.length)?'wb-bad':'wb-ok',
+       s:lateS.length+' school · '+lateL.length+' lead'},
+      {v:signed,l:'Schools signed',c:'wb-ok',s:'of 20–30 by December'},
+      {v:visited,l:'Schools visited',s:schools.length+' on the list'},
+      {v:leads.length,l:'Leads from events',
+       s:leads.filter(function(l){return l.interest==='hot';}).length+' hot'},
+      {v:going,l:'Events approved',s:events.length+' considered'}
     ];
     box.innerHTML=tiles.map(function(t){
-      return '<div class="wb-stat '+(t.c||'')+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div></div>';
+      return '<div class="wb-stat '+(t.c||'')+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div>'
+        +(t.s?'<div class="s">'+esc(t.s)+'</div>':'')+'</div>';
     }).join('');
     var rows=[];
     waiting.slice(0,4).forEach(function(i){
@@ -1492,6 +1503,24 @@ window.addEventListener('load',function(){loadFC();});
   }
 
   function load(){
+    /* Same three homes the workbook uses, in the same order of truth:
+       the team Sheet, then this browser, then the committed snapshot. */
+    var api='';
+    try{api=localStorage.getItem('ba_os_api')||'';}catch(e){}
+    if(api){
+      fetch(api+(api.indexOf('?')<0?'?':'&')+'action=state',{cache:'no-store'})
+        .then(function(r){return r.json();})
+        .then(function(res){
+          if(res&&res.ok&&res.state){render(res.state);flagLive(true);}
+          else fallback();
+        })
+        .catch(fallback);
+      return;
+    }
+    fallback();
+  }
+  function fallback(){
+    flagLive(false);
     var local=null;
     try{local=JSON.parse(localStorage.getItem(LS)||'null');}catch(e){}
     if(local){render(local);return;}
@@ -1499,7 +1528,12 @@ window.addEventListener('load',function(){loadFC();});
     fetch(SNAP,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
       .catch(function(){return null;}).then(render);
   }
-  window.addEventListener('storage',function(e){if(e.key===LS)load();});
+  function flagLive(on){
+    var el=document.getElementById('wb-live');
+    if(el)el.textContent=on?'Live from the team Sheet':'';
+  }
+  window.addEventListener('storage',function(e){if(e.key===LS||e.key==='ba_os_api')load();});
+  setInterval(function(){if(!document.hidden)load();},60000);
   document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});
   window.addEventListener('focus',load);
   load();

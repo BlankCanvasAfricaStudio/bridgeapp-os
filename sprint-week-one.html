@@ -364,13 +364,14 @@ footer b{color:var(--ink-2)}
     <div class="sec-h">
       <div class="eyebrow">Dependencies</div>
       <h2>What we need from Gradesmatch, and what it costs us if it does not land</h2>
-      <p>None of these stop the week. All three make the answer weaker.</p>
+      <p>The first two are now hard stops: without one of them nothing can be counted. The last two make the answer weaker rather than impossible.</p>
     </div>
     <div class="tw">
       <table>
         <thead><tr><th>Item</th><th>Needed by</th><th>Effect on week one if it slips</th></tr></thead>
         <tbody>
-          <tr><td><b>GA4 purchase event, with value</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>The week runs on manual Peach reconciliation. Cost per sale is still measurable. Channel level attribution gets weaker and slower.</td></tr>
+          <tr><td><b>GA4 purchase event, with value</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>With the transaction feed but not this, sales are counted but cannot be split by channel, so we learn what a sale costs but not which channel produced it.</td></tr>
+          <tr><td><b>Automated feed of cleared Peach transactions</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>Counting sales is a tech function now. The manual reconciliation it replaces is not resourced, so without this or the purchase event no sale can be recorded at all.</td></tr>
           <tr><td><b>Parent landing page live on bridgeapp.co.za</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>Paid traffic has no dedicated destination and will convert lower. Every link in the register has to be repointed before spend starts.</td></tr>
           <tr><td><b>Lead endpoint for the readiness tracker</b></td><td><span class="tag blk">Mon 24 Aug</span></td><td>Sign ups are not captured, so click to sign up stays dark and only the end to end click to sale rate can be read.</td></tr>
         </tbody>

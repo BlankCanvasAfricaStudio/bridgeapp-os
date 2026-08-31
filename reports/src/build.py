@@ -217,6 +217,9 @@ NEEDS = [
  ("Fire a <b>purchase</b> event in GA4, with the transaction value and id",
   f'Nothing else on this list matters until this exists. Today the property holds {fmt(D.GA["events"])} events, {D.GA["key_events"]} key events and R0 of revenue, so no click has ever been tied to a payment. Send it from the Peach callback, dedupe on transaction_id.',
   "Blocks everything", "blk"),
+ ("Give the Growth Office an automated feed of cleared transactions",
+  "Counting sales is now a tech function. The daily manual reconciliation out of Peach is not resourced, so without this or the purchase event above there is no way to record a single sale. It also does not scale: hand counting works for 137 sales and not for 40 000.",
+  "Blocks everything", "blk"),
  ("Deploy the parent landing page on bridgeapp.co.za",
   "Paid traffic currently has no dedicated destination. Every tagged link in the register has to be repointed before spend starts, and the conversion rate we measure is the rate of whatever page they land on instead.",
   "Blocks the sprint", "blk"),
@@ -229,9 +232,6 @@ NEEDS = [
  ("Tag every outbound link, and keep tagging them",
   f'Unassigned is the largest single channel at {fmt(509000)} sessions. Each untagged link adds to it, and traffic in that bucket cannot be repeated, defended or funded.',
   "Degrades attribution", "deg"),
- ("Give the Growth Office a read only feed of cleared transactions",
-  "Sales are reconciled by hand out of Peach each morning. That works for 137 sales. It does not work for 40 000, and it is the step that will silently break first as volume rises.",
-  "Limits scale", "deg"),
 ]
 rows = "".join(
  f'<div class="need"><span class="i">{i+1:02d}</span><div class="t"><b>{head}</b>{body}</div>'
@@ -242,11 +242,11 @@ P3.append(f'''<section><div class="wrap">
 <h2>What Gradesmatch has to switch on</h2>
 <p>The Growth Office can buy attention, book schools and write content today. What it cannot do today is prove any of it paid off. These six items are what turn this report from a description into a control panel, in priority order.</p></div>
 <div class="card">{rows}</div>
-<p class="cnote" style="margin-top:14px">The first three block the sprint that starts on 24 August. The sprint still runs without them, on manual Peach reconciliation, but it measures cost per sale more slowly and cannot break it down by channel.</p>
+<p class="cnote" style="margin-top:14px">Counting a sale needs either item 01 or item 06. Neither exists yet and the manual reconciliation that used to cover the gap is no longer resourced, so as things stand the sprint that started on 24 August cannot record a single sale. Items 02 and 03 do not stop it, they narrow what it can learn.</p>
 </div></section>
 
 <footer><div class="wrap">
-<p><b>Sources.</b> Sessions, users, events, channels, page progression, purchase journey and automation segments from Google Analytics 4, property {D.GA["prop"]}, {D.GA["period"]}, pulled 20 August 2026. Cost per click, click through rate, audience and video performance from Meta Ad insights for the boosted post of 29 July 2026. Organic reach from Reel insights and TikTok Studio, both pulled 20 August 2026. School route, distances and fuel from the School Visit Proposal for 24 to 28 August 2026. Pilot schools, budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Sales banked from the Peach transaction export reconciled to the sales ledger.</p>
+<p><b>Sources.</b> Sessions, users, events, channels, page progression, purchase journey and automation segments from Google Analytics 4, property {D.GA["prop"]}, {D.GA["period"]}, pulled 20 August 2026. Cost per click, click through rate, audience and video performance from Meta Ad insights for the boosted post of 29 July 2026. Organic reach from Reel insights and TikTok Studio, both pulled 20 August 2026. School route, distances and fuel from the School Visit Proposal for 24 to 28 August 2026. Pilot schools, budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Sales banked from the Peach transaction export reconciled to the sales ledger, a count that is moving to an automated tech feed.</p>
 <p style="margin-top:11px"><b>On the numbers.</b> Every figure here is either reported by a platform or derived arithmetically from one on this page. Nothing is estimated or modelled. Where a platform did not publish a figure, the gap is shown as unreported rather than filled in. Chart colours were validated for colour vision deficiency and for contrast against both the light and dark surfaces.</p>
 <p style="margin-top:11px"><b>Prepared by Blank Canvas</b> for BridgeApp by Gradesmatch, 21 August 2026.</p>
 </div></footer>''')

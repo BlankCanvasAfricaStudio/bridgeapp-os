@@ -8,7 +8,7 @@ LOG="'05_Daily_Log'"; G1="'06_GE1_Paid_Media'"; G2="'07_GE2_School_Outreach'"; U
 F,LD,TOT=RW["FIRSTD"],RW["LASTD"],RW["TOT"]
 g1=lambda n:"%s!$C$%d"%(G1,n); g2=lambda n:"%s!$C$%d"%(G2,n)
 DAYSLOG="COUNT(%s!$D$%d:$D$%d)"%(LOG,F,LD)
-TAGGED="COUNTIF(%s!$H$%d:$H$%d,\"?*\")"%(UTM,R2["UF"],R2["UL"])
+TAGGED="COUNTIF(%s!$H$%d:$H$%d,\"Y\")"%(UTM,R2["UF"],R2["UL"])
 NREG=R2["UL"]-R2["UF"]+1
 TOTSALES="%s!$L$%d"%(LOG,TOT)
 TOTSPEND="%s!$D$%d"%(LOG,TOT)
@@ -63,7 +63,7 @@ GE="ALL"
 r=grp(r,"Sprint discipline. Owner: Campaign Lead",F_CREAM)
 r=header(ws,r,["KPI","GE","Cadence","Owner","Current","Target","Trigger","Good when","Status"])
 r=kpi(r,"Days logged in 05_Daily_Log","D","Campaign Lead","=%s"%DAYSLOG,14,12,"higher",NUM)
-r=kpi(r,"Links in 09_UTM_Register that build a tagged URL","W","Performance Marketer","=%s"%TAGGED,NREG,NREG,"higher",NUM)
+r=kpi(r,"Sprint codes created in the live UTM register","W","Performance Marketer","=%s"%TAGGED,NREG,NREG,"higher",NUM)
 r=kpi(r,"Peach feed landing daily","D","Gradesmatch tech","Pass","Pass","Any miss","manual",'General')
 r=kpi(r,"Visit logged the same day","D","Schools Coordinator","Pass","Pass","Any miss","manual",'General')
 r=kpi(r,"Working book updated Friday","W","Campaign Lead","Pass","Pass","Any miss","manual",'General')

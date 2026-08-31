@@ -51,47 +51,64 @@ r+=1
 ws.cell(row=r,column=2,value="Signups captured here must equal the GE2 signups captured entered in 05_Daily_Log for the same date.").font=MUTED_I
 
 # ------------------------------------------------------- 09_UTM_Register
+LIVE_UTM = "https://docs.google.com/spreadsheets/d/1D7rVlQW8ym0bb20i3-7qmEHBS5fxVVRegwjdhaK9JF8"
 ws=wb.create_sheet("09_UTM_Register")
-widths(ws,{"B":30,"C":16,"D":14,"E":22,"F":22,"G":40,"H":74,"I":8,"J":20,"K":12})
-title(ws,"UTM REGISTER","Every link used in the sprint. A link that is not on this sheet cannot be attributed, so the sale it produces counts for nobody.")
+widths(ws,{"B":34,"C":16,"D":14,"E":20,"F":24,"G":7,"H":12,"I":18,"J":12})
+title(ws,"UTM CODES",
+ "There is one live register and it is not this tab. Links are built and stored in the BridgeApp UTM link builder in Google Drive, so the whole team works off one list.")
 r=5
-r=band(ws,r,"Type into the yellow cells. Column H builds itself",9)
-r=header(ws,r,["Purpose","Source","Medium","Campaign","Content","Landing URL","Tagged URL, copy this one","GE","Owner","Live from"])
+r=band(ws,r,"Where links live",8)
+for a,b in [
+ ("Live register","BridgeApp UTM link builder, Google Sheets. Every link is created there and nowhere else."),
+ ("Link", LIVE_UTM),
+ ("Why not here","A workbook file gets emailed and forked. A Sheet does not. Two registers means links tagged in one and counted from the other."),
+ ("This tab","The checklist of codes this sprint needs. Tick each one off as it is created in the register."),
+]:
+    ws.cell(row=r,column=2,value=a).font=BODY_B
+    c=ws.cell(row=r,column=3,value=b); c.font=BODY if a!="Link" else Font(name="Arial",sz=9,color=BLUE)
+    c.alignment=WRAP
+    ws.merge_cells(start_row=r,start_column=3,end_row=r,end_column=10)
+    ws.row_dimensions[r].height=24
+    r+=1
+r+=1
+r=band(ws,r,"Codes this sprint needs. Tick column H when it exists in the live register.",8)
+r=header(ws,r,["Purpose","Source","Medium","Campaign","Content","GE","Created? Y/N","Owner","Live from"])
 UF=r
-def cl(x): return 'SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(LOWER(TRIM(%s))," ","-"),"/","-"),"--","-")'%x
 ROWS=[
- ("Meta paid, parent audience","meta","paid-social","qualifying-sprint","meta-set-a","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Meta paid, retargeting July leads","meta","paid-social","qualifying-sprint","meta-retarget","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Google paid search, brand","google","paid-search","qualifying-sprint","brand","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("LinkedIn paid, school leaders","linkedin","paid-social","qualifying-sprint","school-leaders","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Boosted organic, best of last week","facebook","boosted","qualifying-sprint","weekly-boost","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Influencer Wave 3, GP creator","influencer","referral","qualifying-sprint","wave-3-gp","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Instagram bio link","instagram","organic-social","qualifying-sprint","bio-link","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("WhatsApp concierge broadcast","whatsapp","message","qualifying-sprint","broadcast","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("Nurture emailer","email","email","qualifying-sprint","nurture-1","https://bridgeapp.co.za/uniapply-parents","GE1"),
- ("School visit QR, generic","school-visits","qr","qualifying-sprint","","https://bridgeapp.co.za/uniapply-parents","GE2"),
- ("School visit QR, per school","school-visits","qr","qualifying-sprint","school-kingsmead","https://bridgeapp.co.za/uniapply-parents","GE2"),
- ("Exhibition and conference QR","school-events","qr","qualifying-sprint","sahisa-durban","https://bridgeapp.co.za/uniapply-parents","GE2"),
- ("Parent info session handout","school-visits","print","qualifying-sprint","info-session","https://bridgeapp.co.za/uniapply-parents","GE2"),
+ ("Meta paid, parent audience","meta","paid-social","qualifying-sprint","meta-set-a","GE1"),
+ ("Meta paid, retargeting July leads","meta","paid-social","qualifying-sprint","meta-retarget","GE1"),
+ ("Meta paid, 20 second recut","meta","paid-social","qualifying-sprint","recut-20s","GE1"),
+ ("Meta paid, static statement","meta","paid-social","qualifying-sprint","static-statement","GE1"),
+ ("Boosted organic, best of last week","facebook","boosted","qualifying-sprint","weekly-boost","GE1"),
+ ("Instagram bio link","instagram","organic-social","qualifying-sprint","bio-link","GE1"),
+ ("Nurture emailer","email","email","qualifying-sprint","nurture-1","GE1"),
+ ("School QR, Pretoria Technical","school-visits","qr","qualifying-sprint","school-pretoria-technical","GE2"),
+ ("School QR, Pretoria-Wes","school-visits","qr","qualifying-sprint","school-pretoria-wes","GE2"),
+ ("School QR, Pretoria Girls","school-visits","qr","qualifying-sprint","school-pretoria-girls","GE2"),
+ ("School QR, generic fallback","school-visits","qr","qualifying-sprint","","GE2"),
+ ("Learner leave behind, printed","school-visits","print","qualifying-sprint","leave-behind","GE2"),
+ ("Parent take home slip","school-visits","print","qualifying-sprint","parent-slip","GE2"),
 ]
-for purpose,src,med,camp,cont,url,ge in ROWS:
+for purpose,src,med,camp,cont,ge in ROWS:
     ws.cell(row=r,column=2,value=purpose).font=BODY
-    for col,v in [(3,src),(4,med),(5,camp),(6,cont),(7,url)]:
-        c=ws.cell(row=r,column=col,value=v); c.font=INPUT; c.fill=F_YELLOW
-    f=('=IF(OR(G{r}="",C{r}="",D{r}=""),"",G{r}&"?utm_source="&{cs}&"&utm_medium="&{cm}'
-       '&IF(E{r}="","","&utm_campaign="&{cc})&IF(F{r}="","","&utm_content="&{co}))').format(
-        r=r,cs=cl("C%d"%r),cm=cl("D%d"%r),cc=cl("E%d"%r),co=cl("F%d"%r))
-    c=ws.cell(row=r,column=8,value=f); c.font=Font(name="Arial",sz=9,color=INK); c.fill=F_GREY
-    g=ws.cell(row=r,column=9,value=ge); g.font=BODY_B; g.alignment=CTR
+    for col,v in [(3,src),(4,med),(5,camp),(6,cont)]:
+        c=ws.cell(row=r,column=col,value=v); c.font=BODY; c.fill=F_GREY
+    g=ws.cell(row=r,column=7,value=ge); g.font=BODY_B; g.alignment=CTR
     g.fill=F_BLUE if ge=="GE1" else F_ORANGE
-    c=ws.cell(row=r,column=10,value="TBC"); c.font=INPUT; c.fill=F_YELLOW
-    c=ws.cell(row=r,column=11); c.font=INPUT; c.fill=F_YELLOW; c.number_format=DAT
+    c=ws.cell(row=r,column=8); c.font=INPUT; c.fill=F_YELLOW; c.alignment=CTR
+    c=ws.cell(row=r,column=9,value="TBC"); c.font=INPUT; c.fill=F_YELLOW
+    c=ws.cell(row=r,column=10); c.font=INPUT; c.fill=F_YELLOW; c.number_format=DAT
     r+=1
 UL=r-1
 r+=1
-for t in ["Landing URL is pre-filled with the parent page path. If the page is not deployed by day 1, change column G to the live destination on every row before any spend starts.",
-          "Source and medium are compulsory. Campaign and content are optional and the formula leaves them out when blank.",
-          "Everything is forced to lower case with spaces turned into hyphens, because GA4 treats Meta and meta as two different sources."]:
-    ws.cell(row=r,column=2,value=t).font=MUTED_I; r+=1
+r=band(ws,r,"Rules",8)
+for t in ["Source and medium are compulsory. Campaign and content are optional.",
+          "Everything is lower case with spaces as hyphens, because GA4 treats Meta and meta as two different sources.",
+          "The landing URL is the parent page. If it is not deployed, repoint every link in the register before any spend starts.",
+          "A school visited without its own code produces sales nobody can trace back to the room it started in.",
+          "A link that is not in the live register cannot be attributed, so the sale it produces counts for nobody."]:
+    ws.cell(row=r,column=2,value=t).font=MUTED_I
+    ws.merge_cells(start_row=r,start_column=2,end_row=r,end_column=10)
+    r+=1
 json.dump({"VF":VF,"VL":VL,"UF":UF,"UL":UL},open(B+"rows2.json","w"))
 wb.save(B+"_p5.xlsx"); print("p5 ok",VF,VL,UF,UL)

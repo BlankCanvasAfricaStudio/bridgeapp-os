@@ -61,7 +61,7 @@ def hbar(rows, width=560, label_w=132, value_w=76, unit="", emphasis=None,
     if note: out.append(f'<p class="cnote">{note}</p>')
     return "\n".join(out)
 
-def funnel(stages, width=560, dead_after=None, note=None):
+def funnel(stages, width=560, dead_after=None, note=None, zero_label="not instrumented", zero_tip="not instrumented, so GA4 records zero"):
     """Ordinal stages, one hue ramp light->dark. dead_after: index where it flatlines."""
     n = len(stages)
     h = n * (BAR + GAP) + GAP
@@ -80,8 +80,8 @@ def funnel(stages, width=560, dead_after=None, note=None):
                        f'<title>{escape(lab)}: {fmt(v)} ({pct:.1f}% of the first stage)</title></path>')
         else:
             out.append(f'<rect x="{label_w}" y="{y}" width="{plot_w}" height="{BAR}" class="voidbar">'
-                       f'<title>{escape(lab)}: not instrumented, so GA4 records zero</title></rect>')
-            out.append(f'<text x="{label_w+10}" y="{y+BAR/2+4}" class="voidtxt">not instrumented</text>')
+                       f'<title>{escape(lab)}: {escape(zero_tip)}</title></rect>')
+            out.append(f'<text x="{label_w+10}" y="{y+BAR/2+4}" class="voidtxt">{escape(zero_label)}</text>')
         out.append(f'<text x="{width-value_w+8}" y="{y+BAR/2+4}" class="val">{fmt(v)}</text>')
     out.append('</svg>')
     if note: out.append(f'<p class="cnote">{note}</p>')

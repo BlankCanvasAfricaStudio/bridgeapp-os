@@ -8,10 +8,8 @@ clicks = D.SPRINT["cap"] / CPC
 machine = sum(v for _, v in D.MACHINE)
 human = D.GA["sessions"] - machine
 paid_total = sum(v for _, v, g, _ in D.CHANNELS if g == "paid")
-schools = sum(x[2] for x in D.SCHOOL_DAYS)
+schools = D.SCHOOL_SPRINT["contacted"]
 dev_total = sum(v for _, v in D.DEVICES)
-km = sum(x[3] for x in D.SCHOOL_DAYS)
-fuel = sum(x[4] for x in D.SCHOOL_DAYS)
 R50 = D.CAMPAIGN["budget"] / D.CAMPAIGN["target"]
 
 def sp(n):
@@ -171,44 +169,61 @@ w2(f'''<section><div class="wrap">
 </div></section>''')
 
 # ------------------------------------------------------------------ GE2
-sch_rows = [(f"{d} {area}", n, f"{d}: {area}, {n} schools, {k} km, R{f} fuel")
-            for d, area, n, k, f in D.SCHOOL_DAYS]
-km_rows = [(f"{d}", k, f"{d}: {k} km, R{f} fuel") for d, area, n, k, f in D.SCHOOL_DAYS]
+SS = D.SCHOOL_SPRINT
+out_rows = [(lab, v, f"{lab}: {v}") for lab, v in D.SCHOOL_OUTCOMES]
 
 w2(f'''<section><div class="wrap">
 <div class="eng-h"><span class="eng-b o"></span><div class="eyebrow">Growth Engine 2</div></div>
 <div class="sh"><h2>School Outreach</h2>
-<p>Reaching learners and the parents behind them in person. {schools} schools across five days, {km} km, R{fmt(fuel)} of fuel against R{fmt(D.SCHOOL_FUEL_APPROVED)} approved. This engine has never been measured, so this sprint sets its first baseline rather than hitting a target.</p></div>
+<p>Two weeks on the road in Pretoria, {SS["start"]} to {SS["end"]}, on a R{fmt(SS["voucher"])} Uber voucher. <b>{SS["contacted"]} schools contacted.</b> The target is the <b>{SS["target_grade"]} learner</b>, reached through a presentation the school has to grant, and the engine carries its own objective of <b>{SS["weekly_sales_target"]} UniApply registrations a week</b>.</p></div>
 
 <div class="grid2">
-{card("The week, school by school", "Visits per day, 24 to 28 August.",
-  hbar(sch_rows, width=520, label_w=168, value_w=44,
-       note=f"{schools} schools in five days. Three stalled relationships are being re opened: Iona Convent, Loreto Convent and Pretoria High for Girls."),
-  table(["Day","Area","Schools","Km","Fuel"], [(d, area, n, k, f"R{f}") for d, area, n, k, f in D.SCHOOL_DAYS]))}
-{card("What access costs", "Fuel per day against distance.",
-  hbar(km_rows, width=520, label_w=52, value_w=60, unit=" km",
-       cls_for=lambda lab: "m-a",
-       note=f"R{fmt(fuel)} of fuel for {schools} schools is about R{fuel/schools:.0f} a school. Against paid media at R{CPC:.2f} a click, that buys roughly {fuel/schools/CPC:.0f} clicks worth of access per school. Whether it converts better is exactly what has never been tested."),
-  table(["Day","Km","Fuel"], [(d, k, f"R{f}") for d, area, n, k, f in D.SCHOOL_DAYS]))}
+{card("What two weeks produced", "Reported outcomes, 17 to 28 August.",
+  hbar(out_rows, width=520, label_w=214, value_w=44,
+       note=f"Access was the job and access was delivered: {SS['contacted']} schools contacted, 3 presentations now booked. The last two rows are the commercial ones, and both are still zero because the first presentation only happens today."),
+  table(["Measure","Count"], [(l, str(v)) for l, v in D.SCHOOL_OUTCOMES]))}
+{card("Where the engine actually is", "The journey the outreach report defines, and how far it has got.",
+  funnel([(D.SCHOOL_JOURNEY[0], SS["contacted"]), ("School meeting", 8), ("Grade 11 presentation", 3),
+          ("Learners reached", 0), ("Leads captured", 0), ("UniApply registration", 0)], width=520,
+    zero_label="not yet, first presentation 31 Aug",
+    zero_tip="zero because no presentation has been delivered yet, not because it is unmeasured",
+    note="27 contacts have become 3 booked presentations. The stages below that are empty because no presentation has run yet. The first two are on 31 August and 2 September.")
+  + f'<p class="cnote"><b>Meetings figure:</b> counted as the schools with a confirmed presentation, a secured appointment or a named decision-maker actively escalating. Presentations counted as the three booked dates.</p>',
+  table(["Stage","Count"], [("Schools contacted", SS["contacted"]), ("Meetings or escalations", 8),
+                            ("Presentations booked", 3), ("Learners reached", 0),
+                            ("Leads captured", 0), ("Registrations", 0)]))}
 </div>
 
 <div class="grid2" style="margin-top:20px">
-{card("What is working", "Grounded in the visit plan and the Phase 2 workbook.",
-  finding("w","+","Access is cheap",
-      f'R{fuel/schools:.0f} a school in fuel to stand in front of a Grade 12 cohort. Nothing in paid media reaches a room full of qualified buyers for that.')
-  + finding("w","+","The route is real and costed",
-      f'{km} km planned day by day, R{fmt(fuel)} estimated against R{fmt(D.SCHOOL_FUEL_APPROVED)} approved. The money is already unlocked.')
-  + finding("w","+","Re-engagement is built in",
-      'Three schools already spoken to are being re opened rather than starting cold.'))}
-{card("What is not working", "These are gaps, not failures. None has been measured before.",
-  finding("n","!","No sign up rate per visit exists",
-      'Nobody can say what a school visit is worth, because it has never been counted. Until it is, the engine cannot be compared against paid media or funded against it.')
-  + finding("n","!","No tagging in place yet",
-      f'Without a QR code unique to each school, a sale that starts in a school hall arrives as Unassigned, which is already the largest channel at {fmt(509000)} sessions.')
-  + finding("c","~","The effort and the audience are in different places",
-      f'All {schools} visits are in Gauteng. The paid audience is national, with KwaZulu-Natal at {fmt(1200)} and Western Cape at {fmt(863)}. Four of the six Phase 2 pilot schools are in the Eastern Cape and none is on this route.'))}
+{card("What is working", "From the outreach report's own findings.",
+  finding("w","+","Face to face opens doors that email does not",
+      "The report is explicit that email-only outreach has a low response rate, and that personal visits are what generated the decision-maker engagement and the presentations.")
+  + finding("w","+","Access is cheap",
+      f"R{fmt(SS['voucher'])} of Uber reached {SS['contacted']} schools, about R{SS['voucher']/SS['contacted']:.0f} a school, and converted three of them into booked Grade 11 presentations.")
+  + finding("w","+","Grade 11 is the right room",
+      "Grade 11 learners are choosing subjects and looking at university requirements now, which is when UniApply is worth buying rather than a year later under deadline pressure."))}
+{card("What is not working", "Also from the report, plus what the numbers show.",
+  finding("n","!","No learner has been reached yet",
+      "Two weeks of work has produced access and zero registrations. That is not a failure at this stage, but it does mean the engine is entirely unproven commercially until the presentations run.")
+  + finding("n","!","Three schools turned the team away at the gate",
+      "Maragon Mooikloof, Tyger Valley and Amberfield require a confirmed appointment. Travelling to a school without one spends the voucher and returns nothing.")
+  + finding("c","~","Sales support is the fragile link",
+      "The report flags that opportunities get delayed or lost when support availability is uncertain, and asks for a faster handover once a presentation is secured.")
+  + finding("c","~","20 a week has no basis yet",
+      f"The {SS['weekly_sales_target']} registrations a week objective is a target set before any presentation has been delivered. This week produces the first real conversion rate to test it against."))}
+</div>
+
+<div class="card" style="margin-top:20px">
+<h3>Booked in the week after the sprint</h3>
+<p class="sub">These are commitments. The first two fall on the day this report was written.</p>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>School</th><th>What</th></tr></thead>
+<tbody>{"".join(f"<tr><td><b>{d}</b></td><td>{s}</td><td>{k}</td></tr>" for d, s, k in D.SCHOOL_BOOKED)}</tbody>
+</table></div>
+<p class="cnote">Every one of these needs a learner count, a lead count and a tagged QR code on the day, or it produces sales nobody can trace back to the room.</p>
 </div>
 </div></section>''')
+
 open("_part2.html","w").write("\n".join(P2))
 print("part2 ok", len("\n".join(P2)))
 
@@ -246,7 +261,7 @@ P3.append(f'''<section><div class="wrap">
 </div></section>
 
 <footer><div class="wrap">
-<p><b>Sources.</b> Sessions, users, events, channels, page progression, purchase journey and automation segments from Google Analytics 4, property {D.GA["prop"]}, {D.GA["period"]}, pulled 20 August 2026. Cost per click, click through rate, audience and video performance from Meta Ad insights for the boosted post of 29 July 2026. Organic reach from Reel insights and TikTok Studio, both pulled 20 August 2026. School route, distances and fuel from the School Visit Proposal for 24 to 28 August 2026. Pilot schools, budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Sales banked from the Peach transaction export reconciled to the sales ledger, a count that is moving to an automated tech feed.</p>
+<p><b>Sources.</b> Sessions, users, events, channels, page progression, purchase journey and automation segments from Google Analytics 4, property {D.GA["prop"]}, {D.GA["period"]}, pulled 20 August 2026. Cost per click, click through rate, audience and video performance from Meta Ad insights for the boosted post of 29 July 2026. Organic reach from Reel insights and TikTok Studio, both pulled 20 August 2026. School outcomes, follow-up pipeline, travel and targets from the GradesMatch and UniApply School Outreach Report, Pretoria, internal, 29 August 2026, covering 17 to 28 August. Pilot schools, budget and pacing from the BridgeApp Phase 2 Operating Workbook v4, May 2026. Sales banked from the Peach transaction export reconciled to the sales ledger, a count that is moving to an automated tech feed.</p>
 <p style="margin-top:11px"><b>On the numbers.</b> Every figure here is either reported by a platform or derived arithmetically from one on this page. Nothing is estimated or modelled. Where a platform did not publish a figure, the gap is shown as unreported rather than filled in. Chart colours were validated for colour vision deficiency and for contrast against both the light and dark surfaces.</p>
 <p style="margin-top:11px"><b>Prepared by Blank Canvas</b> for BridgeApp by Gradesmatch, 21 August 2026.</p>
 </div></footer>''')

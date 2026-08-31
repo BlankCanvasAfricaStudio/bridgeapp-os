@@ -60,14 +60,37 @@ TIKTOK = dict(views=38922, viewers=30800, avg_watch=16.9, full=0.0625, likes=519
               non_followers=0.60, sa=0.779)
 TIKTOK_AGE = [("18-24",0.54),("25-34",0.33),("35-44",0.08),("45-54",0.03),("55+",0.02)]
 
-SCHOOL_DAYS = [
-    ("Mon", "Pretoria West",        6, 100, 205),
-    ("Tue", "Pretoria East",        6, 200, 409),
-    ("Wed", "Pretoria Central",     6, 155, 317),
-    ("Thu", "Pretoria East/Central",5, 160, 327),
-    ("Fri", "Centurion",            6, 240, 491),
+# Pretoria school outreach sprint, 17 to 28 August 2026.
+# Source: GradesMatch x UniApply School Outreach Report, internal, 29 August 2026.
+SCHOOL_SPRINT = dict(start="17 August", end="28 August", weeks=2,
+                     contacted=27, voucher=2000, target_grade="Grade 11",
+                     weekly_sales_target=20, registrations=0, learners_reached=0)
+
+# The reported outcome table, exactly as published
+SCHOOL_OUTCOMES = [
+    ("Schools visited or contacted",                 27),
+    ("Schools requiring follow-up",                   7),
+    ("Schools with active opportunities",             5),
+    ("Access denied without an appointment",          3),
+    ("Confirmed Grade 11 presentation dates",         2),
+    ("Confirmed presentation schools",                1),
+    ("Potential event opportunity",                   1),
+    ("Learners reached",                              0),
+    ("UniApply registrations",                        0),
 ]
-SCHOOL_FUEL_APPROVED = 2000
+
+# What is booked in the week after the sprint
+SCHOOL_BOOKED = [
+    ("31 Aug", "Pretoria Technical High School", "Grade 11 presentation"),
+    ("31 Aug", "Pretoria High School for Girls", "Appointment"),
+    ("2 Sep",  "Pretoria Technical High School", "Grade 11 presentation"),
+    ("3 Sep",  "Pretoria-Wes",                   "Grade 9 career day, requested"),
+    ("4 Sep",  "Pretoria-Wes",                   "Grade 11 presentation"),
+]
+
+# The conversion journey the outreach report defines
+SCHOOL_JOURNEY = ["School visit", "School meeting", "Grade 11 presentation",
+                  "Learner engagement", "Lead capture", "Follow-up", "UniApply registration"]
 
 PILOTS = [("Kingsmead","KZN"),("St Albans","EC"),("Dainfern College","GP"),
           ("Umtata International","EC"),("St Jude Private","EC"),

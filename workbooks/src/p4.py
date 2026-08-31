@@ -55,40 +55,66 @@ ws.cell(row=r,column=2,value="Influencer Wave 3 budget R50 000 is the v4 Budget 
 
 # -------------------------------------------------- 07_GE2_School_Outreach
 ws=wb.create_sheet("07_GE2_School_Outreach")
-widths(ws,{"B":38,"C":16,"D":14,"E":56})
-title(ws,"GE2: SCHOOL OUTREACH","Owner: Schools Coordinator. Reads from 05_Daily_Log and 08_School_Visits. This engine is measured on the same basis as paid media.")
+widths(ws,{"B":40,"C":16,"D":14,"E":60})
+title(ws,"GE2: SCHOOL OUTREACH",
+ "Owner: Schools Coordinator. A school visit produces four things before it produces a sale, so all four are tracked here. Reads from 05_Daily_Log.")
 r=5
-r=band(ws,r,"Sprint to date",4); r=header(ws,r,["Metric","Actual","Target","Note"])
-r=metric(ws,r,"Schools visited","=%s"%S("H"),NUM,"6 per week is the visit target.",12)
-r=metric(ws,r,"Calls made","=%s"%S("I"),NUM,"19 per week. Calls plus visits equals the v4 GE2 target of 25 per week.",38)
-r=metric(ws,r,"Calls plus visits","=%s+%s"%(S("H"),S("I")),NUM,"v4 GE2 KPI. Trigger is below 15 in a week.",50)
-r=metric(ws,r,"Signups captured","=%s"%S("J"),NUM,"Parent sign ups taken at a visit, same day entry.")
-r=metric(ws,r,"Sales","=%s"%S("K"),NUM,"Peach reconciled, attributed to a school tagged link.","=%s"%A["t2"])
-r=metric(ws,r,"Signups per visit","=IFERROR(%s/%s,0)"%(S("J"),S("H")),'0.0',"The number that tells you whether visits are worth the travel.")
-r=metric(ws,r,"Sales per visit","=IFERROR(%s/%s,0)"%(S("K"),S("H")),'0.00',"The school engine equivalent of cost per sale.")
-r=metric(ws,r,"Signup to sale rate","=IFERROR(%s/%s,0)"%(S("K"),S("J")),PCT,"Compare against the paid engine on 05.")
-r=metric(ws,r,"Share of GE2 target banked","=IFERROR(%s/%s,0)"%(S("K"),A["t2"]),PCT,"Against the GE2 split of the qualifying target.",1)
+r=band(ws,r,"Read this before wondering why sales say zero",4)
+for a,b in [
+ ("Different windows","The Pretoria school outreach sprint ran 17 to 28 August. This workbook covers 24 August to 6 September. Week 1 of the outreach sits in the outreach report, not in this log, so entering it here will not move these numbers."),
+ ("Sales lag the work","Registrations is the only column that counts as a sale, and it stays at zero until a presentation has actually been delivered to learners. Two weeks of visits producing zero sales is the expected shape, not a failure."),
+ ("What moves instead","Schools contacted, meetings secured, learners reached and leads captured all move the moment they are logged. That is where the week's work shows up."),
+]:
+    ws.cell(row=r,column=2,value=a).font=BODY_B
+    c=ws.cell(row=r,column=3,value=b); c.font=BODY; c.alignment=WRAP
+    ws.merge_cells(start_row=r,start_column=3,end_row=r,end_column=5); ws.row_dimensions[r].height=28
+    r+=1
 r+=1
-r=band(ws,r,"Sprint cost of this engine. Type into the yellow cells",4)
+r=band(ws,r,"The pipeline, 24 August to 6 September",4); r=header(ws,r,["Stage","Actual","Target","Note"])
+r=metric(ws,r,"Schools contacted","=%s"%S("H"),NUM,"Visits, calls and emails that reached someone.")
+r=metric(ws,r,"Meetings or presentations secured","=%s"%S("I"),NUM,"A booked date, not a maybe.")
+r=metric(ws,r,"Learners reached","=%s"%S("J"),NUM,"Only counts once a presentation has actually been delivered.")
+r=metric(ws,r,"Leads captured","=%s"%S("K"),NUM,"Scanned the QR or signed the sheet.")
+r=metric(ws,r,"Registrations","=%s"%S("L"),NUM,"The only stage that is a sale.","=%s"%A["t2"])
+r+=1
+r=band(ws,r,"Conversion, once there is something to convert",4); r=header(ws,r,["Rate","Actual","Target","Note"])
+r=metric(ws,r,"Meetings per school contacted","=IFERROR(%s/%s,0)"%(S("I"),S("H")),PCT,"How often a contact turns into a booked date.")
+r=metric(ws,r,"Learners per presentation","=IFERROR(%s/%s,0)"%(S("J"),S("I")),'0.0',"Room size. Tells you what a presentation is worth.")
+r=metric(ws,r,"Leads per learner reached","=IFERROR(%s/%s,0)"%(S("K"),S("J")),PCT,"How well the QR and the pitch work in the room.")
+r=metric(ws,r,"Lead to registration rate","=IFERROR(%s/%s,0)"%(S("L"),S("K")),PCT,"The number that decides whether schools can carry a sales target.")
+r=metric(ws,r,"Registrations per school contacted","=IFERROR(%s/%s,0)"%(S("L"),S("H")),'0.00',"The school engine equivalent of cost per sale.")
+r+=1
+r=band(ws,r,"Baseline from the outreach report, 17 to 28 August",4)
+r=header(ws,r,["Measure","Count","","Source"])
+SRC="GradesMatch and UniApply School Outreach Report, Pretoria, internal, 29 August 2026."
+for lab,v in [("Schools visited or contacted",27),("Schools requiring follow-up",7),
+              ("Schools with active opportunities",5),("Access denied without an appointment",3),
+              ("Confirmed Grade 11 presentation dates",2),("Learners reached",0),("UniApply registrations",0)]:
+    ws.cell(row=r,column=2,value=lab).font=BODY
+    c=ws.cell(row=r,column=3,value=v); c.font=BODY_B; c.number_format=NUM; c.alignment=RGT; c.fill=F_GREY
+    ws.cell(row=r,column=5,value=SRC if lab.startswith("Schools visited") else "").font=MUTED_I
+    r+=1
+r+=1
+r=band(ws,r,"What this engine costs",4)
 r=header(ws,r,["Cost line","Sprint cost (R)","","Source"])
 gf=r
 for name,val,src in [
- ("School activations Wave 2","","v4 Budget Master, R19 000 for all of Aug 2026. Enter only the portion inside these 14 days."),
- ("Information sessions support","","v4 Budget Master, R5 000 across Aug and Sep 2026. Enter the sprint portion."),
- ("Travel and fuel","","Actual, from expense claims."),
- ("Printed material and QR codes","","Actual."),
+ ("Uber voucher, allocated",2000,"Allocated for school-to-school travel. Outreach report."),
+ ("Uber voucher, spent to date","","Update after each travel day."),
+ ("Acudeo Family Fun Day stall","","R1 000 if approved. Not covered by the voucher. Decision needed."),
+ ("Printed leave behinds and parent slips",0,"Printed in house."),
 ]:
     ws.cell(row=r,column=2,value=name).font=BODY
-    c=ws.cell(row=r,column=3,value=val); c.fill=F_YELLOW; c.font=INPUT; c.number_format=CUR; c.alignment=RGT
+    c=ws.cell(row=r,column=3,value=val)
+    if val=="" : c.fill=F_YELLOW; c.font=INPUT
+    else: c.font=BODY_B; c.fill=F_GREY
+    c.number_format=CUR; c.alignment=RGT
     ws.cell(row=r,column=5,value=src).font=MUTED_I
     r+=1
 gl=r-1
-ws.cell(row=r,column=2,value="Total GE2 sprint cost").font=BODY_B
-c=ws.cell(row=r,column=3,value="=SUM(C%d:C%d)"%(gf,gl)); c.font=BODY_B; c.number_format=CUR; c.alignment=RGT; c.fill=F_GREY
-GTOT=r; r+=1
-ws.cell(row=r,column=2,value="Cost per sale, school engine").font=BODY_B
-c=ws.cell(row=r,column=3,value="=IFERROR(C%d/%s,0)"%(GTOT,S("K"))); c.font=BODY_B; c.number_format=CUR; c.alignment=RGT; c.fill=F_GREY
+ws.cell(row=r,column=2,value="Cost per registration, school engine").font=BODY_B
+c=ws.cell(row=r,column=3,value="=IFERROR(C%d/%s,0)"%(gf+1,S("L"))); c.font=BODY_B; c.number_format=CUR; c.alignment=RGT; c.fill=F_GREY
 t=ws.cell(row=r,column=4,value="=%s"%A["cpa"]); t.number_format=CUR; t.font=MUTED; t.alignment=RGT
-ws.cell(row=r,column=5,value="Directly comparable with the paid media cost per sale on 05. This comparison is the point of the sprint.").font=MUTED_I
+ws.cell(row=r,column=5,value="Voucher spent divided by registrations. Directly comparable with the paid media cost per sale on 06.").font=MUTED_I
 
 wb.save(B+"_p4.xlsx"); print("p4 ok")

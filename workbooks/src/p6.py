@@ -10,9 +10,9 @@ g1=lambda n:"%s!$C$%d"%(G1,n); g2=lambda n:"%s!$C$%d"%(G2,n)
 DAYSLOG="COUNT(%s!$D$%d:$D$%d)"%(LOG,F,LD)
 TAGGED="COUNTIF(%s!$H$%d:$H$%d,\"Y\")"%(UTM,R2["UF"],R2["UL"])
 NREG=R2["UL"]-R2["UF"]+1
-TOTSALES="%s!$L$%d"%(LOG,TOT)
+TOTSALES="%s!$M$%d"%(LOG,TOT)
 TOTSPEND="%s!$D$%d"%(LOG,TOT)
-GE2COST=g2(23)
+GE2COST=g2(39)   # Uber voucher spent to date
 
 # ----------------------------------------------------------------- 10_KPIs
 ws=wb.create_sheet("10_KPIs")
@@ -52,12 +52,12 @@ r+=1
 GE="GE2"
 r=grp(r,"GE2: School outreach. Owner: Schools Coordinator",F_ORANGE)
 r=header(ws,r,["KPI","GE","Cadence","Owner","Current","Target","Trigger","Good when","Status"])
-r=kpi(r,"Sales banked, GE2","W","Schools Coordinator","=%s"%g2(11),"=%s"%A["t2"],"=ROUND(%s*0.5,0)"%A["t2"],"higher",NUM)
-r=kpi(r,"Cost per sale, school engine","W","Schools Coordinator","=%s"%g2(24),"=%s"%A["cpa"],"=%s*2"%A["cpa"],"lower",CUR)
-r=kpi(r,"Schools visited","W","Schools Coordinator","=%s"%g2(7),12,8,"higher",NUM)
-r=kpi(r,"Calls plus visits","W","Schools Coordinator","=%s"%g2(9),50,30,"higher",NUM)
-r=kpi(r,"Signups captured","W","Schools Coordinator","=%s"%g2(10),"Baseline","Baseline","higher",NUM)
-r=kpi(r,"Signups per visit","W","Schools Coordinator","=%s"%g2(12),"Baseline","Baseline","higher",'0.0')
+r=kpi(r,"Registrations banked, GE2","W","Schools Coordinator","=%s"%g2(16),"=%s"%A["t2"],"=ROUND(%s*0.5,0)"%A["t2"],"higher",NUM)
+r=kpi(r,"Cost per registration, school engine","W","Schools Coordinator","=%s"%g2(42),"=%s"%A["cpa"],"=%s*2"%A["cpa"],"lower",CUR)
+r=kpi(r,"Schools contacted","W","Schools Coordinator","=%s"%g2(12),"Baseline","Baseline","higher",NUM)
+r=kpi(r,"Meetings or presentations secured","W","Schools Coordinator","=%s"%g2(13),"Baseline","Baseline","higher",NUM)
+r=kpi(r,"Learners reached","W","Schools Coordinator","=%s"%g2(14),"Baseline","Baseline","higher",NUM)
+r=kpi(r,"Leads captured","W","Schools Coordinator","=%s"%g2(15),"Baseline","Baseline","higher",NUM)
 r+=1
 GE="ALL"
 r=grp(r,"Sprint discipline. Owner: Campaign Lead",F_CREAM)
@@ -95,7 +95,7 @@ BLENDCPS="IFERROR((%s+%s)/%s,0)"%(TOTSPEND,GE2COST,TOTSALES)
 r=test(r,"1. Qualifying sales achieved","=%s"%TOTSALES,"=%s"%A["qt"],NUM,"higher","Total banked across both engines.")
 r=test(r,"2. Blended cost per sale at or under target","=%s"%BLENDCPS,"=%s"%A["cpa"],CUR,"lower","Paid media spend plus school engine cost, divided by all sales.",zero_is_nodata=True)
 r=test(r,"3. Paid engine at or under twice target","=%s"%g1(11),"=%s*2"%A["cpa"],CUR,"lower","A paid engine above this is not scalable at the current creative.",zero_is_nodata=True)
-r=test(r,"4. School engine at or under twice target","=%s"%g2(24),"=%s*2"%A["cpa"],CUR,"lower","Same test, applied to visits.",zero_is_nodata=True)
+r=test(r,"4. School engine at or under twice target","=%s"%g2(42),"=%s*2"%A["cpa"],CUR,"lower","Same test, applied to school outreach.",zero_is_nodata=True)
 r=test(r,"5. At least one engine at or under target",'=IF(OR(AND(ISNUMBER(%s),%s<=%s,%s>0),AND(ISNUMBER(%s),%s<=%s,%s>0)),1,0)'%(
         g1(11),g1(11),A["cpa"],g1(11),g2(24),g2(24),A["cpa"],g2(24)),1,NUM,"higher",
         "One working engine is enough to justify releasing budget into it.")

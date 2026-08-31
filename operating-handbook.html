@@ -1,0 +1,571 @@
+<title>The Sprint Handbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0F2A4A; --blue:#4A90D9; --blue-600:#2F6EB5; --blue-50:#EBF4FF; --blue-200:#7FBCE8;
+  --yellow:#FBBF24; --yellow-600:#F59E0B; --yellow-950:#92400E; --yellow-50:#FFFDE7;
+  --orange:#F97316; --orange-800:#C2550D; --orange-50:#FFF3E0;
+  --green:#16a34a; --green-50:rgba(22,163,74,.09);
+  --red:#dc2626; --red-50:rgba(220,38,38,.08);
+  --ground:#F8F4EF; --warm:#F5F0E8; --stone:#E8E2DA; --surface:#FFFFFF;
+  --ink:#0F2A4A; --ink-2:rgba(15,42,74,.72); --ink-3:rgba(15,42,74,.55); --ink-4:rgba(15,42,74,.40);
+  --line:rgba(15,42,74,.12); --line-2:rgba(15,42,74,.22);
+  --shadow:0 1px 3px rgba(11,31,58,.08);
+  --f:'Roboto',"Helvetica Neue",Arial,sans-serif;
+  --m:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r-sm:8px; --r-md:12px; --r-lg:24px; --r-pill:999px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#060810; --warm:#0B1424; --stone:#16243a; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.74); --ink-3:rgba(255,255,255,.55); --ink-4:rgba(255,255,255,.40);
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.22);
+  --blue-50:#16304f; --yellow-50:#2b2410; --orange-50:#2c1a11; --yellow-950:#FCD34D; --orange-800:#FBA36F;
+  --green:#22c55e; --green-50:rgba(34,197,94,.14); --red:#ef4444; --red-50:rgba(239,68,68,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.5);
+}}
+:root[data-theme="dark"]{
+  --ground:#060810; --warm:#0B1424; --stone:#16243a; --surface:#0F2A4A;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.74); --ink-3:rgba(255,255,255,.55); --ink-4:rgba(255,255,255,.40);
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.22);
+  --blue-50:#16304f; --yellow-50:#2b2410; --orange-50:#2c1a11; --yellow-950:#FCD34D; --orange-800:#FBA36F;
+  --green:#22c55e; --green-50:rgba(34,197,94,.14); --red:#ef4444; --red-50:rgba(239,68,68,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);font-size:16.5px;line-height:1.66;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:900;letter-spacing:-.025em;line-height:1.08;text-wrap:balance}
+p{margin:0}
+a{color:var(--blue-600)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+.wrap{max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+
+header{background:var(--navy);color:#fff;padding:clamp(38px,6vw,66px) 0 clamp(30px,5vw,50px);border-bottom:4px solid var(--yellow)}
+header .eyebrow{color:var(--yellow)}
+header h1{font-size:clamp(34px,5.4vw,60px);color:#fff;max-width:16ch;margin-top:13px}
+header .sub{font-size:clamp(16px,2vw,19px);color:rgba(255,255,255,.78);max-width:60ch;margin-top:18px;line-height:1.6}
+.mast{display:flex;flex-wrap:wrap;gap:10px 32px;margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.16)}
+.mast div{display:flex;flex-direction:column;gap:2px}
+.mast dt{font-size:9.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.46)}
+.mast dd{margin:0;font-size:15px;font-weight:700;color:#fff}
+
+nav#toc{position:sticky;top:0;z-index:40;background:var(--warm);border-bottom:1px solid var(--line)}
+.toc-in{max-width:960px;margin:0 auto;padding:11px clamp(20px,5vw,48px);display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+.toc-in::-webkit-scrollbar{display:none}
+.toc-in a{font-family:var(--m);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-pill);padding:7px 14px;white-space:nowrap}
+.toc-in a:hover{border-color:var(--blue);color:var(--blue-600)}
+
+section{padding:clamp(38px,5vw,64px) 0;border-bottom:1px solid var(--line)}
+.sec-h{display:flex;gap:clamp(14px,3vw,26px);align-items:flex-start;margin-bottom:26px}
+.sec-n{font-family:var(--m);font-size:12.5px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--navy);border-radius:var(--r-sm);padding:6px 10px;flex:0 0 auto;margin-top:6px}
+.sec-h h2{font-size:clamp(25px,3.5vw,38px)}
+.sec-h .lede{font-size:16.5px;color:var(--ink-2);margin-top:10px;max-width:64ch}
+.sec-h .lede strong{color:var(--ink)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.mt{margin-top:20px}
+
+.note{border-radius:var(--r-md);padding:15px 18px;margin-top:16px;font-size:15.5px;line-height:1.58;border:1px solid}
+.note b{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.note strong{color:var(--ink)}
+.warn{background:var(--orange-50);border-color:rgba(249,115,22,.3);color:var(--ink-2)}
+.warn b{color:var(--orange-800)}
+.good{background:var(--green-50);border-color:rgba(22,163,74,.3);color:var(--ink-2)}
+.good b{color:var(--green)}
+.ask{background:var(--yellow-50);border-color:rgba(251,191,36,.45);color:var(--ink-2)}
+.ask b{color:var(--yellow-950)}
+.stop{background:var(--red-50);border-color:rgba(220,38,38,.3);color:var(--ink-2)}
+.stop b{color:var(--red)}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-md);margin-top:16px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+th{text-align:left;font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);padding:11px 13px;background:var(--warm);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+td strong{color:var(--ink)}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--m);font-size:13px}
+
+/* the constraint panel */
+.calc{background:var(--navy);color:#fff;border-radius:var(--r-lg);padding:clamp(22px,3.4vw,34px)}
+.calc h3{color:#fff;font-size:21px}
+.calc p{color:rgba(255,255,255,.76);font-size:15.5px;margin-top:9px;max-width:58ch}
+.calc-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:22px}
+.calc-c{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:var(--r-md);padding:14px 15px}
+.calc-l{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.calc-v{font-size:clamp(24px,3.4vw,32px);font-weight:900;letter-spacing:-.035em;line-height:1.05;margin-top:5px;font-variant-numeric:tabular-nums}
+.calc-c.bad .calc-v{color:#ef4444}
+.calc-c.ok .calc-v{color:var(--yellow)}
+.calc-s{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:5px;line-height:1.4}
+
+/* roles */
+.role{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:19px 21px;box-shadow:var(--shadow);border-left:5px solid var(--line-2)}
+.role.h1{border-left-color:var(--red)}
+.role.h2{border-left-color:var(--orange)}
+.role.h3{border-left-color:var(--yellow)}
+.role.have{border-left-color:var(--blue)}
+.role.client{border-left-color:var(--ink-4)}
+.role-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.role h3{font-size:18.5px;letter-spacing:-.015em}
+.tag{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;border-radius:var(--r-pill);padding:4px 10px;white-space:nowrap}
+.tag.n1{background:var(--red-50);color:var(--red)}
+.tag.n2{background:var(--orange-50);color:var(--orange-800)}
+.tag.n3{background:var(--yellow-50);color:var(--yellow-950)}
+.tag.now{background:var(--blue-50);color:var(--blue-600)}
+.tag.cl{background:var(--stone);color:var(--ink-3)}
+.role .why{font-size:14.5px;color:var(--ink-2);margin-top:9px;line-height:1.55}
+.role .why strong{color:var(--ink)}
+.owns{list-style:none;padding:0;margin:13px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.owns li{font-size:12.5px;color:var(--ink-2);background:var(--warm);border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 10px}
+.num-kpi{font-family:var(--m);font-size:12.5px;font-weight:700;color:var(--blue-600);margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+
+/* kpis inside a role card */
+.kpi-t{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.kpi-h{font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.kpi-r{display:grid;grid-template-columns:74px 1fr auto;gap:11px;align-items:baseline;padding:6px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+.kpi-r:first-of-type{border-top:none}
+@media(max-width:520px){.kpi-r{grid-template-columns:74px 1fr;gap:4px 11px}.kpi-r b{grid-column:2}}
+.kpi-ty{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r-pill);padding:3px 7px;text-align:center}
+.kpi-ty.out{background:var(--blue-50);color:var(--blue-600)}
+.kpi-ty.lead{background:var(--warm);color:var(--ink-3);border:1px solid var(--line)}
+.kpi-ty.std{background:var(--green-50);color:var(--green)}
+.kpi-r b{font-family:var(--m);font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.kpi-r b.pend{color:var(--orange-800)}
+
+/* okr */
+.okr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:21px 23px;box-shadow:var(--shadow);margin-top:14px}
+.okr-o{font-size:19px;font-weight:900;letter-spacing:-.02em;line-height:1.25}
+.okr-h{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:8px}
+.okr-when{font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);background:var(--warm);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px 11px}
+.krs{list-style:none;padding:0;margin:15px 0 0;display:flex;flex-direction:column;gap:9px}
+.krs li{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:baseline;font-size:14.5px;color:var(--ink-2);padding:9px 0;border-top:1px solid var(--line)}
+.krs li::before{content:"KR";font-family:var(--m);font-size:9px;font-weight:700;color:var(--ink-4);letter-spacing:.08em}
+.krs b{font-family:var(--m);font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.krs strong{color:var(--ink)}
+
+/* week */
+.day{display:grid;grid-template-columns:96px 1fr;gap:clamp(14px,2.6vw,26px);padding:17px 0;border-top:1px solid var(--line);align-items:start}
+.day:first-of-type{border-top:none}
+@media(max-width:620px){.day{grid-template-columns:1fr;gap:8px}}
+.day-d{font-family:var(--m);font-size:11.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--blue-600);padding-top:2px}
+.day-d span{display:block;font-size:10px;color:var(--ink-4);font-weight:600;margin-top:3px;letter-spacing:.06em}
+.day h4{font-size:17px;letter-spacing:-.015em}
+.day p{font-size:14.5px;color:var(--ink-2);margin-top:7px;line-height:1.55}
+.day p strong{color:var(--ink)}
+.who{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.who span{font-size:11.5px;font-weight:600;color:var(--ink-3);background:var(--warm);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px 9px}
+
+/* sop */
+.sop{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);margin-top:13px;overflow:hidden}
+.sop summary{cursor:pointer;list-style:none;padding:16px 21px;font-size:17px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sop summary::-webkit-details-marker{display:none}
+.sop summary::after{content:"+";font-size:24px;font-weight:400;color:var(--ink-3);line-height:1}
+.sop[open] summary::after{content:"\2212"}
+.sop summary .owner{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);background:var(--warm);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px 10px;margin-left:auto;white-space:nowrap}
+.sop-body{padding:0 21px 20px;font-size:15px;color:var(--ink-2);line-height:1.6}
+.sop-body ol{margin:0;padding-left:20px}
+.sop-body li{margin-bottom:9px}
+.sop-body li strong{color:var(--ink)}
+.sop-body .when{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-600);margin-bottom:11px}
+
+footer{padding:32px 0 60px;font-size:13.5px;color:var(--ink-3);line-height:1.65}
+footer strong{color:var(--ink-2)}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">BridgeApp &middot; UniApply &middot; Operating handbook</div>
+    <h1>How the team gets to 40 000</h1>
+    <p class="sub">The number we carry, who does what, each person's figure, what happens on which day, and the steps for the work that repeats. Written to be used on a Monday morning, not filed.</p>
+    <dl class="mast">
+      <div><dt>Target</dt><dd>40 000 sales</dd></div>
+      <div><dt>Deadline</dt><dd>30 November 2026</dd></div>
+      <div><dt>Weeks left</dt><dd>15</dd></div>
+      <div><dt>Pace needed</dt><dd>2 667 a week</dd></div>
+    </dl>
+  </div>
+</header>
+
+<nav id="toc"><div class="toc-in">
+  <a href="#c">00 The number</a>
+  <a href="#roles">01 Roles &amp; hiring</a>
+  <a href="#okr">02 OKRs</a>
+  <a href="#week">03 The week</a>
+  <a href="#sop">04 SOPs</a>
+  <a href="#data">05 Where data lives</a>
+</div></nav>
+
+<section id="c">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">00</div>
+      <div>
+        <h2>We own the number</h2>
+        <p class="lede">Blank Canvas is accountable for <strong>40 000 sales by 30 November</strong>. Not for reach, not for leads, not for activity. For sales. Everything in this handbook exists to serve that one line.</p>
+      </div>
+    </div>
+
+    <div class="calc">
+      <h3>The whole job, in four figures.</h3>
+      <p>Everything else in this document is a means to these. If a piece of work cannot be traced back to one of them, it is not campaign work.</p>
+      <div class="calc-row">
+        <div class="calc-c ok"><div class="calc-l">Our number</div><div class="calc-v">40 000</div><div class="calc-s">Sales by 30 November</div></div>
+        <div class="calc-c"><div class="calc-l">Weeks left</div><div class="calc-v">15</div><div class="calc-s">From 24 August</div></div>
+        <div class="calc-c"><div class="calc-l">Pace</div><div class="calc-v">2 667</div><div class="calc-s">Sales a week, every week</div></div>
+        <div class="calc-c"><div class="calc-l">Banked so far</div><div class="calc-v">137</div><div class="calc-s">Peach plus the ledger</div></div>
+      </div>
+    </div>
+
+    <div class="grid g2 mt">
+      <div class="card" style="border-left:5px solid var(--blue)">
+        <div class="eyebrow" style="color:var(--blue-600)">Our deliverables</div>
+        <h3 style="font-size:19px;margin-top:9px">Demand, end to end</h3>
+        <p style="font-size:14.5px;color:var(--ink-2);margin-top:9px;line-height:1.55">Getting the right parent in front of the right offer, at a price that works, and moving them to a purchase.</p>
+        <ul class="owns" style="margin-top:13px"><li>Reach</li><li>Leads</li><li>Sales</li><li>Cost per sale</li><li>Media and budget</li><li>Content and creative</li><li>The landing page</li><li>School outreach</li></ul>
+      </div>
+      <div class="card" style="border-left:5px solid var(--ink-4)">
+        <div class="eyebrow">Not ours</div>
+        <h3 style="font-size:19px;margin-top:9px">Gradesmatch runs these</h3>
+        <p style="font-size:14.5px;color:var(--ink-2);margin-top:9px;line-height:1.55">Listed so nobody spends a morning on them. We hand leads across and move on.</p>
+        <ul class="owns" style="margin-top:13px"><li>Consultations</li><li>Closing</li><li>The product</li><li>Checkout</li><li>Tech and analytics build</li></ul>
+      </div>
+    </div>
+
+    <div class="note stop"><b>Three things we need from them, and only three</b>The <strong>GA4 purchase event</strong> fired from the Peach callback, the <strong>lead endpoint</strong> the readiness tracker posts to, and the <strong>landing page deployed</strong> on the BridgeApp domain. Nothing else on their side is our business. Each gets a date and a cost of delay in the working book, and anything unmoved for a week goes to the client with that cost attached, because a dependency that slips is still our missed number.</div>
+
+    <div class="note good"><b>Two routes to a purchase, and we should know the cost of each</b>A parent either <strong>buys straight off the campaign</strong>, arriving from an ad or a post and going through checkout, or <strong>buys after the readiness tracker</strong> gives them a straight answer and a reason to act. Both are self-serve and both are ours to drive. Track cost per sale separately for each, because the cheaper one is where the budget belongs, and we will not know which until the purchase event is firing.</div>
+  </div>
+</section>
+
+<section id="roles">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">01</div>
+      <div>
+        <h2>Roles, and the order to fill them</h2>
+        <p class="lede">Blank Canvas runs growth. Gradesmatch runs product and tech. Below is the <strong>target structure to recruit against</strong>, with what each role owns and the one number they are judged on.</p>
+      </div>
+    </div>
+
+    <div class="grid" style="gap:13px">
+
+      <div class="role have">
+        <div class="role-top"><h3>Campaign Lead</h3><span class="tag now">You, today</span></div>
+        <p class="why">Owns the 40 000. Runs the weekly rhythm, holds the single relationship with Gradesmatch, and makes the call when the numbers disagree with the plan. Also holds the analyst work until there is enough of it to split out.</p>
+        <ul class="owns"><li>The number</li><li>Client relationship</li><li>Budget allocation</li><li>Weekly report</li><li>The tracker</li></ul>
+        <div class="kpi-t"><div class="kpi-h">KPIs</div><div class="kpi-r"><span class="kpi-ty out">Outcome</span><span>Sales banked against pace</span><b>2 667 a week</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Blended cost per sale</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Weekly report delivered on time</span><b>100%</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Dependencies escalated inside 7 days</span><b>100%</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Working book current every Friday</span><b>Pass</b></div></div>
+      </div>
+
+      <div class="role h1">
+        <div class="role-top"><h3>Performance Marketer</h3><span class="tag n1">Hire first</span></div>
+        <p class="why"><strong>R2.2m of media has nobody accountable for it.</strong> Paid social has run 14 users in eight months, so there is no performance history to inherit and the first buy is a test that needs someone watching it daily. This person also owns the measurement fix, because they are the one who suffers when it is missing.</p>
+        <ul class="owns"><li>Meta and LinkedIn buying</li><li>CPA against the cap</li><li>UTM discipline</li><li>Monday boost call</li><li>GA4 with the dev team</li></ul>
+        <div class="kpi-t"><div class="kpi-h">KPIs</div><div class="kpi-r"><span class="kpi-ty out">Outcome</span><span>Cost per sale, paid</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Share of spend inside the CPA cap</span><b>&ge; 80%</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Paid sales volume</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Creative tests run</span><b>4 a month</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Every link built from the UTM sheet</span><b>100%</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>No unbudgeted overspend</span><b>Pass</b></div></div>
+      </div>
+
+      <div class="role h2">
+        <div class="role-top"><h3>Content Producer</h3><span class="tag n2">Hire second</span></div>
+        <p class="why">Thirteen posts a week across three channels, <strong>182 pieces between now and 30 November</strong>, plus eight emailers. That is not a side duty for someone who also does something else. Works from the content engine calendar and the twelve recurring formats, so the job is production and adaptation rather than invention.</p>
+        <ul class="owns"><li>The calendar</li><li>Captions</li><li>Carousels and stories</li><li>Emailers</li><li>Community replies</li></ul>
+        <div class="kpi-t"><div class="kpi-h">KPIs</div><div class="kpi-r"><span class="kpi-ty out">Outcome</span><span>Leads from content</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Posts shipped on schedule</span><b>&ge; 95%</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Saves plus shares per post</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Conversion posts per channel</span><b>&ge; 2 a week</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Zero deadline errors in published copy</span><b>Pass</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Captions finished, no placeholders</span><b>Pass</b></div></div>
+      </div>
+
+      <div class="role h3">
+        <div class="role-top"><h3>Schools Outreach Coordinator</h3><span class="tag n3">Hire third</span></div>
+        <p class="why">Engine 2 is entirely people dependent and the cluster tour already has dates in the calendar. Cannot be done from a desk. Owns the relationships, the visit logistics, the QR codes and the exhibition bookings, including the Jeppe approval still outstanding with Sade Marion.</p>
+        <ul class="owns"><li>35+ schools</li><li>Cluster tour</li><li>Events and exhibitions</li><li>QR codes and tagging</li><li>School relationships</li></ul>
+        <div class="kpi-t"><div class="kpi-h">KPIs</div><div class="kpi-r"><span class="kpi-ty out">Outcome</span><span>Sales from school-tagged links</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Schools visited during cluster weeks</span><b>6 a week</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Sign-ups per visit</span><b class="pend">From 21 Sep</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Visit logged the same day</span><b>100%</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Every QR code UTM-tagged</span><b>100%</b></div></div>
+      </div>
+
+      <div class="role have">
+        <div class="role-top"><h3>Designer</h3><span class="tag now">Existing studio, half time</span></div>
+        <p class="why">Assets to the design system, from the content producer's briefs. Half a person is enough because the twelve formats are templated: most weeks are adaptation, not origination. Becomes full time only if creative testing volume grows.</p>
+        <ul class="owns"><li>Post creative</li><li>Ad variants</li><li>Emailer artwork</li><li>Design system adherence</li></ul>
+        <div class="kpi-t"><div class="kpi-h">KPIs</div><div class="kpi-r"><span class="kpi-ty out">Outcome</span><span>Assets delivered on or ahead of schedule</span><b>&ge; 95%</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Creative variants produced</span><b>8 a month</b></div><div class="kpi-r"><span class="kpi-ty lead">Leading</span><span>Rework rate</span><b>&le; 15%</b></div><div class="kpi-r"><span class="kpi-ty std">Standard</span><span>Design system adherence, no off-system colour or type</span><b>Pass</b></div></div>
+      </div>
+
+      <div class="role client">
+        <div class="role-top"><h3>Gradesmatch tech team</h3><span class="tag cl">Exists</span></div>
+        <p class="why">Owns everything the campaign cannot do for itself: the purchase event, the lead endpoint, deploying the landing page, and checkout conversion. <strong>Worth asking for one standing point of contact</strong> rather than raising each item with whoever is available, but that is a suggestion from us and not something anyone has agreed.</p>
+        <ul class="owns"><li>GA4 purchase event</li><li>Lead endpoint</li><li>Landing page deployment</li><li>Checkout conversion</li></ul>
+        <div class="num-kpi">Judged on: measurement live, and checkout completion rate</div>
+      </div>
+
+    </div>
+
+    <div class="note ask"><b>How these KPIs are set</b>Every role carries one <strong>outcome</strong> it is accountable for, two or three <strong>leading indicators</strong> it controls week to week, and <strong>standards</strong> that are pass or fail. Process and standard targets apply from day one. Performance targets read <strong style="color:var(--orange-800)">From 21 Sep</strong>, four weeks after the 24 August start: paid media has never run at volume and the purchase event is not firing, so there is no cost per sale, lead volume or engagement benchmark to set against today. Those get set from four weeks of real data rather than guessed now.</div>
+
+    <div class="note warn"><b>Why this order and not another</b>Performance Marketer first because unspent budget is not the risk, <strong>badly spent budget is</strong>, and there is nobody to catch it today. Content second because 182 pieces will not happen in someone's spare hours. Schools third because it is the smaller engine by volume, though it has the least flexible dates, so if the tour is a priority, swap two and three.</div>
+
+    <div class="note good"><b>The smallest team that works</b>Campaign Lead, Performance Marketer, Content Producer, half a Designer. <strong>Four people, three and a half full time</strong>, and that covers Engine 1 completely. The Schools Coordinator is the fifth, and is what makes Engine 2 real rather than aspirational. Nothing on the delivery side needs hiring by us.</div>
+  </div>
+</section>
+
+<section id="okr">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">02</div>
+      <div>
+        <h2>OKRs</h2>
+        <p class="lede">Three objectives in sequence, not in parallel. <strong>The first one has to land before the others mean anything</strong>, because until the funnel is measurable every result is an opinion.</p>
+      </div>
+    </div>
+
+    <div class="okr">
+      <div class="okr-h"><span class="okr-when">Now to 6 September</span><span class="okr-when" style="color:var(--red);border-color:rgba(220,38,38,.3);background:var(--red-50)">Blocking</span></div>
+      <div class="okr-o">Make the funnel measurable, so every number after this is a fact rather than a model.</div>
+      <ul class="krs">
+        <li><span><strong>Purchase event live</strong> and reconciling against Peach within 2% for a full week</span><b>2%</b></li>
+        <li><span>Unassigned traffic down from 48% of sessions</span><b>&lt;10%</b></li>
+        <li><span>Machine traffic filtered, so reach figures can be quoted honestly</span><b>0%</b></li>
+        <li><span>Every live campaign link built from the UTM sheet</span><b>100%</b></li>
+        <li><span>Landing page deployed on the BridgeApp domain and tagged</span><b>Live</b></li>
+      </ul>
+    </div>
+
+    <div class="okr">
+      <div class="okr-h"><span class="okr-when">To 30 September</span></div>
+      <div class="okr-o">Prove a sale can be bought profitably, at small scale, before any budget scales.</div>
+      <ul class="krs">
+        <li><span>Paid sales from a measured, attributed source</span><b>100</b></li>
+        <li><span>Blended cost per sale inside the conservative band</span><b>&le; R85</b></li>
+        <li><span>At least one channel at the optimised end</span><b>&le; R55</b></li>
+        <li><span><strong>Cost per sale</strong>, blended across both routes to purchase</span><b>&le; R85</b></li>
+        <li><span>Cost per lead</span><b>&le; R14</b></li>
+        <li><span>Lead to sale, our end of the funnel</span><b>&ge; 5%</b></li>
+      </ul>
+    </div>
+
+    <div class="okr">
+      <div class="okr-h"><span class="okr-when">To 30 November</span></div>
+      <div class="okr-o">Run the volume engine at the pace the target requires.</div>
+      <ul class="krs">
+        <li><span>Sales a week, sustained</span><b>2 667</b></li>
+        <li><span>Monthly reach, filtered of machine traffic</span><b>200 000</b></li>
+        <li><span>Leads a month</span><b>1 200</b></li>
+        <li><span>Schools visited across the clusters</span><b>35+</b></li>
+        <li><span>Every dependency closed or escalated with a cost of delay attached</span><b>Zero silent</b></li>
+      </ul>
+    </div>
+
+    <div class="note warn"><b>On the 2 667 a week</b>It is the arithmetic of 40 000 over 14 weeks, and nothing has yet demonstrated a rate anywhere near it. <strong>Treat it as the size of the gap rather than a forecast.</strong> The honest sequence is: measure, prove a hundred sales, then decide with the client whether the target or the timeline moves. Bring that conversation forward rather than letting November bring it.</div>
+  </div>
+</section>
+
+<section id="week">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">03</div>
+      <div>
+        <h2>The week</h2>
+        <p class="lede">Two standing external reviews, both weekly: <strong>Gradesmatch exco</strong> and the <strong>dev team</strong>. Around them sit our own numbers meeting and the written report. Days and times below are placeholders until the two external slots are confirmed.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="day">
+        <div class="day-d">Monday<span>08:30 &middot; 30 min</span></div>
+        <div>
+          <h4>Numbers and money</h4>
+          <p>Last week's actuals go on the table first, before anyone talks about plans. Two decisions come out of this meeting and nothing else: <strong>which single post gets boosted</strong>, and <strong>whether any budget moves between channels</strong>. Both are made from the numbers, not from taste.</p>
+          <p>If no post clearly outperformed, nothing gets boosted and the budget rolls forward. That is a legitimate outcome and saying so out loud protects the signal.</p>
+          <div class="who"><span>Campaign Lead</span><span>Performance Marketer</span><span>Content Producer</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-d">Wednesday<span>09:00 &middot; 30 min</span></div>
+        <div>
+          <h4>Dev team, weekly</h4>
+          <p>Where the three dependencies get chased: the purchase event, the lead endpoint, the deployed landing page. What shipped, what is stuck, what the campaign needs from product this week. <strong>Anything blocked for more than a week is raised with a cost of delay attached, not just a status.</strong></p>
+          <p>Content for the following week is confirmed in the same session, so the designer has a full working week on the assets.</p>
+          <div class="who"><span>Campaign Lead</span><span>Performance Marketer</span><span>Gradesmatch dev team</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-d">Weekly<span>Day TBC</span></div>
+        <div>
+          <h4>Gradesmatch exco</h4>
+          <p>The commercial review. Sales against pace, spend against budget, cost per sale once it is measurable, and what changed in the week. <strong>Numbers first, always</strong>, so a bad week is visible in the first two minutes rather than the last.</p>
+          <p>This is also where anything threatening the 40 000 gets raised. Not the month after it becomes a problem.</p>
+          <div class="who"><span>Campaign Lead</span><span>Gradesmatch exco</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-d">Friday<span>15:00 &middot; async</span></div>
+        <div>
+          <h4>The report</h4>
+          <p>Written, not presented. Posted to the channel by 15:00 so anyone can read it before the weekend. Uses the fixed structure: against target, what to boost Monday, what worked, what did not, decisions needed.</p>
+          <p><strong>A report that leads to no different decision is a status update.</strong> If a week genuinely produces no decisions, write one line saying so rather than padding it.</p>
+          <div class="who"><span>Campaign Lead</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-d">Daily<span>Sprint only</span></div>
+        <div>
+          <h4>Ten minute stand-up</h4>
+          <p>During the validation sprint only, 24 August to 6 September. Standing, or on a call with cameras off. Yesterday, today, blocked. <strong>Stops when the sprint stops</strong>, because a permanent daily meeting stops being useful within a fortnight.</p>
+          <div class="who"><span>Everyone on the campaign</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note ask"><b>On incentives</b>There is <strong>bonus opportunity, contingent on sales landing first</strong>. No scheme is set and no KPI is currently tied to pay. Until sales are on the board and the performance targets are set from real data on 21 September, KPIs are a management and improvement tool rather than a remuneration one. Say that plainly when the roles are briefed, so nobody assumes either way.</div>
+
+    <div class="note good"><b>The rule that keeps it honest</b>Every meeting opens with actuals, not with intentions. It is uncomfortable in a bad week, which is exactly why it works: a team that reports numbers first cannot drift for a month without noticing.</div>
+  </div>
+</section>
+
+<section id="sop">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">04</div>
+      <div>
+        <h2>Standard procedures</h2>
+        <p class="lede">The seven jobs that repeat. Written so a new person can do them correctly on their first day without asking, which is the only real test of an SOP.</p>
+      </div>
+    </div>
+
+    <details class="sop"><summary>Publishing a post<span class="owner">Content Producer</span></summary>
+      <div class="sop-body">
+        <div class="when">Every posting slot, 13 a week</div>
+        <ol>
+          <li><strong>Find the slot</strong> in the content calendar. The day decides the job: Wednesday is the offer, Thursday is proof, Friday is a checklist or funding, Sunday is Q&amp;A, Monday is the deadline countdown.</li>
+          <li><strong>Check the deadline</strong> if the post carries one. Recount the days from the publication date. Never copy a day count forward from an earlier post.</li>
+          <li><strong>Write the caption finished.</strong> No placeholders, no bracketed choices. One call to action, never two.</li>
+          <li><strong>Build the link</strong> in the UTM sheet and copy it from the finished-link column. Never type a link by hand.</li>
+          <li><strong>Check the channel voice.</strong> Parent voice on Facebook, student voice on Instagram, professional voice on LinkedIn. A post that reads the same on all three is wrong on at least two.</li>
+          <li><strong>Schedule it</strong> in the slot, and mark the calendar row as scheduled.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Making the Monday boost decision<span class="owner">Performance Marketer</span></summary>
+      <div class="sop-body">
+        <div class="when">Every Monday, before the 08:30</div>
+        <ol>
+          <li><strong>Pull last week's organic numbers</strong> for both consumer channels.</li>
+          <li><strong>Rank by saves and shares first, then link clicks.</strong> Not by likes or reach. Saves mean the post did a job for someone; likes mean they scrolled past approvingly.</li>
+          <li><strong>Pick one post.</strong> If two are close, take the one with the clearer single call to action.</li>
+          <li><strong>If nothing clearly won, boost nothing</strong> and roll the budget forward. An underwhelming week is information and spending through it destroys the signal.</li>
+          <li><strong>Retargeting audiences only.</strong> Boosting into cold audiences is a different exercise and needs its own budget line.</li>
+          <li><strong>Log the decision and the reason</strong> in the working book, so next Monday can see whether it worked.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Running a school visit<span class="owner">Schools Coordinator</span></summary>
+      <div class="sop-body">
+        <div class="when">Per school, during cluster weeks</div>
+        <ol>
+          <li><strong>Confirm the week before</strong>, with a named contact at the school and a written time.</li>
+          <li><strong>Take a QR code tagged to that school</strong>, built from the UTM sheet with the school in the content field. Untagged codes make the visit unmeasurable.</li>
+          <li><strong>Brief the hall on the readiness tracker.</strong> It is what a learner can do on their phone before you have left the car park, and it is the route we can measure.</li>
+          <li><strong>Capture the contact</strong> for the school, not just the learners: the Life Orientation teacher or head of department is who lets you back in.</li>
+          <li><strong>Log the visit the same day</strong> in the working book, with QR scans if the numbers are available.</li>
+          <li><strong>Tick the school</strong> in the tracker's schools list so the cluster's progress stays visible to everyone.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Writing the weekly report<span class="owner">Campaign Lead</span></summary>
+      <div class="sop-body">
+        <div class="when">Every Friday, posted by 15:00</div>
+        <ol>
+          <li><strong>Pull the week's actuals</strong> into the working book: reach, leads, sales, spend.</li>
+          <li><strong>Pro-rate the monthly targets</strong> by the fraction of the month elapsed. Not by quarters, because months are not four weeks.</li>
+          <li><strong>Diagnose by which stage is short</strong>, never by the headline. Reach short is distribution, so look at spend and posting frequency. Reach fine but leads short means the content entertains and does not convert, which is the most common failure, so check the two-conversion-posts-a-week floor. Leads fine but sales short is downstream of us, so bring the pattern to Gradesmatch on Wednesday rather than rewriting content that is working.</li>
+          <li><strong>Name what to boost Monday</strong>, with the number that chose it.</li>
+          <li><strong>List only decisions the client must make.</strong> If there are none, say none.</li>
+          <li><strong>Label every figure measured or modelled.</strong> Until the purchase event is live, anything downstream of a click is modelled and should say so.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Handling a lead<span class="owner">Campaign Lead, then Advisor</span></summary>
+      <div class="sop-body">
+        <div class="when">Within 24 hours, every lead</div>
+        <ol>
+          <li><strong>Leads arrive from the readiness tracker</strong> with a name, email address, WhatsApp number and their readiness score.</li>
+          <li><strong>Send the breakdown within 24 hours</strong>, on WhatsApp and email. The page promises this, so it is a commitment and not a nicety.</li>
+          <li><strong>Route by grade.</strong> A Grade 9 to 11 learner goes to PathFinder, not UniApply, because selling the wrong product loses a two-year relationship. Matric and gap-year go to UniApply.</li>
+          <li><strong>Hand every UniApply lead to Gradesmatch the same day.</strong> What happens next is theirs. Ours is that it arrives fast, complete and correctly tagged so the sale can be traced back to the campaign that produced it.</li>
+          <li><strong>Follow up once.</strong> The page says once, so follow up once.</li>
+          <li><strong>POPIA applies.</strong> Consent was given by the parent or guardian for this purpose. Do not repurpose the list.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Adding a campaign link<span class="owner">Anyone who makes a link</span></summary>
+      <div class="sop-body">
+        <div class="when">Before any link goes anywhere public</div>
+        <ol>
+          <li><strong>Open the UTM link builder</strong> and add a row. Date, owner, channel.</li>
+          <li><strong>Pick source and medium from the dropdowns.</strong> If the value you need is not there, ask rather than invent. One improvised medium creates a channel that never rejoins the others.</li>
+          <li><strong>Name the campaign and the creative</strong>: season, product, objective for the campaign; format and variant for the content. The variant suffix is what lets you tell two creatives apart later.</li>
+          <li><strong>Copy the finished link from column I.</strong> Never retype it.</li>
+          <li><strong>Never hand-tag Google Ads.</strong> Manual tags override auto-tagging and lose the cost data. Link the accounts instead.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sop"><summary>Escalating a blocker<span class="owner">Anyone</span></summary>
+      <div class="sop-body">
+        <div class="when">The moment something is stuck</div>
+        <ol>
+          <li><strong>Say it in the channel the same day.</strong> Not in the next meeting. A blocker held quietly for three days is three days lost.</li>
+          <li><strong>State what is blocked, by what, and what it costs.</strong> "Waiting on the lead endpoint, so every lead since Tuesday is unreachable" is actionable. "Still waiting on dev" is not.</li>
+          <li><strong>Anything blocked over a week</strong> goes on the Wednesday agenda automatically, with the cost attached.</li>
+          <li><strong>Anything blocking the target</strong> goes to the client the same week, not the same month.</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="data" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-h">
+      <div class="sec-n">05</div>
+      <div>
+        <h2>Where the data lives, and what is honestly automatic</h2>
+        <p class="lede">Being straight about this matters more than the org chart, because a team that trusts a number that is not real makes worse decisions than a team with no number.</p>
+      </div>
+    </div>
+
+    <div class="tw"><table>
+      <thead><tr><th>What</th><th>Where it lives</th><th>Updated how</th><th>Shared?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Weekly actuals</strong></td><td>The working book, Google Sheets</td><td>By hand, Friday</td><td>Yes, everyone edits</td></tr>
+        <tr><td><strong>Campaign links</strong></td><td>UTM link builder, Google Sheets</td><td>Formula, instantly</td><td>Yes, everyone edits</td></tr>
+        <tr><td><strong>Content calendar</strong></td><td>Commercialisation tracker</td><td>By hand</td><td>Read-only for the team</td></tr>
+        <tr><td><strong>Funnel and spend model</strong></td><td>Commercialisation tracker</td><td>Typed in, saved per device</td><td><strong>No, per browser</strong></td></tr>
+        <tr><td><strong>Sales banked</strong></td><td>Peach gateway plus ledger</td><td>Live at the gateway</td><td>Client side</td></tr>
+        <tr><td><strong>Reach and sessions</strong></td><td>GA4</td><td>Live, but see below</td><td>Yes, with access</td></tr>
+        <tr><td><strong>Sales attributed to a channel</strong></td><td>Nowhere yet</td><td>Needs the purchase event</td><td>Not until then</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note warn"><b>The tracker saves per device, not per team</b>Anything typed into the commercialisation tracker, the funnel inputs, the spend figures, the ticked schools, is stored <strong>in that person's browser only</strong>. Two people will see two different sets of numbers and neither will know. So the tracker is the <strong>model and the reference</strong>, and the working book in Google Sheets is <strong>the record</strong>. Numbers the team acts on live in the sheet.</div>
+
+    <div class="note stop"><b>Nothing pulls itself in yet</b>There is no automatic feed from Meta, Instagram, LinkedIn or GA4 into any of these documents. Numbers arrive as screenshots or CSV exports and someone types them into the working book on a Friday. That is fine at this size and it is what the Friday slot is for. If you want it automated later, a connector such as Supermetrics or Windsor.ai bridges GA4 and the ad platforms, and that is a paid tool decision rather than a build.</div>
+
+    <div class="note ask"><b>What has to come from the dev team before any of this is real</b>Three things, all specified in the instrumentation brief: the <strong>GA4 purchase event fired from the Peach webhook</strong>, the <strong>lead endpoint</strong> the readiness tracker posts to, and the <strong>landing page deployed on the BridgeApp domain</strong> so it can be tagged. Until the first of those lands, every cost per sale in every document is a model, and the team should say so out loud whenever one is quoted.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong>Blank Canvas Agency</strong> for BridgeApp by Gradesmatch. Companion to the commercialisation tracker and the analytics instrumentation brief.<br>
+    Figures current to 20 August 2026. Blank Canvas is accountable for the 40 000. Consultation delivery, closing and the product sit with Gradesmatch and are tracked here as managed dependencies.
+  </div>
+</footer>

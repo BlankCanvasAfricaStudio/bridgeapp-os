@@ -1,0 +1,8 @@
+/* BridgeApp ships one typeface: Roboto. Loaded from Google Fonts, exactly as the
+   2026 brand book does (src/styles/fonts.css). No local binaries were supplied. */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+:root{
+  --font-sans:"Roboto","Helvetica Neue",Arial,sans-serif; /* @kind font */
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace; /* @kind font */
+}

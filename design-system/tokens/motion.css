@@ -1,0 +1,15 @@
+:root{
+  --duration-fast:100ms; /* @kind other */
+  --duration-base:200ms; /* @kind other */
+  --duration-slow:300ms; /* @kind other */
+  --ease-out:cubic-bezier(0.16,1,0.3,1); /* @kind other */
+  --ease-standard:ease-out; /* @kind other */
+
+  /* Scroll-reveal defaults used throughout the brand book */
+  --reveal-offset-y:18px; /* @kind other */
+  --reveal-offset-x:16px; /* @kind other */
+  --reveal-stagger:70ms; /* @kind other */
+
+  --hover-lift:scale(1.02); /* @kind other */
+  --hover-lift-cta:scale(1.05); /* @kind other */
+}

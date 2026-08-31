@@ -1,0 +1,14 @@
+:root{
+  --shadow-none:none;
+  --shadow-card:0 1px 3px rgba(11,31,58,0.08);
+  --shadow-glass:0 24px 48px rgba(0,0,0,0.45);
+  --shadow-hero-card:0 24px 64px rgba(0,0,0,0.30);
+  --shadow-cta-blue:0 8px 32px rgba(74,144,217,0.40);
+  --shadow-cta-yellow:0 6px 20px rgba(251,191,36,0.35);
+
+  --blur-glass:blur(20px); /* @kind other */
+  --blur-nav:blur(12px); /* @kind other */
+  --glass-fill:rgba(255,255,255,0.05); /* @kind color */
+  --glass-fill-strong:rgba(255,255,255,0.07); /* @kind color */
+  --glass-border:rgba(255,255,255,0.11); /* @kind color */
+}

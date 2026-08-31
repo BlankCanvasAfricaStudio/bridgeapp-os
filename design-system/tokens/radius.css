@@ -1,0 +1,9 @@
+:root{
+  /* The editorial/brand system is SQUARE. Radius belongs to product UI only. */
+  --radius-none:0;
+  --radius-sm:8px;    /* tags, chips, inline */
+  --radius-md:12px;   /* buttons, inputs */
+  --radius-lg:24px;   /* cards, modals, panels */
+  --radius-device:20px; /* phone mockup frames */
+  --radius-pill:999px;  /* marketing-site buttons & pill badges */
+}
